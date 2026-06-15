@@ -1,6 +1,6 @@
 # DS 4.0 — Build Memory
 
-Last updated: 2026-06-12
+Last updated: 2026-06-15
 
 ## System decisions (locked)
 - Border-radius: 4px across all components
@@ -20,11 +20,19 @@ Last updated: 2026-06-12
 - Page: Buttons & Actions
 - 2026-06-12: footer date corrected 2026-06-09 → 2026-06-11
 
-### Forms & Inputs — 2026-06-10
-- 6 components: Input, Textarea, Select, Checkbox, Radio, Switch
-- Border-radius: 4px confirmed
-- All states: Default, Focused, Filled, Error, Disabled
-- Page: Forms & Inputs
+### Forms & Inputs — 2026-06-10, rebuilt 2026-06-15 (DS 3.0 audit-driven)
+- 6 components + Filter chip (new). Border-radius 4px (2px checkbox per Spacing). Page: Forms & Inputs.
+- Rebuild decisions (design lead 2026-06-15): restore Hover+Focus to Checkbox/Radio; Input 40px M + add 32px Small (Input only); keep HTML input types + add Phone; add Switch Loading; port Filter chip.
+- **Checkbox** (set 179:420): 2 props — State(Enabled/Hover/Focused/Disabled) × Status(Unchecked/Checked/Indeterminate) = 12 variants. Hover: border/strong (unchecked), bg/brand-hover (checked/indet). Focused: 2px border/focused ring. Added Disabled Indeterminate. Grid cols=State, rows=Status.
+- **Radio** (set 179:435): State(Enabled/Hover/Focused/Disabled) × Selected(False/True) = 8. Hover: border/strong / bg/brand-hover dot. Focused: 2px border/focused OUTSIDE halo. Cols=State, rows=Selected.
+- **Input** (set 157:1255): added Size prop. 7 Type (Text/Email/Password/URL/Search/Number/Phone) × 5 State × 2 Size (M 40px, Small 32px) = 70 variants. Phone = plain field placeholder "(201) 555-0123". Spacing&Grid Input-height row reconciled to Small 32 / Default 40. Forms page description updated.
+- **Switch** (set 179:452): added Loading (5th State) = surface/muted track + centered thumb + brand spinner arc (ellipse arcData 270°). 5 variants.
+- **Filter chip** (NEW, set 430:487, on Forms page x=2720): State(Default/Hover/Selected/Disabled) × Icon × Badge = 16. Pill 32px r=16, pad 12h, gap md(8). Default/Hover badge = brand-subtle bg + link count; Selected = brand chip / white badge / link count; Disabled greyed. Fully tokenized.
+- **Phone Input** — rebuilt 2026-06-15: the 10 Phone variants (set 157:1255) restructured from plain field → field = country-selector (🇺🇸 emoji flag 20px + Chevron-down instance, brand) + dial code "+1" (placeholder) / full number "+1 (123) 321 234" (filled, text/primary) + Clear ✕ (Close icon, filled only). Heights M 40 / Small 32 (DS 4.0, not DS 3.0's 36). Icons reused: Chevron down (Select's main), Close (180:1200). Focus = single border/focused (no DS 3.0 3px halo); Error = border/error (Red/D1, not DS 3.0 Red/D2). Doc-frame showcase (157:1257, VERTICAL auto-layout, itemSpacing 40) gained a 7th "Phone" row (448:2) showing all 5 states; footer date → 2026-06-15.
+- **Country dropdown** (NEW): "Country row" set 440:450 (State=Default/Hover/Selected; flag+name+dial+check, 264×36 r4; Hover=surface/subtle, Selected=brand-subtle+link+Check icon). "Country dropdown" panel component 441:437 (280w, surface/default, border/subtle, r8, raw DROP_SHADOW matching Shadow 0-2-8) = search field (Search icon 180:1639 + placeholder) + 6 country rows (US/GB/CA/AU/DE/FR). On Forms page x=2720.
+- **Masked field** (NEW standalone, set 453:800, Forms page x=3500): State(Masked/Loading/Revealed/Focused/Error/Disabled) × Size(M 40 / Small 32) = 12 variants. Anatomy = label + field + helper (cloned from Input Text base). Field: 🔒 Lock leading (180:2099) + masked "••••••••" / revealed "1234-5678-9012" + trailing eye (180:2119) / spinner (ellipse arcData 270°, Loading). Per-state: Masked/Loading bg surface/subtle + border/default; Revealed border/focused 1px; Focused border/focused 2px; Error border/error + "This field has an error"; Disabled surface/disabled. For sensitive values fetched async on reveal (vs the simple Password input type which is static dots).
+- Token reuse for new states: color/bg/brand-hover (107:3), color/border/focused (3:85), color/border/strong (3:84).
+- Plugin gotchas hit: (1) variable-bound paint needs raw fallback set to RESOLVED color or it renders black (bit the radio focus ring) — resolve alias chain then setBoundVariableForPaint on a paint with that rgb. (2) resize() after primaryAxisSizingMode=AUTO re-locks to FIXED (bit Filter chip width) — set AUTO again after resize.
 
 ### Process Status — 2026-06-11
 - 8 variants: New, In Progress, Completed, Review, Draft, Approved, Duplicate, Inactive
@@ -83,11 +91,28 @@ Last updated: 2026-06-12
 - Working note: in this MCP/plugin environment, `loadAllPagesAsync` is unsupported but `figma.root.children` exposes pages directly; `page.findAll` requires the page to be current/loaded (`setCurrentPageAsync`) within each call.
 - Working note: throwing inside use_figma rolls back all changes (use for read-only queries only); persistent edits must complete without throwing.
 
+## Session log — 2026-06-15 (Forms & Inputs audit + rebuild)
+- Full DS 3.0 vs DS 4.0 audit of Forms family. DS 3.0 form pages: Input (11426:7463), Checkbox (11455:8195), Radio (11477:10059), Switch (11646:8782), Form Components [NEW] (16406:15048), + standalone: Dropdown Menu, File Upload Field, Filter chip (27839:33637), Read-only fields, RAG fields, Horizontal/Vertical toggle, Cascader, Slider.
+- Built 5: Checkbox, Radio, Input, Switch (Loading), Filter chip — all screenshot-verified, fully tokenized.
+- Then: Phone Input full rebuild (country selector: flag+chevron+dial+clear) + Country dropdown panel (row set 440:450 + panel 441:437); added Phone as 7th row to Input doc showcase.
+- Then: Masked field standalone component (set 453:800, 12 variants) + added Masked field section (6-state showcase) to doc frame 157:1257.
+- Organization: moved Filter chip (430:487) + Masked field (453:800) sets INTO _Source Components frame 157:1256 (below Switch, y=3500/3772; frame extended to 1892×4044).
+- Also: corrected color/text/disabled doc row on Color System page (Neutral/500/#D0D4DF → Neutral/600/#8892AC) to match live variable.
+- Env note: network egress blocks www.figma.com → cannot curl screenshot URLs or push to out-of-scope repos; screenshots viewed via get_screenshot base64 inline. GitHub MCP scoped to christiancalvino/certa_app only — certacalvino/certa-design-system is out of scope (user pushes CLAUDE.md manually).
+
 ## Open decisions — pending design lead
 - FLAG (Nav icon): now "Menu/Hamburger" icon (House→Sidebar→Menu progression). Reads clearly as navigation. Confirm acceptable, or specify per-item icons.
 - FLAG (Toast icon): Error & Warning share the Warning triangle — no distinct Error/exclamation icon in library. Recommend commissioning an alert-circle icon.
 - FLAG (Fix 1): Alert Banner doc frame is now auto-layout while Toast doc is still free-form/manually reflowed. Recommend standardising both doc frames to auto-layout for maintainability.
 - FLAG (Fix 1): Alert Banner showcase displays only the Action+Dismiss=true variant per type (4 of 16). Confirm if additional states should be shown.
+- FLAG (Filter chip): DS 4.0 build diverges from DS 3.0 dark-pill styling (Neutral/750 fill) — no dark-neutral bg semantic token exists. Built as light/brand-selected model instead. Confirm, or commission dark-neutral bg tokens for the literal port.
+- FLAG (Phone input): now full country-selector build (flag+chevron+dial+clear) + Country dropdown panel. Caveats: (a) flag = OS emoji (🇺🇸) — renders inconsistently across Win/Mac/Linux; (b) dropdown shadow is a raw DROP_SHADOW (no shadow effect-style/variable exists in file — not tokenized); (c) country/dial data is illustrative (6 sample countries), not a full dataset; (d) dropdown is static (no interactive open/close wiring).
+- FLAG (focus ring): Checkbox focus = 2px border/focused CENTER; Radio focus = OUTSIDE halo. Standardize focus-ring treatment across all controls in a polish pass.
+- FLAG (Masked field): no eye-off icon in library — Eye (180:2119) used for both show & hide (state differentiates). Recommend commissioning an eye-off/eye-slash icon. Also overlaps the simple Password input type — Masked = async-reveal sensitive values, Password = static dots; keep both or consolidate (design lead).
+- FLAG (Forms doc showcase): Phone row + Masked field section now added to doc 157:1257. Still pending: showcase refresh for new Checkbox/Radio Hover/Focused states, Switch Loading, Input Small size, and a Filter chip section (sets are done; those showcase instances not yet expanded).
+- FLAG (Input set overlap): Input set 157:1255 grew to 1880px tall (70 variants) and now visually OVERLAPS Textarea/Select beneath it inside _Source Components frame 157:1256. Recommend reflowing the source frame to stack all sets without overlap.
+- FLAG (Phone country components floating): Country row set 440:450 + Country dropdown 441:437 are still on the page at x=2720, NOT inside _Source Components frame. Move them in alongside the others when reflowing.
+- Forms backlog (DS 3.0 not yet ported): Multi-select, Dropdown Menu, File Upload Field, Read-only fields, RAG/Visualization fields, Horizontal/Vertical toggle, Cascader, Slider.
 - Nav bar full sidebar composition: individual items need to be composed into a full sidebar component
 - 6 provisional status tokens: need primitives or confirmation
 - Process Status interactive states: needed if chips are clickable
@@ -98,7 +123,7 @@ High priority: Table rows, Pagination, Date picker, File upload
 Medium priority: Modal, Tabs, Empty state, Dashboard widget
 Post-presentation: Full sidebar composition, Motion specs, Theming
 
-## Tokenization state (as of 2026-06-12)
+## Tokenization state (as of 2026-06-15)
 - Color: ~95%
 - Spacing: ~65%
 - Typography: 100%
