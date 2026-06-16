@@ -94,6 +94,7 @@ Last updated: 2026-06-16
 ## Session log — 2026-06-16 (Forms source-frame reflow + doc showcase)
 - Reflowed _Source Components frame 157:1256: all 10 sets restacked top-to-bottom at x=40, 40px gaps, no overlaps (Input→Textarea→Select→Checkbox→Radio→Switch→Filter chip→Masked field→Country row→Country dropdown). Frame resized 1892×5364. Country row 440:450 + Country dropdown 441:437 moved inside.
 - Doc frame 157:1257: Checkbox showcase (179:580) + Radio showcase (179:608) rebuilt to 4 labeled state cells each (Enabled/Hover/Focused/Disabled).
+- Doc frame 157:1257 completed: (1) Switch showcase (179:625) — appended 5th State=Loading instance; (2) NEW "Input — Small (32px)" section added below the existing Input section — heading 463:1672, 7 type rows × 5 states with Size=Small (32px field / 76px overall), inserted before Textarea separator; (3) NEW "Filter chip" section added between Switch and Masked field — heading 464:3, col headers + 4 combo rows × 4 states = 16 chip instances (Plain / + Icon / + Badge / + Icon + Badge). Doc grew 2643 → 4175px.
 
 ## Session log — 2026-06-15 (Forms & Inputs audit + rebuild)
 - Full DS 3.0 vs DS 4.0 audit of Forms family. DS 3.0 form pages: Input (11426:7463), Checkbox (11455:8195), Radio (11477:10059), Switch (11646:8782), Form Components [NEW] (16406:15048), + standalone: Dropdown Menu, File Upload Field, Filter chip (27839:33637), Read-only fields, RAG fields, Horizontal/Vertical toggle, Cascader, Slider.
@@ -113,7 +114,7 @@ Last updated: 2026-06-16
 - FLAG (Phone input): now full country-selector build (flag+chevron+dial+clear) + Country dropdown panel. Caveats: (a) flag = OS emoji (🇺🇸) — renders inconsistently across Win/Mac/Linux; (b) dropdown shadow is a raw DROP_SHADOW (no shadow effect-style/variable exists in file — not tokenized); (c) country/dial data is illustrative (6 sample countries), not a full dataset; (d) dropdown is static (no interactive open/close wiring).
 - FLAG (focus ring): Checkbox focus = 2px border/focused CENTER; Radio focus = OUTSIDE halo. Standardize focus-ring treatment across all controls in a polish pass.
 - FLAG (Masked field): no eye-off icon in library — Eye (180:2119) used for both show & hide (state differentiates). Recommend commissioning an eye-off/eye-slash icon. Also overlaps the simple Password input type — Masked = async-reveal sensitive values, Password = static dots; keep both or consolidate (design lead).
-- FLAG (Forms doc showcase): Phone row, Masked field section, and Checkbox/Radio 4-state showcases now added to doc 157:1257. Still pending: showcase rows for Switch Loading state, Input Small size, and a Filter chip section.
+- RESOLVED 2026-06-16 (Forms doc showcase): all pending showcase items added to doc 157:1257 — Phone row, Masked field section, Checkbox/Radio 4-state showcases, Switch Loading state, Input Small (32px) section, Filter chip section. Showcase complete.
 - RESOLVED 2026-06-16 (Input set overlap): source frame 157:1256 reflowed — all sets stacked with 40px gaps, no overlaps.
 - RESOLVED 2026-06-16 (Phone country components): Country row 440:450 + Country dropdown 441:437 moved into _Source Components frame.
 - Forms backlog (DS 3.0 not yet ported): Multi-select, Dropdown Menu, File Upload Field, Read-only fields, RAG/Visualization fields, Horizontal/Vertical toggle, Cascader, Slider.
