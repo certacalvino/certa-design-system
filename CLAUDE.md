@@ -5,7 +5,9 @@ Last updated: 2026-06-16
 ## System decisions (locked)
 - Border-radius: 4px across all components
 - Icon size: 20px (production-confirmed, overrides 16px spec)
+- EXCEPTION: menu-row icons are 16px — deliberate exception for contextual menus (not nav/buttons)
 - Typography scale: 14px minimum for component labels (accessibility)
+- EXCEPTION: Menu Section headers (non-interactive meta-text) use 12px Caption uppercase
 - Spacing grid: 8-unit tokens (xs:2, sm:4, md:8, lg:12, xl:16, 2xl:20, 3xl:24, 4xl:32)
 - Tokenization: zero hardcoded values in any component
 - Button M label: Body Bold 14px
@@ -34,8 +36,16 @@ Last updated: 2026-06-16
 - **Multi-select** (NEW standalone, set 469:1283): State(Default/Focused/Filled/Error/Disabled) × Size(M 40 / Small 32) = 10 variants. Open dropdown = standalone component 470:1047. Anatomy = label + field (chips/placeholder + chevron) + helper. Tag chip: 24px h, r2, bg/brand-subtle, label text/primary 12px, Close ✕ text/link. Fixed single row NO_WRAP — tags clip if overflow. Dropdown panel: search field + Checkbox rows (179:420) with Hover=surface/subtle, Selected=brand-subtle. Doc: state showcase 471:4 (5 M cells) + Open state composed 471:101 (field + dropdown below). Decisions: standalone (not Mode prop on Select); fixed single row; includes dropdown panel with Checkbox instances.
 - **File row** (NEW standalone, set 489:1280): State(Default/Hover/Processing/Error/Encrypted) = 5 variants, M only (40px). Anatomy: file-type badge (32×32, r4) + name/size (flex-1) + trailing actions. Default: Eye+Download+Trashcan (secondary). Hover: bg/surface/muted, icons primary. Processing: spinner (cloned from 453:553) + Close. Error: red sub-text + "Try again" (Refresh+link). Encrypted: Lock+Download, "Encrypted · …". File-type badge stand-ins tokenized: PDF=bg/error-subtle+text/error, DOC=bg/brand-subtle+text/link, IMG=bg/success-subtle+text/success, generic=Neutral. FLAG: badge stand-ins are placeholders — commission real file-type icon set as follow-up.
 - **File Upload Field** (NEW standalone, set 493:1401): State(Empty/Empty-Disabled/Hover/Default/Processing/Encrypted/Error-single/Error-post-submit/Dragging) = 9 variants, M only. Anatomy: label + area (drop zone OR file list + "Upload more files" link) + helper. Empty/Hover: dashed drop zone, surface/muted bg, Upload icon 180:1224. Dragging: bg/brand-subtle + 2px dashed border/focused, "Drop files to upload". Filled states compose File row instances. Error-post-submit: 2px dashed border/error + helper "Attachment is required". Doc: File row showcase 498:5 + Upload Field 3×3 state grid 498:130, both in Forms doc frame 157:1257; footer re-dated 2026-06-16.
+- **Dropdown Menu** (NEW, ported from DS 3.0 "new" 19752:7977): 4 components on Forms & Inputs page.
+  - Menu Item (set 510:1825): 52 variants — State(Default/Hover/Focused/Selected/Disabled) × Size(M 36/Small 32) × Type(Default/Destructive) × Icon(bool) × Disclosure(bool). Pruning: Selected excludes Disclosure; Destructive excludes Selected. Pressed state dropped (v1). Icons 16px (documented exception). Destructive = color/text/error. Selected = bg/brand-subtle + text/link + Check icon (subtle "new" treatment). Disclosure chevron = Chevron-down 179:272 rotated +90°.
+  - Menu Section (512:1668): 12px Caption uppercase, text/secondary, surface/subtle bar. Non-interactive meta-text — 12px exception to 14px min documented.
+  - Menu Search (512:1670): bordered 36px row, Search 180:1637 + placeholder.
+  - Dropdown Menu container (513:1669): radius 8, dropdown drop-shadow (blur 8, y+2, navy@10%), pad 8, composes search + sections + Menu Item instances.
+  - Doc (Forms & Inputs 157:1257): Menu Item matrix 515:1698 + composed example 515:1761. Source components in 157:1256 (grew to 2256×7854).
+  - v2 backlog: user-rows (avatar+name) + file-rows deferred; File row already exists separately (489:1280).
 - Token reuse for new states: color/bg/brand-hover (107:3), color/border/focused (3:85), color/border/strong (3:84).
 - Plugin gotchas hit: (1) variable-bound paint needs raw fallback set to RESOLVED color or it renders black (bit the radio focus ring) — resolve alias chain then setBoundVariableForPaint on a paint with that rgb. (2) resize() after primaryAxisSizingMode=AUTO re-locks to FIXED (bit Filter chip width) — set AUTO again after resize. (3) recolorSafe: IMAGE-fill icons (Refresh 180:1206, chevron, close) flood to a solid square if you replace their fill — only replace fills when every existing fill is SOLID; leave image-fill icons at default color.
+- Clonable icon instances confirmed: Eye 180:2119 · Download 180:1214 · Trashcan 180:1131 · Lock 180:2099 · Refresh 180:1206 · Close 180:1200 · Upload 180:1224 · Search 180:1637 · Check 180:1264 · Edit 180:1053 · Chevron-down 179:272.
 
 ### Process Status — 2026-06-11
 - 8 variants: New, In Progress, Completed, Review, Draft, Approved, Duplicate, Inactive
@@ -86,12 +96,12 @@ Last updated: 2026-06-16
   - Doc frame (283:70) overlap fixed: long body text nodes (283:106, 283:108) had fixed 24px height → set textAutoResize=HEIGHT on all text; frame primaryAxisSizingMode=AUTO, itemSpacing=16. Specifications / DS 3.0→4.0 Changes now stack cleanly.
   - Source Components (282:83) reorganized from single vertical column → 4×5 grid (cols: Exp/Badge-, Exp/Badge+, Col/Badge-, Col/Badge+; rows: Default/Hover/Active/Focused/Disabled). layoutMode=NONE + manual placement; collapsed variants now align under expanded counterparts, all 20 visible & separated. Parent frame hugs both axes.
 
-## Session log — 2026-06-16 (Multi-select + File Upload)
+## Session log — 2026-06-16 (Multi-select + File Upload + Dropdown Menu)
 - **Multi-select**: field set 469:1283 (10 variants: State × Size M/Small) + open dropdown standalone 470:1047. Doc: showcase 471:4 + Open state composed 471:101. Decisions: standalone component (not Mode prop on Select); fixed single row NO_WRAP; dropdown panel includes Checkbox 179:420 rows + search field. Tag chip 24px r2 brand-subtle. Both sets added to _Source Components 157:1256.
 - **File row**: set 489:1280 (5 variants, M only). Reusable building block for File Upload Field.
 - **File Upload Field**: set 493:1401 (9 variants, M only). Upload icon: native glyph 180:1224 (rotated-Download workaround NOT needed — icon exists). Processing spinner reused from Masked field trailing-icon 453:553. File-type badges are tokenized stand-ins (PDF=Danger, DOC=Brand, IMG=Success, Neutral=generic) — FLAG: commission real file-type icon set.
-- Doc showcases 498:5 (File row) + 498:130 (Upload Field 3×3 grid) added to Forms & Inputs doc frame 157:1257. Footer re-dated 2026-06-16.
-- Clonable icon instances confirmed: Eye 180:2119 · Download 180:1214 · Trashcan 180:1131 · Lock 180:2099 · Refresh 180:1206 · Close 180:1200 · Upload 180:1224.
+- **Dropdown Menu**: Menu Item 510:1825 (52 variants) + Menu Section 512:1668 + Menu Search 512:1670 + container 513:1669. Ported from DS 3.0 "new" (19752:7977). 16px icon exception documented. Pressed dropped. Doc: item matrix 515:1698 + composed 515:1761. Source Components grew to 2256×7854.
+- Doc showcases added to Forms & Inputs doc frame 157:1257 for all three components. Footer re-dated 2026-06-16.
 
 ## Session log — 2026-06-16 (Forms source-frame reflow + doc showcase)
 - Reflowed _Source Components frame 157:1256: all 10 sets restacked top-to-bottom at x=40, 40px gaps, no overlaps (Input→Textarea→Select→Checkbox→Radio→Switch→Filter chip→Masked field→Country row→Country dropdown). Frame resized 1892×5364. Country row 440:450 + Country dropdown 441:437 moved inside.
@@ -125,11 +135,12 @@ Last updated: 2026-06-16
 - FLAG (focus ring): Checkbox focus = 2px border/focused CENTER; Radio focus = OUTSIDE halo. Standardize focus-ring treatment across all controls in a polish pass.
 - FLAG (Masked field): no eye-off icon in library — Eye (180:2119) used for both show & hide (state differentiates). Recommend commissioning an eye-off/eye-slash icon. Also overlaps the simple Password input type — Masked = async-reveal sensitive values, Password = static dots; keep both or consolidate (design lead).
 - FLAG (File Upload): file-type badges are tokenized stand-ins (PDF=Danger, DOC=Brand, IMG=Success, Neutral=generic). Commission real file-type icon set (PDF, DOC, IMG, generic) as follow-up task.
-- RESOLVED 2026-06-16 (Multi-select + File Upload): both components built, screenshot-verified, doc showcases added to Forms & Inputs frame 157:1257.
-- RESOLVED 2026-06-16 (Forms doc showcase): all pending showcase items added to doc 157:1257 — Phone row, Masked field section, Checkbox/Radio 4-state showcases, Switch Loading state, Input Small (32px) section, Filter chip section. Showcase complete.
+- FLAG (Dropdown Menu): Pressed token not yet canonical in DS 4.0 — Pressed state dropped for v1. Add in polish pass when token is established.
+- RESOLVED 2026-06-16 (Multi-select + File Upload + Dropdown Menu): all three components built, screenshot-verified, doc showcases added to Forms & Inputs frame 157:1257.
+- RESOLVED 2026-06-16 (Forms doc showcase): all pending showcase items added to doc 157:1257. Showcase complete.
 - RESOLVED 2026-06-16 (Input set overlap): source frame 157:1256 reflowed — all sets stacked with 40px gaps, no overlaps.
 - RESOLVED 2026-06-16 (Phone country components): Country row 440:450 + Country dropdown 441:437 moved into _Source Components frame.
-- Forms backlog (DS 3.0 not yet ported): Dropdown Menu, Read-only fields, RAG/Visualization fields, Horizontal/Vertical toggle, Cascader, Slider.
+- Forms backlog (DS 3.0 not yet ported): Read-only fields, RAG/Visualization fields, Horizontal/Vertical toggle, Cascader, Slider.
 - Nav bar full sidebar composition: individual items need to be composed into a full sidebar component
 - 6 provisional status tokens: need primitives or confirmation
 - Process Status interactive states: needed if chips are clickable
