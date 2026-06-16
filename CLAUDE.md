@@ -9,6 +9,7 @@ Last updated: 2026-06-16
 - EXCEPTION: read-only field value icons (Date, Envelope) are 16px — display context, not interactive
 - Typography scale: 14px minimum for component labels (accessibility)
 - EXCEPTION: Menu Section headers + Read-only Field labels (non-interactive meta-text) use 12px Caption uppercase
+- EXCEPTION: Table Column Header labels use 10px uppercase (Inter Medium, +0.5 letterspacing) — table-header convention, below the 12px meta-text floor (no 10px style exists; raw value). FLAG for design-lead confirm.
 - Spacing grid: 8-unit tokens (xs:2, sm:4, md:8, lg:12, xl:16, 2xl:20, 3xl:24, 4xl:32)
 - Tokenization: zero hardcoded values in any component
 - Button M label: Body Bold 14px
@@ -52,7 +53,18 @@ Last updated: 2026-06-16
   - v2 backlog: Time-Series chart, RAG (→ RAG/Visualization backlog), Roll-up, Address.
 - Token reuse for new states: color/bg/brand-hover (107:3), color/border/focused (3:85), color/border/strong (3:84).
 - Plugin gotchas hit: (1) variable-bound paint needs raw fallback set to RESOLVED color or it renders black. (2) resize() after primaryAxisSizingMode=AUTO re-locks to FIXED — set AUTO again after resize. (3) recolorSafe: IMAGE-fill icons flood to solid square if you replace their fill — only replace fills when every existing fill is SOLID. (4) Badge/Tag instances do NOT re-hug after text override — must set inner label textAutoResize='WIDTH_AND_HEIGHT' AND instance.layoutSizingHorizontal='HUG'.
-- Clonable icon instances confirmed: Eye 180:2119 · Download 180:1214 · Trashcan 180:1131 · Lock 180:2099 · Refresh 180:1206 · Close 180:1200 · Upload 180:1224 · Search 180:1637 · Check 180:1264 · Edit 180:1053 · Chevron-down 179:272 · Date/Calendar 180:2253 · Envelope 180:1527.
+- Clonable icon instances confirmed: Eye 180:2119 · Download 180:1214 · Trashcan 180:1131 · Lock 180:2099 · Refresh 180:1206 · Close 180:1200 · Upload 180:1224 · Search 180:1637 · Check 180:1264 · Edit 180:1053 · Chevron-down 179:272 · Date/Calendar 180:2253 · Envelope 180:1527 · Sort 180:945 · Filter 180:1633 · Chevron up 180:907 · Chevron down (Data&UI) 180:911 · Dots/kebab 180:1710 · User 180:1426 · User Circle 180:1504.
+- Icon catalog structure: Icons page 180:872 → frame 180:873 → category sub-frames (Navigation, Actions, Data & UI, People & Users, …). Each icon = FRAME(name) > INSTANCE(clonable) + TEXT(label). Non-current pages need `await page.loadAsync()` before findAll.
+
+### Table Row — 2026-06-16
+- Conceptually a Data Display component, but per locked decision built INTO the Forms & Inputs source/doc frames (source 157:1256 below Read-only Field; doc 157:1257). Flagged for possible later move to Data Display page.
+- 3 component sets, all 52px row / 40px header, fully tokenized (color + spacing tokens; radius 4px raw):
+  - **Table Cell** (set 529:94): Type(Entity/Text/Status/Number/Date/Link/Actions) = 7 variants. Each 52px tall, padding 16H (xl), gap md(8). Entity = 32px avatar stand-in (circle, bg/brand-subtle, initials Body Bold text/link) + VERTICAL(name Body Bold 14 text/primary + meta Caption 12 text/secondary). Text = Body 14 text/primary. Status = Badge instance 238:136 (Color=Success, re-hugged label). Number = Body 14 right-aligned (primaryAxisAlignItems MAX + textAlign RIGHT), 120w. Date = Calendar icon 16 (180:2253 clone) + Body 14. Link = Body 14 text/link. Actions = Eye 180:2119 + Edit 180:1053 + Trashcan 180:1131 (16px clones, gap lg). Cell widths: Entity 240/Text 200/Status 140/Number 120/Date 160/Link 200/Actions 120.
+  - **Table Row** (set 530:132): State(Default/Hover/Selected) = 3 variants. HORIZONTAL, hugs to 1180w (sum of 7 cell instances), 52px, bottom border 1px border/subtle (strokeBottomWeight). Default=bg/surface/default, Hover=bg/surface/muted, Selected=bg/brand-subtle. Composes one instance of each Table Cell type.
+  - **Table Column Header** (set 530:3400): Sort(None/Ascending/Descending) × Filter(bool) = 6 variants. 40px, bg/surface/subtle, bottom border 1px border/default, padding 16H, gap sm(4). Label 10px uppercase Inter Medium text/secondary +0.5 ls, layoutGrow=1 (pushes icons right). Sort None = Sort icon 180:945 @opacity 0.4; Ascending = Chevron up 180:907; Descending = Chevron down 180:911; Filter true appends Filter icon 180:1633. All icons 16px.
+- Doc (Forms & Inputs 157:1257, inserted before footer): "Table Row" section = divider + title + description, then 3 showcases — Row state showcase (531:6), Column header 6-variant showcase (531:228), Composed table 531:277 (7 width-matched header instances over Default/Hover/Selected body rows, r4 + border/subtle).
+- FLAG: no Avatar component in library — Entity avatar is a tokenized stand-in (like file-type badges). Commission real Avatar set.
+- FLAG: 10px header label below 12px meta-text floor (raw, no style) — see System decisions exception.
 
 ### Process Status — 2026-06-11
 - 8 variants: New, In Progress, Completed, Review, Draft, Approved, Duplicate, Inactive
@@ -100,6 +112,12 @@ Last updated: 2026-06-16
 - **Read-only Field**: set 520:1872 (24 variants = 12 Type × Filled/Empty). Badge 238:208 reused for pills. Lightweight File treatment. 12px label exception.
 - All doc showcases added to Forms & Inputs 157:1257. _Source Components 157:1256 grew to 8754 tall. Footer re-dated 2026-06-16.
 
+## Session log — 2026-06-16 (Table Row)
+- Built 3 sets in Forms source 157:1256 (below Read-only Field): Table Cell 529:94 (7 types), Table Row 530:132 (3 states), Table Column Header 530:3400 (6 = Sort×Filter). Doc section added to 157:1257 before footer (row-states 531:6, header-variants 531:228, composed table 531:277). Source frame extended to ~10028 tall.
+- New cloneable icons logged: Sort 180:945, Filter 180:1633, Chevron up 180:907 / down 180:911, Dots 180:1710, User/User Circle.
+- Decisions held to: 52px row, 40px header, Badge 238:208 for Status, avatar stand-in (no Avatar comp), raw 10px header label.
+- Plugin notes: `use_figma` returns values via top-level `return` (console.log not captured); a thrown error rolls back ALL writes in that call (a `paddingbottom` typo wiped a full build — re-ran clean). Screenshot render backend lags fresh nodes by a beat (returns 1×1 until propagated). Sandbox cannot curl Figma asset URLs — use `enableBase64Response:true`.
+
 ## Session log — 2026-06-16 (Forms source-frame reflow + doc showcase)
 - Reflowed _Source Components frame 157:1256: all sets restacked, 40px gaps. Frame resized 1892×5364.
 - Doc frame 157:1257 completed: Checkbox/Radio 4-state showcases, Switch Loading, Input Small (32px) section, Filter chip section.
@@ -121,13 +139,14 @@ Last updated: 2026-06-16
 - FLAG (Masked field): no eye-off icon — Eye used for both states. Commission eye-slash icon.
 - FLAG (File Upload): file-type badges are tokenized stand-ins. Commission real file-type icon set.
 - FLAG (Dropdown Menu): Pressed token not canonical in DS 4.0 — dropped for v1. Add in polish pass.
-- RESOLVED 2026-06-16: Multi-select, File Upload, Dropdown Menu, Read-only Field all built and verified.
+- FLAG (Table Row): Entity avatar is a tokenized stand-in — no Avatar component exists. Commission Avatar set. Also confirm 10px column-header label and whether Table Row should move to the Data Display page.
+- RESOLVED 2026-06-16: Multi-select, File Upload, Dropdown Menu, Read-only Field, Table Row (Cell/Row/Column Header) all built and verified.
 - Forms backlog (DS 3.0 not yet ported): RAG/Visualization fields, Horizontal/Vertical toggle, Cascader, Slider.
 - Nav bar full sidebar composition pending.
 - 6 provisional status tokens pending primitives or confirmation.
 
 ## Pending components (from production audit)
-High priority: Table rows, Pagination, Date picker
+High priority: Pagination, Date picker (Table rows — DONE 2026-06-16)
 Medium priority: Modal, Tabs, Empty state, Dashboard widget
 Post-presentation: Full sidebar composition, Motion specs, Theming
 
