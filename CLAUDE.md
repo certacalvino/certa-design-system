@@ -6,8 +6,9 @@ Last updated: 2026-06-16
 - Border-radius: 4px across all components
 - Icon size: 20px (production-confirmed, overrides 16px spec)
 - EXCEPTION: menu-row icons are 16px — deliberate exception for contextual menus (not nav/buttons)
+- EXCEPTION: read-only field value icons (Date, Envelope) are 16px — display context, not interactive
 - Typography scale: 14px minimum for component labels (accessibility)
-- EXCEPTION: Menu Section headers (non-interactive meta-text) use 12px Caption uppercase
+- EXCEPTION: Menu Section headers + Read-only Field labels (non-interactive meta-text) use 12px Caption uppercase
 - Spacing grid: 8-unit tokens (xs:2, sm:4, md:8, lg:12, xl:16, 2xl:20, 3xl:24, 4xl:32)
 - Tokenization: zero hardcoded values in any component
 - Button M label: Body Bold 14px
@@ -43,9 +44,15 @@ Last updated: 2026-06-16
   - Dropdown Menu container (513:1669): radius 8, dropdown drop-shadow (blur 8, y+2, navy@10%), pad 8, composes search + sections + Menu Item instances.
   - Doc (Forms & Inputs 157:1257): Menu Item matrix 515:1698 + composed example 515:1761. Source components in 157:1256 (grew to 2256×7854).
   - v2 backlog: user-rows (avatar+name) + file-rows deferred; File row already exists separately (489:1280).
+- **Read-only Field** (NEW standalone, set 520:1872, ported from DS 3.0 "Read only fields - UPDATED" 23561:54): 24 variants = Type(12) × State(Filled/Empty). Architecture: wrapper = label (Caption 12, text/secondary) + value (Body 14, text/primary); Type prop drives value rendering. Empty state = "—" in text/secondary.
+  - Types: String · Description (multiline) · Number · Currency · Date · Email · Link · Phone · Boolean · Single Select · Multi-select · File.
+  - Value treatments: Date uses Date icon 16 (180:2253); Email uses Envelope icon 16 (180:1527); Email/Link use color/text/link; Phone uses emoji flag; Boolean/Select/Multi reuse Badge 238:208 (Neutral/M); File = lightweight read-only (filename link + Eye 180:2119 + Download 180:1214, no trash/badge).
+  - Doc (Forms & Inputs 157:1257): type catalog 523:1780 (2-col, all 12 types) + empty-state row 523:1844.
+  - Source components in _Source Components 157:1256 (grew to 8754 tall).
+  - v2 backlog: Time-Series chart, RAG (→ RAG/Visualization backlog), Roll-up, Address.
 - Token reuse for new states: color/bg/brand-hover (107:3), color/border/focused (3:85), color/border/strong (3:84).
-- Plugin gotchas hit: (1) variable-bound paint needs raw fallback set to RESOLVED color or it renders black (bit the radio focus ring) — resolve alias chain then setBoundVariableForPaint on a paint with that rgb. (2) resize() after primaryAxisSizingMode=AUTO re-locks to FIXED (bit Filter chip width) — set AUTO again after resize. (3) recolorSafe: IMAGE-fill icons (Refresh 180:1206, chevron, close) flood to a solid square if you replace their fill — only replace fills when every existing fill is SOLID; leave image-fill icons at default color.
-- Clonable icon instances confirmed: Eye 180:2119 · Download 180:1214 · Trashcan 180:1131 · Lock 180:2099 · Refresh 180:1206 · Close 180:1200 · Upload 180:1224 · Search 180:1637 · Check 180:1264 · Edit 180:1053 · Chevron-down 179:272.
+- Plugin gotchas hit: (1) variable-bound paint needs raw fallback set to RESOLVED color or it renders black. (2) resize() after primaryAxisSizingMode=AUTO re-locks to FIXED — set AUTO again after resize. (3) recolorSafe: IMAGE-fill icons flood to solid square if you replace their fill — only replace fills when every existing fill is SOLID. (4) Badge/Tag instances do NOT re-hug after text override — must set inner label textAutoResize='WIDTH_AND_HEIGHT' AND instance.layoutSizingHorizontal='HUG'.
+- Clonable icon instances confirmed: Eye 180:2119 · Download 180:1214 · Trashcan 180:1131 · Lock 180:2099 · Refresh 180:1206 · Close 180:1200 · Upload 180:1224 · Search 180:1637 · Check 180:1264 · Edit 180:1053 · Chevron-down 179:272 · Date/Calendar 180:2253 · Envelope 180:1527.
 
 ### Process Status — 2026-06-11
 - 8 variants: New, In Progress, Completed, Review, Draft, Approved, Duplicate, Inactive
@@ -65,22 +72,17 @@ Last updated: 2026-06-16
 - Default type: no icon circle, color/bg/surface/default bg, color/border/subtle border
 - Border-radius: 8px (DS 3.0 spec — CONFIRMED by design lead 2026-06-12)
 - All fills/strokes/text bound via semantic tokens — zero hardcoded values
-- Token mapping: bg→color/bg/{type}-subtle, border→color/border/{type}-subtle, icon circle bg→color/text/{type}, icon fill→color/text/on-brand
-- 2026-06-12 (Fix round 3): all 16 non-Default variants confirmed to have 32×32 icon circle; all variants & doc-showcase instances confirmed 430px; body text UPGRADED 12px Medium → 14px Regular/20px (resolves accessibility flag; doc spec + component now match); variants reflowed.
 - FLAG (open): Error and Warning both use Warning triangle icon (180:1244) — no distinct Error/exclamation icon in library
 - Previous DS 4.0 Toast (single-line, flat icons, no icon circle) deleted and replaced
 
 ### Alert Banner — rebuilt 2026-06-12 (DS 3.0 structure + DS 4.0 visual decisions)
 - 32 variants: Type(Info/Success/Warning/Error) × Icon(bool) × Dismiss(bool) × Action(bool) = 4×2×2×2
-- Component set id=360:761 (4-col×8-row grid in Source Components 278:6); doc frame id=364:97 (x=1556)
-- Rebuilt to match DS 3.0 STRUCTURE: inline banner = icon + message + optional "Learn more" link + optional × close
-- DECISIONS (design lead, 2026-06-12): border kept as 4px LEFT accent (NOT DS 3.0 full border); typography 14px (NOT DS 3.0 12px); Error reuses Warning triangle
-- Structure: 480px wide, HORIZONTAL gap=12, pad=12V/16H, radius 4px; strokeLeft=4 → color/border/{type}-subtle; bg → color/bg/{type}-subtle; message 14px Regular + action "Learn more" 14px Medium underline + close "×" 16px Medium — all color/text/{type}
-- Icon BOOLEAN added: Icon=true shows 16×16 type icon (Check 180:1264 / Warning 180:1244 / Info 180:1250), color/text/{type}; Icon=false = text only
-- Grey type dropped (use Default Toast); DS 3.0 Link/Hover/Focus states collapsed into Action boolean
+- Component set id=360:761; doc frame id=364:97 (x=1556)
+- DECISIONS (design lead, 2026-06-12): border kept as 4px LEFT accent; typography 14px; Error reuses Warning triangle
+- Structure: 480px wide, HORIZONTAL gap=12, pad=12V/16H, radius 4px; strokeLeft=4 → color/border/{type}-subtle; bg → color/bg/{type}-subtle
 - All colors bound to semantic tokens — zero hardcoded values
-- FLAG: Error uses Warning triangle (no distinct exclamation/error-circle icon in DS 4.0 library) — same gap as Toast
-- Previous 16-variant Alert Banner (filled-dot icons) deleted and replaced
+- FLAG: Error uses Warning triangle (no distinct exclamation/error-circle icon in DS 4.0 library)
+- Previous 16-variant Alert Banner deleted and replaced
 
 ### Nav bar — 2026-06-11
 - 20 variants: State(Default/Hover/Active/Focused/Disabled) × Expanded(bool) × Badge(bool)
@@ -88,63 +90,41 @@ Last updated: 2026-06-16
 - Icon size: 20px (production-confirmed)
 - Typography: Body Bold 14px (upgraded from DS 3.0 12px)
 - Page: Navigation
-- 2026-06-12: icon-placeholder replaced in all 20 variants with "House" icon (Icons page, component 180:2435) at 20×20. Per-state icon color VARIABLE bindings preserved (color/text/secondary for Default/Hover/Focused, color/text/on-brand for Active, color/text/disabled for Disabled) — no hardcoded colours
-- 2026-06-12 (Fix round 2):
-  - Icon swapped House→Sidebar OUTLINE icon (Icons page, main 180:1749) — House was too heavy/filled. 20×20, per-state color bound to BOTH the rectangle stroke and inner fill (rect-based icon, not vector).
-  - Badge dots (8px, color/text/error) re-added to all 10 Badge=true variants — they had lived inside the icon frame and were removed during the icon swap; restored as `badge-dot` ellipse top-right (x=13,y=-1), icon frame clipsContent=false.
-- 2026-06-12 (Fix round 3): icon swapped Sidebar→MENU/HAMBURGER icon (Icons page, main 180:1643) across all 20 variants — Sidebar read as a rectangle/window, not "navigation". Menu = 3 horizontal lines (Union of 3 rects, fill-based), reads unambiguously as menu. Per-state color bound to all fills; badge dots preserved (only the INSTANCE removed during swap, not badge-dot).
-  - Doc frame (283:70) overlap fixed: long body text nodes (283:106, 283:108) had fixed 24px height → set textAutoResize=HEIGHT on all text; frame primaryAxisSizingMode=AUTO, itemSpacing=16. Specifications / DS 3.0→4.0 Changes now stack cleanly.
-  - Source Components (282:83) reorganized from single vertical column → 4×5 grid (cols: Exp/Badge-, Exp/Badge+, Col/Badge-, Col/Badge+; rows: Default/Hover/Active/Focused/Disabled). layoutMode=NONE + manual placement; collapsed variants now align under expanded counterparts, all 20 visible & separated. Parent frame hugs both axes.
+- 2026-06-12 (Fix round 3): icon = MENU/HAMBURGER (Icons page, main 180:1643). Per-state color bound to all fills; badge dots preserved.
 
-## Session log — 2026-06-16 (Multi-select + File Upload + Dropdown Menu)
-- **Multi-select**: field set 469:1283 (10 variants: State × Size M/Small) + open dropdown standalone 470:1047. Doc: showcase 471:4 + Open state composed 471:101. Decisions: standalone component (not Mode prop on Select); fixed single row NO_WRAP; dropdown panel includes Checkbox 179:420 rows + search field. Tag chip 24px r2 brand-subtle. Both sets added to _Source Components 157:1256.
-- **File row**: set 489:1280 (5 variants, M only). Reusable building block for File Upload Field.
-- **File Upload Field**: set 493:1401 (9 variants, M only). Upload icon: native glyph 180:1224 (rotated-Download workaround NOT needed — icon exists). Processing spinner reused from Masked field trailing-icon 453:553. File-type badges are tokenized stand-ins (PDF=Danger, DOC=Brand, IMG=Success, Neutral=generic) — FLAG: commission real file-type icon set.
-- **Dropdown Menu**: Menu Item 510:1825 (52 variants) + Menu Section 512:1668 + Menu Search 512:1670 + container 513:1669. Ported from DS 3.0 "new" (19752:7977). 16px icon exception documented. Pressed dropped. Doc: item matrix 515:1698 + composed 515:1761. Source Components grew to 2256×7854.
-- Doc showcases added to Forms & Inputs doc frame 157:1257 for all three components. Footer re-dated 2026-06-16.
+## Session log — 2026-06-16 (Multi-select + File Upload + Dropdown Menu + Read-only Field)
+- **Multi-select**: field set 469:1283 (10 variants) + open dropdown 470:1047. Standalone, fixed single row NO_WRAP, Checkbox rows in dropdown.
+- **File row**: set 489:1280 (5 variants, M only).
+- **File Upload Field**: set 493:1401 (9 variants, M only). Native Upload icon 180:1224. Spinner from 453:553.
+- **Dropdown Menu**: Menu Item 510:1825 (52 variants) + Menu Section 512:1668 + Menu Search 512:1670 + container 513:1669. Ported from DS 3.0 "new". 16px icon exception. Pressed dropped.
+- **Read-only Field**: set 520:1872 (24 variants = 12 Type × Filled/Empty). Badge 238:208 reused for pills. Lightweight File treatment. 12px label exception.
+- All doc showcases added to Forms & Inputs 157:1257. _Source Components 157:1256 grew to 8754 tall. Footer re-dated 2026-06-16.
 
 ## Session log — 2026-06-16 (Forms source-frame reflow + doc showcase)
-- Reflowed _Source Components frame 157:1256: all 10 sets restacked top-to-bottom at x=40, 40px gaps, no overlaps (Input→Textarea→Select→Checkbox→Radio→Switch→Filter chip→Masked field→Country row→Country dropdown). Frame resized 1892×5364. Country row 440:450 + Country dropdown 441:437 moved inside.
-- Doc frame 157:1257: Checkbox showcase (179:580) + Radio showcase (179:608) rebuilt to 4 labeled state cells each (Enabled/Hover/Focused/Disabled).
-- Doc frame 157:1257 completed: (1) Switch showcase (179:625) — appended 5th State=Loading instance; (2) NEW "Input — Small (32px)" section added below the existing Input section — heading 463:1672, 7 type rows × 5 states with Size=Small (32px field / 76px overall), inserted before Textarea separator; (3) NEW "Filter chip" section added between Switch and Masked field — heading 464:3, col headers + 4 combo rows × 4 states = 16 chip instances (Plain / + Icon / + Badge / + Icon + Badge). Doc grew 2643 → 4175px.
+- Reflowed _Source Components frame 157:1256: all sets restacked, 40px gaps. Frame resized 1892×5364.
+- Doc frame 157:1257 completed: Checkbox/Radio 4-state showcases, Switch Loading, Input Small (32px) section, Filter chip section.
 
 ## Session log — 2026-06-15 (Forms & Inputs audit + rebuild)
-- Full DS 3.0 vs DS 4.0 audit of Forms family. DS 3.0 form pages: Input (11426:7463), Checkbox (11455:8195), Radio (11477:10059), Switch (11646:8782), Form Components [NEW] (16406:15048), + standalone: Dropdown Menu, File Upload Field, Filter chip (27839:33637), Read-only fields, RAG fields, Horizontal/Vertical toggle, Cascader, Slider.
-- Built 5: Checkbox, Radio, Input, Switch (Loading), Filter chip — all screenshot-verified, fully tokenized.
-- Then: Phone Input full rebuild (country selector: flag+chevron+dial+clear) + Country dropdown panel (row set 440:450 + panel 441:437); added Phone as 7th row to Input doc showcase.
-- Then: Masked field standalone component (set 453:800, 12 variants) + added Masked field section (6-state showcase) to doc frame 157:1257.
-- Organization: moved Filter chip (430:487) + Masked field (453:800) sets INTO _Source Components frame 157:1256 (below Switch, y=3500/3772; frame extended to 1892×4044).
-- Also: corrected color/text/disabled doc row on Color System page (Neutral/500/#D0D4DF → Neutral/600/#8892AC) to match live variable.
-- Env note: network egress blocks www.figma.com → cannot curl screenshot URLs or push to out-of-scope repos; screenshots viewed via get_screenshot base64 inline. GitHub MCP scoped to christiancalvino/certa_app only — certacalvino/certa-design-system is out of scope (user pushes CLAUDE.md manually).
+- Full DS 3.0 vs DS 4.0 audit. Built: Checkbox, Radio, Input, Switch (Loading), Filter chip, Phone Input, Country dropdown, Masked field.
+- Env note: GitHub MCP scoped to christiancalvino/certa_app only — certacalvino/certa-design-system is out of scope (user pushes CLAUDE.md manually).
 
 ## Session log — 2026-06-12 (Feedback/Nav/Buttons fixes)
-- Fix 1 (Feedback & Overlay): removed text overlap in Toast + Alert Banner doc frames; added missing Alert Banner variant showcase above its token table; set 96px gap between the two doc frames (Toast left, Alert right). Source-components frame untouched.
-- Fix 2 (Navigation): replaced grey/red icon placeholders with real House icon in all 20 Nav bar variants; per-state colour tokens preserved.
-- Fix 3 (Buttons & Actions): footer "Last updated" date 2026-06-09 → 2026-06-11.
-- Fix 4 (Toast icons): replaced icon-placeholder ellipses in all 16 non-Default Toast variants with real icon instances; color variable bound via setBoundVariableForPaint on VECTOR children — no hardcoded colours.
-- Working note: in this MCP/plugin environment, `loadAllPagesAsync` is unsupported but `figma.root.children` exposes pages directly; `page.findAll` requires the page to be current/loaded (`setCurrentPageAsync`) within each call.
-- Working note: throwing inside use_figma rolls back all changes (use for read-only queries only); persistent edits must complete without throwing.
+- Toast + Alert Banner doc fixes; Nav icon → Menu/Hamburger; Toast icon instances replaced.
+- Working note: `loadAllPagesAsync` unsupported — use `figma.root.children`. Throwing inside use_figma rolls back all changes.
 
 ## Open decisions — pending design lead
-- FLAG (Nav icon): now "Menu/Hamburger" icon (House→Sidebar→Menu progression). Reads clearly as navigation. Confirm acceptable, or specify per-item icons.
-- FLAG (Toast icon): Error & Warning share the Warning triangle — no distinct Error/exclamation icon in library. Recommend commissioning an alert-circle icon.
-- FLAG (Fix 1): Alert Banner doc frame is now auto-layout while Toast doc is still free-form/manually reflowed. Recommend standardising both doc frames to auto-layout for maintainability.
-- FLAG (Fix 1): Alert Banner showcase displays only the Action+Dismiss=true variant per type (4 of 16). Confirm if additional states should be shown.
-- FLAG (Filter chip): DS 4.0 build diverges from DS 3.0 dark-pill styling (Neutral/750 fill) — no dark-neutral bg semantic token exists. Built as light/brand-selected model instead. Confirm, or commission dark-neutral bg tokens for the literal port.
-- FLAG (Phone input): now full country-selector build (flag+chevron+dial+clear) + Country dropdown panel. Caveats: (a) flag = OS emoji (🇺🇸) — renders inconsistently across Win/Mac/Linux; (b) dropdown shadow is a raw DROP_SHADOW (no shadow effect-style/variable exists in file — not tokenized); (c) country/dial data is illustrative (6 sample countries), not a full dataset; (d) dropdown is static (no interactive open/close wiring).
-- FLAG (focus ring): Checkbox focus = 2px border/focused CENTER; Radio focus = OUTSIDE halo. Standardize focus-ring treatment across all controls in a polish pass.
-- FLAG (Masked field): no eye-off icon in library — Eye (180:2119) used for both show & hide (state differentiates). Recommend commissioning an eye-off/eye-slash icon. Also overlaps the simple Password input type — Masked = async-reveal sensitive values, Password = static dots; keep both or consolidate (design lead).
-- FLAG (File Upload): file-type badges are tokenized stand-ins (PDF=Danger, DOC=Brand, IMG=Success, Neutral=generic). Commission real file-type icon set (PDF, DOC, IMG, generic) as follow-up task.
-- FLAG (Dropdown Menu): Pressed token not yet canonical in DS 4.0 — Pressed state dropped for v1. Add in polish pass when token is established.
-- RESOLVED 2026-06-16 (Multi-select + File Upload + Dropdown Menu): all three components built, screenshot-verified, doc showcases added to Forms & Inputs frame 157:1257.
-- RESOLVED 2026-06-16 (Forms doc showcase): all pending showcase items added to doc 157:1257. Showcase complete.
-- RESOLVED 2026-06-16 (Input set overlap): source frame 157:1256 reflowed — all sets stacked with 40px gaps, no overlaps.
-- RESOLVED 2026-06-16 (Phone country components): Country row 440:450 + Country dropdown 441:437 moved into _Source Components frame.
-- Forms backlog (DS 3.0 not yet ported): Read-only fields, RAG/Visualization fields, Horizontal/Vertical toggle, Cascader, Slider.
-- Nav bar full sidebar composition: individual items need to be composed into a full sidebar component
-- 6 provisional status tokens: need primitives or confirmation
-- Process Status interactive states: needed if chips are clickable
-- Spacing token gaps: Button S/M some values rounded to nearest token
+- FLAG (Nav icon): Menu/Hamburger confirmed. Confirm acceptable or specify per-item icons.
+- FLAG (Toast/Alert icon): Error & Warning share Warning triangle — no distinct error-circle icon. Commission alert-circle.
+- FLAG (Filter chip): diverges from DS 3.0 dark-pill — no dark-neutral bg token. Confirm light/brand model or commission tokens.
+- FLAG (Phone input): emoji flag renders inconsistently cross-platform; dropdown shadow not tokenized; 6 sample countries only; static (no open/close wiring).
+- FLAG (focus ring): Checkbox CENTER vs Radio OUTSIDE halo — standardize in polish pass.
+- FLAG (Masked field): no eye-off icon — Eye used for both states. Commission eye-slash icon.
+- FLAG (File Upload): file-type badges are tokenized stand-ins. Commission real file-type icon set.
+- FLAG (Dropdown Menu): Pressed token not canonical in DS 4.0 — dropped for v1. Add in polish pass.
+- RESOLVED 2026-06-16: Multi-select, File Upload, Dropdown Menu, Read-only Field all built and verified.
+- Forms backlog (DS 3.0 not yet ported): RAG/Visualization fields, Horizontal/Vertical toggle, Cascader, Slider.
+- Nav bar full sidebar composition pending.
+- 6 provisional status tokens pending primitives or confirmation.
 
 ## Pending components (from production audit)
 High priority: Table rows, Pagination, Date picker
@@ -155,4 +135,4 @@ Post-presentation: Full sidebar composition, Motion specs, Theming
 - Color: ~95%
 - Spacing: ~65%
 - Typography: 100%
-- Overall: ~85%
+- Overall: ~87%
