@@ -465,14 +465,25 @@ dp = section("Date picker", '<div class="overlay" style="width:300px;padding:var
 pages.append(("30-date-picker.html","Date Picker","High-priority pending component — first DS 4.0 pass. Selected day = brand fill.",dp))
 
 # 31 avatar -----------------------------------------------------------------
-def av(txt,size,bg="var(--color-bg-brand)",col="#fff"):
-    return (f'<span style="width:{size}px;height:{size}px;border-radius:var(--radius-full);background:{bg};color:{col};'
-            f'display:inline-flex;align-items:center;justify-content:center;font-weight:700;'
-            f'font-size:{int(size*0.4)}px">{txt}</span>')
-avp = section("Avatar (stand-in — FLAG: commission set)", '<div class="row">'
-    + av("CC",48) + av("JP",40) + av("AS",32,bg="var(--color-bg-muted)",col="var(--color-text-secondary)")
-    + av("MR",24,bg="var(--color-status-success-bg)",col="var(--color-status-success-fg)") + '</div>')
-pages.append(("31-avatar.html","Avatar","Stand-in only — no real component yet (flagged for commission). Initials, brand fill, sizes 24–48.",avp))
+AV_SIZES = [("S",24),("M",32),("L",40),("XL",56)]
+AV_TONES = ["brand","teal","green","orange","red","neutral"]
+def av(txt,size,tone):
+    return (f'<span style="width:{size}px;height:{size}px;border-radius:var(--radius-full);'
+            f'background:var(--color-avatar-{tone}-bg);color:var(--color-avatar-{tone}-fg);display:inline-flex;'
+            f'align-items:center;justify-content:center;font-weight:600;font-size:{int(size*0.4)}px;flex-shrink:0">{txt}</span>')
+# tone × size matrix (24 variants)
+av_rows = ""
+for tone in AV_TONES:
+    cells = "".join(f'<td style="padding:var(--space-md) var(--space-lg)">{av("AB",px,tone)}</td>' for _,px in AV_SIZES)
+    av_rows += (f'<tr><td style="padding:0 var(--space-lg)"><span class="badge badge--neutral">{tone}</span></td>{cells}</tr>')
+avp = section("Tone × Size (24 variants)",
+    '<table style="border-collapse:separate"><thead><tr><th>Tone</th>'
+    + "".join(f'<th>{lbl} · {px}px</th>' for lbl,px in AV_SIZES) + '</tr></thead><tbody>'
+    + av_rows + '</tbody></table>')
+avp += section("In context", '<div class="row">'
+    + av("CC",40,"brand") + av("JP",40,"teal") + av("AS",40,"green")
+    + av("MR",40,"orange") + av("LC",40,"red") + av("DK",40,"neutral") + '</div>')
+pages.append(("31-avatar.html","Avatar","Size(S 24 / M 32 / L 40 / XL 56) × Tone(Brand/Teal/Green/Orange/Red/Neutral) = 24 variants. Full-circle, light tint bg + saturated Semi-Bold initials (matches Figma set 572:50).",avp))
 
 # 32 progress steps ---------------------------------------------------------
 def step(n,label,state):
@@ -512,6 +523,44 @@ cf = section("Certifications as checkbox pills", '<div class="row">'
     + '<p class="t-caption" style="margin-top:var(--space-lg)">Use pills for small, finite sets. '
       'Switch to a multi-select dropdown when the option list is long.</p>')
 pages.append(("34-certifications.html","Certifications Pills","UI pattern: small finite multi-select as checkbox pills vs dropdown. Active = brand-subtle.",cf))
+
+# 35 toggle -----------------------------------------------------------------
+def toggle(opts, sel, vertical=False):
+    seg = ""
+    h = "var(--control-height-m)" if vertical else "var(--control-height-s)"
+    for o in opts:
+        on = o == sel
+        bg = "background:var(--color-bg-brand-subtle);" if on else "background:transparent;"
+        col = "color:var(--color-text-link);font-weight:700;" if on else "color:var(--color-text-secondary);font-weight:500;"
+        ta = "text-align:left;flex:0 0 auto;" if vertical else "text-align:center;"
+        seg += (f'<button style="height:{h};padding:0 var(--space-lg);border:none;'
+                f'border-radius:var(--radius-sm);cursor:pointer;font:14px var(--font-family-base);{bg}{col}{ta}">{o}</button>')
+    dirn = "column" if vertical else "row"
+    w = "width:220px;" if vertical else ""
+    return (f'<div role="group" style="display:inline-flex;flex-direction:{dirn};{w}overflow:hidden;'
+            f'background:var(--color-bg-subtle);border:1px solid var(--color-border-subtle);'
+            f'border-radius:var(--radius-sm)">{seg}</div>')
+tg = section("Horizontal (item 32px hug)", '<div class="col">'
+    + toggle(["List","Board","Calendar"], "Board")
+    + toggle(["Day","Week","Month","Year"], "Week") + '</div>')
+tg += section("Vertical (220w, item 40px fill)", toggle(["Overview","Activity","Documents","Settings"], "Activity", vertical=True))
+pages.append(("35-toggle.html","Toggle","Segmented control — horizontal & vertical (Figma 574:62 / 575:2 / 575:9). Track on surface/subtle + 1px border/subtle, items flush. Selected = brand-subtle fill + text/link Body Bold.",tg))
+
+# 36 RAG field --------------------------------------------------------------
+def rag(label, level):
+    key = {"Low":"low","Medium":"medium","High":"high"}[level]
+    return (f'<div class="col" style="gap:2px"><span class="t-caption">{label}</span>'
+            f'<span style="display:inline-flex;align-items:center;gap:var(--space-md);'
+            f'background:var(--color-rag-{key}-bg);color:var(--color-rag-{key}-fg);border-radius:var(--radius-sm);'
+            f'padding:2px var(--space-md);font-size:var(--font-body-size);font-weight:600;width:fit-content">'
+            f'<span style="width:8px;height:8px;border-radius:var(--radius-full);background:var(--color-rag-{key}-fg)"></span>'
+            f'{level} risk</span></div>')
+rg = section("RAG risk levels (Red / Amber / Green)", '<div class="row" style="gap:var(--space-4xl)">'
+    + rag("Inherent risk","Low") + rag("Residual risk","Medium") + rag("Overall risk","High") + '</div>')
+rg += section("In a record", '<div class="row" style="gap:var(--space-4xl)">'
+    + rag("Financial","Low") + rag("Operational","Medium") + rag("Cybersecurity","High")
+    + rag("Compliance","Low") + '</div>')
+pages.append(("36-rag-field.html","RAG Field","Low / Medium / High risk status display. Read-only field: 12px caption label + colored dot + level. Green→Low, Amber→Medium, Red→High.",rg))
 
 # --- write -----------------------------------------------------------------
 for fn, title, blurb, body in pages:

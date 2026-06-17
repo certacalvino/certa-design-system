@@ -302,7 +302,139 @@ export function ProgressSteps({ steps = [], current = 0 }) {
   );
 }
 
+/* ---------------------------------------------------------------------------
+   Avatar — Size(S 24 / M 32 / L 40 / XL 56) × Tone(brand/teal/green/orange/
+   red/neutral) = 24 variants. Full-circle, light tint bg + saturated
+   Semi-Bold initials (matches Figma set 572:50). Initials are decorative,
+   so the scaled font size may fall below the 14px interactive floor at S/M.
+   --------------------------------------------------------------------------- */
+export const AVATAR_SIZE = { s: 24, m: 32, l: 40, xl: 56 };
+export const AVATAR_TONES = ["brand", "teal", "green", "orange", "red", "neutral"];
+
+function initials(name = "") {
+  return name.trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+}
+
+export function Avatar({ name = "", tone = "brand", size = "m" }) {
+  const px = AVATAR_SIZE[size] || AVATAR_SIZE.m;
+  return (
+    <span
+      role="img"
+      aria-label={name}
+      style={{
+        width: px,
+        height: px,
+        borderRadius: "var(--radius-full)",
+        background: `var(--color-avatar-${tone}-bg)`,
+        color: `var(--color-avatar-${tone}-fg)`,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontFamily: "var(--font-family-base)",
+        fontWeight: "var(--font-weight-semibold)",
+        fontSize: Math.round(px * 0.4),
+        lineHeight: 1,
+        userSelect: "none",
+        flexShrink: 0,
+      }}
+    >
+      {initials(name)}
+    </span>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   Toggle — segmented control. orientation="horizontal" | "vertical".
+   Matches Figma set 574:62 + containers 575:2/575:9: track on surface/subtle
+   with a 1px border/subtle, r4, items flush (no gap). Selected = brand-subtle
+   fill + text/link Body Bold. H item 32px hug; V item 40px FILL.
+   --------------------------------------------------------------------------- */
+export function Toggle({ options = [], value, onChange = () => {}, orientation = "horizontal" }) {
+  const vertical = orientation === "vertical";
+  return (
+    <div
+      role="group"
+      style={{
+        display: "inline-flex",
+        flexDirection: vertical ? "column" : "row",
+        width: vertical ? 220 : "auto",
+        background: "var(--color-bg-subtle)",
+        border: "1px solid var(--color-border-subtle)",
+        borderRadius: "var(--radius-sm)",
+        overflow: "hidden",
+      }}
+    >
+      {options.map((opt) => {
+        const v = typeof opt === "string" ? opt : opt.value;
+        const label = typeof opt === "string" ? opt : opt.label;
+        const on = v === value;
+        return (
+          <button
+            key={v}
+            type="button"
+            aria-pressed={on}
+            onClick={() => onChange(v)}
+            style={{
+              height: vertical ? "var(--control-height-m)" : "var(--control-height-s)",
+              flex: vertical ? "0 0 auto" : "0 1 auto",
+              padding: "0 var(--space-lg)",
+              border: "none",
+              borderRadius: "var(--radius-sm)",
+              cursor: "pointer",
+              textAlign: vertical ? "left" : "center",
+              background: on ? "var(--color-bg-brand-subtle)" : "transparent",
+              color: on ? "var(--color-text-link)" : "var(--color-text-secondary)",
+              fontFamily: "var(--font-family-base)",
+              fontSize: "var(--font-body-size)",
+              fontWeight: on ? "var(--font-weight-bold)" : "var(--font-weight-medium)",
+            }}
+          >
+            {label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   RAGField — Low / Medium / High risk status display (Red/Amber/Green).
+   Label (12px caption) + colored dot + risk level. Read-only display.
+   --------------------------------------------------------------------------- */
+export const RAG_LEVELS = {
+  Low: "low",
+  Medium: "medium",
+  High: "high",
+};
+export function RAGField({ label = "Risk", level = "Low" }) {
+  const key = RAG_LEVELS[level] || "low";
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <span className="t-caption">{label}</span>
+      <span
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "var(--space-md)",
+          background: `var(--color-rag-${key}-bg)`,
+          color: `var(--color-rag-${key}-fg)`,
+          borderRadius: "var(--radius-sm)",
+          padding: "2px var(--space-md)",
+          fontSize: "var(--font-body-size)",
+          fontWeight: "var(--font-weight-semibold)",
+          width: "fit-content",
+        }}
+      >
+        <span style={{ width: 8, height: 8, borderRadius: "var(--radius-full)", background: `var(--color-rag-${key}-fg)` }} />
+        {level} risk
+      </span>
+    </div>
+  );
+}
+
 export default {
   Button, Icon, Badge, ProcessStatus, Field, Input,
-  CheckboxPill, Card, SectionHeader, EmptyState, ProgressSteps, tokens, STATUS_COLOR,
+  CheckboxPill, Card, SectionHeader, EmptyState, ProgressSteps,
+  Avatar, Toggle, RAGField, tokens, STATUS_COLOR,
+  AVATAR_SIZE, AVATAR_TONES, RAG_LEVELS,
 };

@@ -39,30 +39,31 @@ catalyst-ds-4.0/
 ├── README.md                   # this file
 ├── build_previews.py           # regenerates preview/*.html from token data
 ├── ui_kits/certa-studio/
-│   ├── Primitives.jsx          # Button, Icon, Badge, ProcessStatus, Field, Input,
-│   │                           #   CheckboxPill, Card, SectionHeader, EmptyState, ProgressSteps
+│   ├── Primitives.jsx          # Button, Icon, Badge, ProcessStatus, Field, Input, CheckboxPill,
+│   │                           #   Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, RAGField
 │   ├── AppShell.jsx            # light sidebar + topbar + nav active-state pattern
 │   ├── VendorsList.jsx         # data table: status mapping, hover row actions, empty state
 │   ├── HomeDashboard.jsx       # stat widgets + attention queue + activity feed
 │   └── VendorDetail.jsx        # tabs + multi-step progress + form sections + cert pills + upload
-└── preview/                    # 34 standalone HTML previews (open any in a browser)
-    ├── 01-tokens.html               18-table-row.html
-    ├── 02-buttons.html              19-table-column-header.html
-    ├── 03-icon-buttons.html         20-table.html
-    ├── 04-checkbox.html             21-process-status.html
-    ├── 05-radio.html                22-badge.html
-    ├── 06-switch.html               23-toast.html
-    ├── 07-input.html                24-alert-banner.html
-    ├── 08-masked-field.html         25-nav-bar.html
-    ├── 09-phone-input.html          26-modal.html
-    ├── 10-multi-select.html         27-tabs.html
-    ├── 11-country-dropdown.html     28-pagination.html
-    ├── 12-filter-chip.html          29-empty-state.html
-    ├── 13-dropdown-menu.html        30-date-picker.html
-    ├── 14-read-only-field.html      31-avatar.html
-    ├── 15-file-row.html             32-progress-steps.html
-    ├── 16-file-upload.html          33-form-section.html
-    └── 17-table-cell.html           34-certifications.html
+└── preview/                    # 36 standalone HTML previews (open any in a browser)
+    ├── 01-tokens.html               19-table-column-header.html
+    ├── 02-buttons.html              20-table.html
+    ├── 03-icon-buttons.html         21-process-status.html
+    ├── 04-checkbox.html             22-badge.html
+    ├── 05-radio.html                23-toast.html
+    ├── 06-switch.html               24-alert-banner.html
+    ├── 07-input.html                25-nav-bar.html
+    ├── 08-masked-field.html         26-modal.html
+    ├── 09-phone-input.html          27-tabs.html
+    ├── 10-multi-select.html         28-pagination.html
+    ├── 11-country-dropdown.html     29-empty-state.html
+    ├── 12-filter-chip.html          30-date-picker.html
+    ├── 13-dropdown-menu.html        31-avatar.html
+    ├── 14-read-only-field.html      32-progress-steps.html
+    ├── 15-file-row.html             33-form-section.html
+    ├── 16-file-upload.html          34-certifications.html
+    ├── 17-table-cell.html           35-toggle.html
+    └── 18-table-row.html            36-rag-field.html
 ```
 
 Every preview links `../colors_and_type.css`, so swatches render with the real
@@ -176,7 +177,7 @@ primitives:
 
 Carried over from `CLAUDE.md` "Open decisions":
 
-- **Avatar** — stand-in only; commission a real set.
+- **Avatar** — now a real component (Size × Tone, 24 variants, initials only). Photo-backed avatars + status ring still pending.
 - **Table column header** — 10px label is below the 12px floor (confirmed exception).
 - **Error + Warning icon** — Toast/Alert share the warning triangle; commission an alert-circle.
 - **Masked field** — no eye-slash icon yet.

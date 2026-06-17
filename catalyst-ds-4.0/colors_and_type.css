@@ -52,6 +52,12 @@
   --red-600: #B91C1C;
   --red-700: #991B1B;
 
+  /* Teal ramp (avatar tone — not a status color) ---------------------------- */
+  --teal-50:  #F0FDFA;
+  --teal-100: #CCFBF1;
+  --teal-500: #0D9488;
+  --teal-600: #0F766E;
+
   --white: #FFFFFF;
   --black: #000000;
 
@@ -110,6 +116,21 @@
   --color-status-info-bg:    var(--brand-50);
   --color-status-neutral-fg: var(--slate-600);
   --color-status-neutral-bg: var(--slate-100);
+
+  /* Avatar tones (decorative identity — light tint bg + saturated initials) -
+     Matches Figma set 572:50: Brand 100/700 · Teal/Green/Orange/Red L3/D2 ·
+     Neutral 200/700. Each tone is a {bg, fg} pair. */
+  --color-avatar-brand-bg:   var(--brand-100);   --color-avatar-brand-fg:   var(--brand-700);
+  --color-avatar-teal-bg:    var(--teal-100);    --color-avatar-teal-fg:    var(--teal-600);
+  --color-avatar-green-bg:   var(--green-100);   --color-avatar-green-fg:   var(--green-700);
+  --color-avatar-orange-bg:  var(--amber-100);   --color-avatar-orange-fg:  var(--amber-700);
+  --color-avatar-red-bg:     var(--red-100);     --color-avatar-red-fg:     var(--red-700);
+  --color-avatar-neutral-bg: var(--slate-200);   --color-avatar-neutral-fg: var(--slate-700);
+
+  /* RAG risk (Red/Amber/Green) — reuses status palette ---------------------- */
+  --color-rag-low-fg:    var(--green-600);   --color-rag-low-bg:    var(--green-50);
+  --color-rag-medium-fg: var(--amber-700);   --color-rag-medium-bg: var(--amber-50);
+  --color-rag-high-fg:   var(--red-600);     --color-rag-high-bg:   var(--red-50);
 
   /* ----------------------------------------------------------------------------
      3. TYPOGRAPHY
