@@ -59,6 +59,12 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 ### Badge — 2026-06-11
 - 48 variants: Size(S/M) × Type(Default/Filled) × Color × Icon. Page: Data Display.
 
+### Avatar — 2026-06-17 (greenfield)
+- Set 572:50 — Size(S 24/M 32/L 40/XL 56) × Tone(Brand/Teal/Green/Orange/Red/Neutral) = 24 variants. Page: Data Display. Source: 252:93. Doc section in 198:44 (showcase 573:6).
+- Circle (r = Ø/2), light tint bg + saturated "AB" initials (Inter Semi Bold, raw 10/12/14/20 scaled to Ø — decorative, below 14px floor at S/M).
+- Tones bound to primitive hue scales: Brand 100/700 · Teal/Green/Orange/Red L3(bg)/D2(initials) · Neutral 200/700. Zero hardcoded values.
+- Resolves the Table Entity avatar stand-in flag — swap the stand-in for this component in a polish pass.
+
 ### Toast — rebuilt 2026-06-12
 - 20 variants. Set 330:727, doc 337:62. 430px, r8. FLAG: Error+Warning share Warning triangle.
 
@@ -107,13 +113,14 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - Tabs (542:83 item set 20 variants + 543:2 container). Doc 544:2 on Navigation page.
 - Empty State (549:50, 6 variants Context×Action) — greenfield, no DS 3.0 port. Doc section in Data Display 198:44.
 - Pagination (563:60 Simple/Numbered + 562:8 page-button states). Doc section in Data Display 198:44. Reuses Icon Button 113:710 + Badge brand tokens.
+- Avatar (572:50, 24 variants Size×Tone) — greenfield. Doc section in Data Display 198:44. Resolves Table Entity stand-in flag.
 - Catalyst DS 4.0 ZIP generated with 34 previews + JSX + UI Patterns section in README. Uploaded to Claude Design "Certa DS 4.0 — WIP".
 - Catalyst bundle committed to repo at catalyst-ds-4.0/ (+ catalyst-ds-4.0.zip). colors_and_type.css = full semantic token layer (primitives→semantic→type/space/effects); ui_kits/certa-studio/ = Primitives + AppShell + VendorsList + HomeDashboard + VendorDetail; preview/ = 34 standalone token-linked HTML files; index.html gallery; README UI Patterns documents all 10 composition rules. build_previews.py regenerates previews (excluded from zip). NOTE: programmatic upload to Claude Design unavailable from remote env — zip committed for manual upload.
 - Sidebar confirmed from production inspector: background = var(--colors-neutral-200) = light. Corrected in Catalyst 4.0.
 - Claude Design comparison: DS 4.0 uses correct status vocabulary and brand tokens. DS 3.0 generates invented states ("Blocked", "Pending") not in Certa vocabulary.
 
 ## Open decisions — pending design lead
-- FLAG (Avatar): no component — stand-in in Table Entity. Commission Avatar set.
+- RESOLVED (Avatar): built 572:50 (24 variants). Table Entity stand-in still in place — swap to Avatar component in polish pass.
 - FLAG (Table column header): 10px below 12px floor. Confirmed exception pending formal sign-off.
 - FLAG (Table placement): currently in Forms & Inputs. Candidate for Data Display page.
 - FLAG (Nav icon): Menu/Hamburger. Confirm or specify per-item icons.
@@ -134,7 +141,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 
 ## Pending components
 High priority: Date picker (Empty State — DONE 2026-06-17 · Pagination — DONE 2026-06-17)
-Medium priority: Dashboard widget, Avatar component
+Medium priority: Dashboard widget (Avatar — DONE 2026-06-17)
 Post-presentation: Full sidebar composition, Motion specs, Theming
 
 ## Tokenization state (as of 2026-06-17)
