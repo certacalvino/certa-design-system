@@ -118,6 +118,19 @@ Last updated: 2026-06-17
 - Page: Navigation
 - 2026-06-12 (Fix round 3): icon = MENU/HAMBURGER (Icons page, main 180:1643). Per-state color bound to all fills; badge dots preserved.
 
+### Tabs — 2026-06-17 (ported/unified from DS 3.0 "Tab bar")
+- Two components on Navigation page (1:18): source frame _Source Components 282:2 (extended to ~784 tall), doc frame "Tabs — Documentation" 544:2 (x=1620).
+- **Tab item** (set 542:83): State(Unselected/Hover/Selected/Focused/Disabled) × Badge(bool) × Icon(bool) = 20 variants. 40px tall, HORIZONTAL, padding lg(12) H, gap md(8). Content: icon(20px) + label(14px) + count Badge (238:64 Neutral/S). Label = Body Bold (Selected) / Body Regular (others). Selected→text/primary + 2px text/link bottom indicator; Unselected/Hover/Focused→text/secondary; Disabled→text/disabled + opacity 0.4. Hover = surface/muted fill, top corners r4. Focused = 2px border/focused ring r4. Icon recolored per state (recolor-safe). DECISION: dropped DS 3.0's combined "Focus & Selected" state (focus is orthogonal) → 20 not 24.
+- **Tab container** (component 543:2): HORIZONTAL, itemSpacing 0, full-width 1px border/subtle bottom baseline; composes 4 Tab item instances (Overview selected + Activity/Files[badge]/Settings) — the 2px text/link indicator overlays the baseline on the active item. Width HUG.
+- Fully tokenized; reuses Badge 238:64. Doc sections: States, Tab bar, Specifications, Semantic tokens, DS 3.0 → 4.0 changes.
+- DS 3.0 source was a lone "Tab bar item" set (11434:8165, 24 variants), 12px hardcoded hex, height 32, icon 16, disabled == unselected, per-item underline (no track). All resolved.
+
+## Session log — 2026-06-17 (Tabs)
+- Audited DS 3.0 "Tab bar" page: lone "Tab bar item" set 11434:8165 (24 variants State×Badge×Icon), 12px hardcoded hex, 32px, icon 16, disabled identical to unselected, per-item 2px underline + no shared track; badge = Gray/Rectangle r6.
+- Built DS 4.0 Tab item set 542:83 (20 variants) + Tab container 543:2 in Navigation source 282:2; doc frame 544:2 at x=1620.
+- Locked: full-width 1px border/subtle baseline + 2px text/link (#1B4FD8) active indicator overlay; labels 14px Body Bold/Body; single 40px size; icons 20px; disabled text/disabled @40%; padding lg(12) H; Badge 238:64 Neutral/S. Dropped Focus&Selected combo (20 vs 24), container itemSpacing 0.
+- Gotcha: doc frame AUTO height re-locked by resizeWithoutConstraints — re-asserted AUTO at end.
+
 ## Session log — 2026-06-17 (Modal)
 - Audited DS 3.0 "Dialog" page (no "Modal" page exists): two divergent components (fixed-layout 11481:10127 + auto-layout 27811:275), both header+footer only, hardcoded hex, button height mismatch, separate Dimmer 11480:10088 = #000e33@15%.
 - Built DS 4.0 Modal set 536:144 (6 variants Size×Type) in Feedback&Overlay source 278:6; doc frame 537:2 at x=4800.
@@ -164,13 +177,15 @@ Last updated: 2026-06-17
 - FLAG (Modal): scrim is doc-composition only, not a component — wire scrim+open/close in patterns pass. Close glyph left at native color (no token bind). shadow-lg + color/bg/overlay are the first Figma effect-style / overlay token in the file; consider formalizing a full elevation scale.
 - RESOLVED 2026-06-16: Multi-select, File Upload, Dropdown Menu, Read-only Field, Table Row (Cell/Row/Column Header) all built and verified.
 - RESOLVED 2026-06-17: Modal (Dialog) ported & unified from DS 3.0 — 6 variants, tokenized, new overlay token + shadow-lg style.
+- FLAG (Tabs): dropped DS 3.0 combined "Focus & Selected" state (focus treated as orthogonal) — add back if focus-on-active must be shown. Tab container is item-only composition (no tab panel/content region — out of scope). Active indicator + open/close wiring is a patterns-pass concern.
+- RESOLVED 2026-06-17: Tabs (Tab bar) ported & unified from DS 3.0 — Tab item (20 variants) + Tab container, tokenized, 14px labels, brand indicator over baseline.
 - Forms backlog (DS 3.0 not yet ported): RAG/Visualization fields, Horizontal/Vertical toggle, Cascader, Slider.
 - Nav bar full sidebar composition pending.
 - 6 provisional status tokens pending primitives or confirmation.
 
 ## Pending components (from production audit)
 High priority: Pagination, Date picker (Table rows — DONE 2026-06-16)
-Medium priority: Tabs, Empty state, Dashboard widget (Modal — DONE 2026-06-17)
+Medium priority: Empty state, Dashboard widget (Modal — DONE 2026-06-17 · Tabs — DONE 2026-06-17)
 Post-presentation: Full sidebar composition, Motion specs, Theming
 
 ## Tokenization state (as of 2026-06-17)
