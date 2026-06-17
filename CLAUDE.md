@@ -84,9 +84,19 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - DS 3.0→4.0: label 12→14px, height 32→40, icon 16→20, tokenized (all hex removed), fixed disabled, normalized padding, added full-width baseline + brand indicator, Badge → 238:64.
 - Dropped "Focus & Selected" combined state (DS 3.0 had it) — focus is transient, 20 variants cleaner.
 
+### Empty State — 2026-06-17 (greenfield — no DS 3.0 port)
+- Set 549:50 — Context(Page/Card/Table) × Action(bool) = 6 variants. Page: Data Display. Source: 252:93. Doc section in 198:44 (showcase 551:6 + specs + tokens).
+- Anatomy (VERTICAL, centered): icon (text/disabled) + title (Body Bold 14 text/primary) + description (Body 14 text/secondary, wraps) + optional Action button.
+- Page: icon 32px · gap xl(16) · width 400 · Filled M button (113:50). Card: icon 24px · gap md(8) · width 320 · Filled S (113:14). Table: icon 24px · gap md(8) · width 640 (spans table body) · Filled S (113:14).
+- Icon-led, no illustrations. Default glyph Search 180:1637 (component → instanced, recolored text/disabled), swappable. 14px minimum all contexts.
+- Sample copy: Page "No results found" / Card "Nothing here yet" / Table "No data found".
+- DS 3.0 had NO Empty State component — only in-context table mockups ("NO DATA FOUND" 10px + "Add" CTA) inside Table-page explorations. Built from scratch.
+- Gotcha: cloning a COMPONENT (180:1637) into a component errors ("component inside component") — use createInstance() when node is COMPONENT. WRAP showcase frame needs primaryAxisSizingMode=FIXED + counterAxisSizingMode=AUTO (set FIXED before resize, else width re-hugs). Component-set node with WRAP renders 1×1 from screenshot backend — instances render fine.
+
 ## Session log — 2026-06-17
 - Modal (536:144, 6 variants) + 2 new tokens (color/bg/overlay 535:2, shadow-lg effect style).
 - Tabs (542:83 item set 20 variants + 543:2 container). Doc 544:2 on Navigation page.
+- Empty State (549:50, 6 variants Context×Action) — greenfield, no DS 3.0 port. Doc section in Data Display 198:44.
 - Catalyst DS 4.0 ZIP generated with 34 previews + JSX + UI Patterns section in README. Uploaded to Claude Design "Certa DS 4.0 — WIP".
 - Sidebar confirmed from production inspector: background = var(--colors-neutral-200) = light. Corrected in Catalyst 4.0.
 - Claude Design comparison: DS 4.0 uses correct status vocabulary and brand tokens. DS 3.0 generates invented states ("Blocked", "Pending") not in Certa vocabulary.
@@ -105,12 +115,13 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - FLAG (Dropdown Menu): Pressed token not canonical. Add in polish pass.
 - FLAG (Modal): shadow-lg + overlay are first effect-style/overlay tokens — formalize elevation scale later. Close uses cloned glyph not Icon Button.
 - FLAG (Tabs): no tab panel/content region (out of scope). Dropped Focus+Selected combo — add back if needed.
-- RESOLVED 2026-06-17: Modal, Tabs complete.
+- FLAG (Empty State): icon-led, no illustration library exists — commission spot-art/illustration set for a richer variant later. Default glyph Search; swap per use case (Files/Table/etc).
+- RESOLVED 2026-06-17: Modal, Tabs, Empty State complete.
 - RESOLVED 2026-06-16: Multi-select, File Upload, Dropdown Menu, Read-only Field, Table Row.
 - Forms backlog: RAG/Visualization fields, Toggle H/V, Cascader, Slider.
 
 ## Pending components
-High priority: Pagination, Empty state, Date picker
+High priority: Pagination, Date picker (Empty State — DONE 2026-06-17)
 Medium priority: Dashboard widget, Avatar component
 Post-presentation: Full sidebar composition, Motion specs, Theming
 
