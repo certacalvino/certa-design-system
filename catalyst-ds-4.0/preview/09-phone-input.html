@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certa DS 4.0 — Phone Input</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { padding: var(--space-4xl); background: var(--color-bg-subtle); }
+  .pv-head { margin-bottom: var(--space-3xl); }
+  .pv-head h1 { margin: 0 0 var(--space-sm); }
+  .pv-head p { margin: 0; max-width: 640px; color: var(--color-text-secondary); }
+  .pv-section { background: var(--color-bg-page); border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm); padding: var(--space-3xl); margin-bottom: var(--space-xl); }
+  .pv-section > h2 { margin: 0 0 var(--space-xl); font-size: var(--font-title-small-size);
+    font-weight: var(--font-weight-semibold); }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-lg); align-items: center; }
+  .col { display: flex; flex-direction: column; gap: var(--space-lg); }
+  .lbl { font-size: var(--font-caption-size); color: var(--color-text-tertiary);
+    text-transform: uppercase; letter-spacing: .04em; margin-bottom: var(--space-sm); }
+
+  /* component helpers ---------------------------------------------------- */
+  .btn { display:inline-flex; align-items:center; gap:var(--space-md); height:var(--control-height-m);
+    padding:0 var(--space-xl); border-radius:var(--radius-sm); border:1px solid transparent;
+    font:700 var(--font-body-bold-size)/var(--font-body-bold-lh) var(--font-family-base); cursor:pointer; }
+  .btn--s { height:var(--control-height-s); padding:0 var(--space-lg); }
+  .btn--filled { background:var(--color-action-primary); color:var(--color-text-inverse); }
+  .btn--outline { background:transparent; color:var(--color-action-primary); border-color:var(--color-border-strong); }
+  .btn--text { background:transparent; color:var(--color-action-primary); }
+  .btn--link { background:transparent; color:var(--color-text-link); text-decoration:underline; padding:0; height:auto; }
+  .btn--danger { background:var(--color-status-danger-fg); color:#fff; }
+  .btn--disabled { background:var(--color-action-disabled-bg); color:var(--color-action-disabled-text); cursor:not-allowed; }
+
+  .input { height:var(--control-height-m); padding:0 var(--space-lg); border-radius:var(--radius-sm);
+    border:1px solid var(--color-border-default); font:400 var(--font-body-size) var(--font-family-base);
+    color:var(--color-text-primary); min-width:240px; }
+  .input:focus { outline:none; border-color:var(--color-border-focused); box-shadow:0 0 0 3px var(--brand-100); }
+  .input--error { border-color:var(--color-border-error); }
+  .input--disabled { background:var(--color-bg-muted); color:var(--color-text-disabled); }
+
+  .badge { display:inline-flex; align-items:center; gap:var(--space-sm); border-radius:var(--radius-sm);
+    padding:1px var(--space-sm); font:600 var(--font-caption-size)/var(--font-caption-lh) var(--font-family-base); }
+  .badge--m { padding:2px var(--space-md); font-size:var(--font-body-size); }
+  .badge--neutral { background:var(--color-status-neutral-bg); color:var(--color-status-neutral-fg); }
+  .badge--info { background:var(--color-status-info-bg); color:var(--color-status-info-fg); }
+  .badge--success { background:var(--color-status-success-bg); color:var(--color-status-success-fg); }
+  .badge--warning { background:var(--color-status-warning-bg); color:var(--color-status-warning-fg); }
+  .badge--danger { background:var(--color-status-danger-bg); color:var(--color-status-danger-fg); }
+  .dot { width:6px; height:6px; border-radius:var(--radius-full); }
+
+  .chip { display:inline-flex; align-items:center; gap:var(--space-md); height:32px; padding:0 var(--space-lg);
+    border-radius:var(--radius-full); border:1px solid var(--color-border-default); background:var(--color-bg-page);
+    color:var(--color-text-secondary); font:500 var(--font-body-size) var(--font-family-base); cursor:pointer; }
+  .chip--active { border-color:var(--color-border-focused); background:var(--color-bg-brand-subtle); color:var(--color-text-link); }
+
+  table { width:100%; border-collapse:collapse; }
+  th { text-align:left; height:40px; padding:0 var(--space-lg); border-bottom:1px solid var(--color-border-default);
+    font:600 var(--font-meta-size)/var(--font-meta-lh) var(--font-family-base); text-transform:uppercase;
+    letter-spacing:.04em; color:var(--color-text-tertiary); }
+  td { height:52px; padding:0 var(--space-lg); border-bottom:1px solid var(--color-border-subtle);
+    font-size:var(--font-body-size); }
+
+  .overlay { border:1px solid var(--color-border-default); border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-lg); background:var(--color-bg-page); }
+</style>
+</head>
+<body>
+  <header class="pv-head">
+    <h1 class="t-title-m">Phone Input</h1>
+    <p class="t-body">Country selector (flag + dial + chevron) joined to number field. M 40 / S 32.</p>
+  </header>
+  <section class="pv-section"><h2>Phone input (M)</h2><div class="col" style="max-width:360px"><div style="display:flex"><button class="btn btn--outline" style="border-top-right-radius:0;border-bottom-right-radius:0;border-right:none">🇺🇸 +1 ▾</button><input class="input" value="(415) 555-0142" style="border-top-left-radius:0;border-bottom-left-radius:0;flex:1;min-width:0"></div></div></section>
+</body>
+</html>
