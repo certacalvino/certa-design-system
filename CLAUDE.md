@@ -50,6 +50,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - **Table Cell** (529:94): 7 types, 52px.
 - **Table Row** (530:132): Default/Hover/Selected, 52px.
 - **Table Column Header** (530:3400): Sort × Filter = 6 variants, 40px.
+- **Toggle** (item set 574:62): Orientation(Horizontal/Vertical) × State(Unselected/Hover/Selected/Focused/Disabled) × Icon = 20 variants. Containers: Toggle — Horizontal 575:2 (segmented track surface/subtle + 1px border/subtle r4, items flush) + Toggle — Vertical 575:9 (stacked rows, 220w, gap sm). H item 32px hug; V item 40px FILL. Selected=brand-subtle+text/link Body Bold; Hover=surface/muted; Focused=2px border/focused; Disabled @40%. Ported/unified from DS 3.0 Horizontal toggle (18v) + Vertical Toggle (20v). Doc section in 157:1257.
 - Plugin gotchas: (1) variable-bound paint needs resolved raw fallback. (2) resize() after AUTO re-locks. (3) recolorSafe: IMAGE-fill icons flood. (4) Badge instances don't re-hug — set WIDTH_AND_HEIGHT + HUG. (5) throwing rolls back all. (6) screenshot backend lags fresh nodes.
 - Clonable icons: Eye 180:2119 · Download 180:1214 · Trashcan 180:1131 · Lock 180:2099 · Refresh 180:1206 · Close 180:1200 · Upload 180:1224 · Search 180:1637 · Check 180:1264 · Edit 180:1053 · Chevron-down 179:272 · Calendar 180:2253 · Envelope 180:1527 · Sort 180:945 · Filter 180:1633 · Chevron-up 180:907 · Dots/Kebab 180:1710 · Chart 180:1657.
 
@@ -114,6 +115,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - Empty State (549:50, 6 variants Context×Action) — greenfield, no DS 3.0 port. Doc section in Data Display 198:44.
 - Pagination (563:60 Simple/Numbered + 562:8 page-button states). Doc section in Data Display 198:44. Reuses Icon Button 113:710 + Badge brand tokens.
 - Avatar (572:50, 24 variants Size×Tone) — greenfield. Doc section in Data Display 198:44. Resolves Table Entity stand-in flag.
+- Toggle (item set 574:62, 20 variants + H container 575:2 + V container 575:9). Ported from DS 3.0 H/V toggles. Doc section in Forms & Inputs 157:1257.
 - Catalyst DS 4.0 ZIP generated with 34 previews + JSX + UI Patterns section in README. Uploaded to Claude Design "Certa DS 4.0 — WIP".
 - Catalyst bundle committed to repo at catalyst-ds-4.0/ (+ catalyst-ds-4.0.zip). colors_and_type.css = full semantic token layer (primitives→semantic→type/space/effects); ui_kits/certa-studio/ = Primitives + AppShell + VendorsList + HomeDashboard + VendorDetail; preview/ = 34 standalone token-linked HTML files; index.html gallery; README UI Patterns documents all 10 composition rules. build_previews.py regenerates previews (excluded from zip). NOTE: programmatic upload to Claude Design unavailable from remote env — zip committed for manual upload.
 - Sidebar confirmed from production inspector: background = var(--colors-neutral-200) = light. Corrected in Catalyst 4.0.
@@ -137,7 +139,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - FLAG (Pagination): "Double Chevron Left" icon (180:978/981) is mislabeled — points right; First arrow uses a 180°-rotated button as a workaround. Commission a true left double-chevron glyph. Arrows render at Icon Button M native ~14px (not 16px) — accepted; revisit if a 16px arrow control is wanted.
 - RESOLVED 2026-06-17: Modal, Tabs, Empty State, Pagination complete.
 - RESOLVED 2026-06-16: Multi-select, File Upload, Dropdown Menu, Read-only Field, Table Row.
-- Forms backlog: RAG/Visualization fields, Toggle H/V, Cascader, Slider.
+- Forms backlog: RAG/Visualization fields, Cascader, Slider (Toggle H/V — DONE 2026-06-17).
 
 ## Pending components
 High priority: Date picker (Empty State — DONE 2026-06-17 · Pagination — DONE 2026-06-17)
