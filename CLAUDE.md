@@ -1,9 +1,11 @@
 # DS 4.0 — Build Memory
 
-Last updated: 2026-06-16
+Last updated: 2026-06-17
 
 ## System decisions (locked)
 - Border-radius: 4px across all components
+- EXCEPTION: overlay containers (Toast, Dropdown Menu, Modal) use 8px — confirmed overlay-container exception
+- EXCEPTION: Modal title uses 18px Semi Bold (raw, documented) — sits between Title Small 16 and Title Medium 20; no 18px style exists
 - Icon size: 20px (production-confirmed, overrides 16px spec)
 - EXCEPTION: menu-row icons are 16px — deliberate exception for contextual menus (not nav/buttons)
 - EXCEPTION: read-only field value icons (Date, Envelope) are 16px — display context, not interactive
@@ -96,6 +98,18 @@ Last updated: 2026-06-16
 - FLAG: Error uses Warning triangle (no distinct exclamation/error-circle icon in DS 4.0 library)
 - Previous 16-variant Alert Banner deleted and replaced
 
+### Modal — 2026-06-17 (ported/unified from DS 3.0 "Dialog")
+- Component set id=536:144 (6 variants = Size(S/L/M) × Type(Default/Destructive)); doc frame "Modal — Documentation" id=537:2 (Feedback & Overlay page 1:17, x=4800). Source set built in _Source Components 278:6 (x=40, y=2912).
+- Sizes: S 400 / M 520 / L 640 (width); height HUG. Container: VERTICAL auto-layout, fill color/bg/surface/default, radius 8 (overlay exception), shadow-lg effect style, clipsContent.
+- Anatomy: Header (HORIZONTAL, pad 24/24/16/24, title 18 Semi Bold text/primary layoutGrow=1 + close) · Body (VERTICAL, pad 0/24, gap md, body text Body 14 text/secondary, FILL width + wrap, clipsContent = scroll-on-overflow slot) · Footer (HORIZONTAL, pad 16/24/24/24, gap md, right-aligned MAX).
+- Footer reuses DS 4.0 Button sets: Outline Button 113:447 (Cancel, M/Enabled 113:267) + Filled Button 113:230 (Save, M/Enabled 113:50). Type=Destructive swaps primary → Filled Destructive ("Delete"). All paddings/gaps bound to spacing tokens (3xl/xl/md).
+- Close = Close glyph 180:1200 cloned at 20px in a 32×32 r4 transparent hit-area (icon-cloning pattern, consistent with Table/File row). DECISION: did NOT use Icon Button component — its glyph (12px S / 16px M) and component-swap mechanics were a poorer fit. Close glyph left at native color (like other cloned icons).
+- NEW tokens created this build: color/bg/overlay = rgba(17,24,39,0.45) (VariableID 535:2, Semantic collection) for the scrim; shadow-lg effect style = 0 8px 24px rgba(0,22,78,0.15).
+- Scrim is doc-composition only (not part of the component) — backdrop showcase = M modal centered on a color/bg/overlay rectangle over surface/muted.
+- Doc sections: Sizes (S/M/L), Types (Default/Destructive), Backdrop & scrim, Specifications, Semantic tokens, DS 3.0 → DS 4.0 changes.
+- DS 3.0 source unified: legacy fixed-layout Dialog 11481:10127 + auto-layout Dialog 27811:275 (both header+footer only, no body, 100% hardcoded hex, button height mismatch 32/36, title color navy vs black). All resolved.
+- Plugin note (hit again): resize() after primaryAxisSizingMode=AUTO re-locks primary axis to FIXED — doc frame stayed 400px tall until AUTO re-asserted post-build. Body text needed textAutoResize=HEIGHT + layoutSizingHorizontal=FILL to wrap (defaulted to WIDTH and clipped).
+
 ### Nav bar — 2026-06-11
 - 20 variants: State(Default/Hover/Active/Focused/Disabled) × Expanded(bool) × Badge(bool)
 - Individual nav item (composable) — not full sidebar frame
@@ -103,6 +117,13 @@ Last updated: 2026-06-16
 - Typography: Body Bold 14px (upgraded from DS 3.0 12px)
 - Page: Navigation
 - 2026-06-12 (Fix round 3): icon = MENU/HAMBURGER (Icons page, main 180:1643). Per-state color bound to all fills; badge dots preserved.
+
+## Session log — 2026-06-17 (Modal)
+- Audited DS 3.0 "Dialog" page (no "Modal" page exists): two divergent components (fixed-layout 11481:10127 + auto-layout 27811:275), both header+footer only, hardcoded hex, button height mismatch, separate Dimmer 11480:10088 = #000e33@15%.
+- Built DS 4.0 Modal set 536:144 (6 variants Size×Type) in Feedback&Overlay source 278:6; doc frame 537:2 at x=4800.
+- Created first-in-file overlay token color/bg/overlay 535:2 (rgba(17,24,39,0.45)) + first effect style shadow-lg (0 8 24 navy@15%).
+- Footer reuses Button sets (Outline 113:267 Cancel + Filled 113:50 Save; Destructive → Filled Destructive). Title 18 raw exception. Close = 20px glyph 180:1200 in 32px hit-area (not Icon Button).
+- Gotchas hit: resize() re-locked AUTO height (re-assert AUTO after build); body text needed FILL+autoresize HEIGHT to wrap.
 
 ## Session log — 2026-06-16 (Multi-select + File Upload + Dropdown Menu + Read-only Field)
 - **Multi-select**: field set 469:1283 (10 variants) + open dropdown 470:1047. Standalone, fixed single row NO_WRAP, Checkbox rows in dropdown.
@@ -140,17 +161,19 @@ Last updated: 2026-06-16
 - FLAG (File Upload): file-type badges are tokenized stand-ins. Commission real file-type icon set.
 - FLAG (Dropdown Menu): Pressed token not canonical in DS 4.0 — dropped for v1. Add in polish pass.
 - FLAG (Table Row): Entity avatar is a tokenized stand-in — no Avatar component exists. Commission Avatar set. Also confirm 10px column-header label and whether Table Row should move to the Data Display page.
+- FLAG (Modal): scrim is doc-composition only, not a component — wire scrim+open/close in patterns pass. Close glyph left at native color (no token bind). shadow-lg + color/bg/overlay are the first Figma effect-style / overlay token in the file; consider formalizing a full elevation scale.
 - RESOLVED 2026-06-16: Multi-select, File Upload, Dropdown Menu, Read-only Field, Table Row (Cell/Row/Column Header) all built and verified.
+- RESOLVED 2026-06-17: Modal (Dialog) ported & unified from DS 3.0 — 6 variants, tokenized, new overlay token + shadow-lg style.
 - Forms backlog (DS 3.0 not yet ported): RAG/Visualization fields, Horizontal/Vertical toggle, Cascader, Slider.
 - Nav bar full sidebar composition pending.
 - 6 provisional status tokens pending primitives or confirmation.
 
 ## Pending components (from production audit)
 High priority: Pagination, Date picker (Table rows — DONE 2026-06-16)
-Medium priority: Modal, Tabs, Empty state, Dashboard widget
+Medium priority: Tabs, Empty state, Dashboard widget (Modal — DONE 2026-06-17)
 Post-presentation: Full sidebar composition, Motion specs, Theming
 
-## Tokenization state (as of 2026-06-16)
+## Tokenization state (as of 2026-06-17)
 - Color: ~95%
 - Spacing: ~65%
 - Typography: 100%
