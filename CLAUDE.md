@@ -93,10 +93,20 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - DS 3.0 had NO Empty State component — only in-context table mockups ("NO DATA FOUND" 10px + "Add" CTA) inside Table-page explorations. Built from scratch.
 - Gotcha: cloning a COMPONENT (180:1637) into a component errors ("component inside component") — use createInstance() when node is COMPONENT. WRAP showcase frame needs primaryAxisSizingMode=FIXED + counterAxisSizingMode=AUTO (set FIXED before resize, else width re-hugs). Component-set node with WRAP renders 1×1 from screenshot backend — instances render fine.
 
+### Pagination — 2026-06-17 (ported/unified from DS 3.0)
+- Pagination set 563:60 — Type(Simple/Numbered) = 2 variants. Pagination Number (page button) set 562:8 — State(Default/Hover/Selected) = 3 variants. Page: Data Display. Source: 252:93. Doc section in 198:44 (showcase 566:6 + specs + tokens).
+- Simple: range text (left) ↔ First/Prev/Next/Last arrows (right). Numbered: range (left) ↔ Prev + "1 2 3 … 10" page buttons (one Selected) + Next.
+- Arrows = Icon Button M 113:710 (32px), glyphs swapped: First=Double Chevron Left 180:978 (rotated 180° — see gotcha) / Prev=Chevron Left 180:893 / Next=Chevron Right 180:899 / Last=Double Chevron Right 180:986. Glyph ~14px (Icon Button M native slot — DECISION: accepted native over forced 16px, since Icon Button reuse takes precedence).
+- Range text: 12px Caption color/text/secondary ("1–10 of 100"). Page button 32×32 r4: Default(transparent/text-secondary) · Hover(surface/muted/text-primary) · Selected(bg/brand/text-on-brand Body Bold).
+- Disabled edges: First+Prev = Icon Button Disabled (glyph recolored text/disabled #8892ac) on page 1; Next+Last on last page. Shown in doc, not a main-set variant.
+- DS 3.0 source: single Pagination 11452:8244 (range + 4 arrows, no variants, hardcoded hex, arrows built on Disabled icon-button variant, 14px icons). Unified + tokenized; added Numbered type + page-button states.
+- GOTCHA: DS 4.0 catalog "Double Chevron Left" (180:978/981) AND "Double Chevron Right" (180:986/989) BOTH render right-pointing (left one mislabeled) — no left double chevron exists. Fix: rotate the whole First Icon Button 180° (chevrons vertically symmetric → clean «). Nested glyph rotation is locked inside an instance; rotate the button instead.
+
 ## Session log — 2026-06-17
 - Modal (536:144, 6 variants) + 2 new tokens (color/bg/overlay 535:2, shadow-lg effect style).
 - Tabs (542:83 item set 20 variants + 543:2 container). Doc 544:2 on Navigation page.
 - Empty State (549:50, 6 variants Context×Action) — greenfield, no DS 3.0 port. Doc section in Data Display 198:44.
+- Pagination (563:60 Simple/Numbered + 562:8 page-button states). Doc section in Data Display 198:44. Reuses Icon Button 113:710 + Badge brand tokens.
 - Catalyst DS 4.0 ZIP generated with 34 previews + JSX + UI Patterns section in README. Uploaded to Claude Design "Certa DS 4.0 — WIP".
 - Catalyst bundle committed to repo at catalyst-ds-4.0/ (+ catalyst-ds-4.0.zip). colors_and_type.css = full semantic token layer (primitives→semantic→type/space/effects); ui_kits/certa-studio/ = Primitives + AppShell + VendorsList + HomeDashboard + VendorDetail; preview/ = 34 standalone token-linked HTML files; index.html gallery; README UI Patterns documents all 10 composition rules. build_previews.py regenerates previews (excluded from zip). NOTE: programmatic upload to Claude Design unavailable from remote env — zip committed for manual upload.
 - Sidebar confirmed from production inspector: background = var(--colors-neutral-200) = light. Corrected in Catalyst 4.0.
@@ -117,12 +127,13 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - FLAG (Modal): shadow-lg + overlay are first effect-style/overlay tokens — formalize elevation scale later. Close uses cloned glyph not Icon Button.
 - FLAG (Tabs): no tab panel/content region (out of scope). Dropped Focus+Selected combo — add back if needed.
 - FLAG (Empty State): icon-led, no illustration library exists — commission spot-art/illustration set for a richer variant later. Default glyph Search; swap per use case (Files/Table/etc).
-- RESOLVED 2026-06-17: Modal, Tabs, Empty State complete.
+- FLAG (Pagination): "Double Chevron Left" icon (180:978/981) is mislabeled — points right; First arrow uses a 180°-rotated button as a workaround. Commission a true left double-chevron glyph. Arrows render at Icon Button M native ~14px (not 16px) — accepted; revisit if a 16px arrow control is wanted.
+- RESOLVED 2026-06-17: Modal, Tabs, Empty State, Pagination complete.
 - RESOLVED 2026-06-16: Multi-select, File Upload, Dropdown Menu, Read-only Field, Table Row.
 - Forms backlog: RAG/Visualization fields, Toggle H/V, Cascader, Slider.
 
 ## Pending components
-High priority: Pagination, Date picker (Empty State — DONE 2026-06-17)
+High priority: Date picker (Empty State — DONE 2026-06-17 · Pagination — DONE 2026-06-17)
 Medium priority: Dashboard widget, Avatar component
 Post-presentation: Full sidebar composition, Motion specs, Theming
 
