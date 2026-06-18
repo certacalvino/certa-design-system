@@ -66,7 +66,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 
 ### Gauge — 2026-06-17 (ported from DS 3.0 Visualisation Field Gauge)
 - Set 598:32 — RAG(Low/Medium/High) = 3 variants. Page: Data Display. Source: 252:93. Doc section in 198:44 (showcase 598:37).
-- 140×140 gauge: 270° arc (start 135°, gap at bottom) via ELLIPSE arcData {startingAngle,endingAngle,innerRadius:0.74}. Track = border/default (#d0d4df — Neutral/200 #f8f9f9 was too light/invisible on white); colored arc sweep = value/5 × 270° in RAG base (Low Green/base 3:41 · Med Orange/base 3:35 · High Red/base 3:53). NO needle (redesigned 2026-06-17) — instead an 8px filled dot (RAG base) at the arc endpoint (cx+Rd·cosα, cy+Rd·sinα; Rd=61 ring-mid, α=START+f·SWEEP); center stays clean (no line through it). Value Display 28 text/primary + "/5" Body text/secondary centered; "Risk" Caption 12 text/secondary below.
+- 140×140 gauge: 270° arc (start 135°, gap at bottom) via ELLIPSE arcData {startingAngle,endingAngle,innerRadius:0.74}. Track = surface/muted (3:74, #f4f5f5); colored arc sweep = value/5 × 270° in RAG base (Low Green/base 3:41 · Med Orange/base 3:35 · High Red/base 3:53). NO needle, NO dot (redesigned 2026-06-17) — the arc alone communicates the value. Center text = vertical stack (gap xs): value Display 28 text/primary (number only, e.g. "1.5") over "/ 5" Caption 12 text/secondary, centered & unobstructed. "Risk" Caption 12 text/secondary below the gauge.
 - Sample scores: Low 1.5 / Med 2.5 / High 4.5. RAG mapping matches RAG Field 577:23. Zero hardcoded values.
 
 ### KPI / Stat Card — 2026-06-17 (greenfield)
