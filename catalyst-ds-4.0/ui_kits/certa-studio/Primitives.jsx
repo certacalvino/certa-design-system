@@ -293,7 +293,27 @@ export function CheckboxPill({ checked = false, onChange, children }) {
         cursor: "pointer",
       }}
     >
-      <span aria-hidden>{checked ? "✓" : "+"}</span>
+      {/* real 16px checkbox box (brand fill + white SVG check) — not a ✓/+ glyph */}
+      <span
+        aria-hidden
+        style={{
+          width: 16,
+          height: 16,
+          flexShrink: 0,
+          borderRadius: "var(--radius-sm)",
+          border: `2px solid ${checked ? "var(--color-action-primary)" : "var(--color-border-strong)"}`,
+          background: checked ? "var(--color-action-primary)" : "var(--color-bg-page)",
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {checked && (
+          <svg width="12" height="12" viewBox="0 0 16 16">
+            <path d="M3.5 8.5 L6.5 11.5 L12.5 5" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+      </span>
       {children}
     </button>
   );

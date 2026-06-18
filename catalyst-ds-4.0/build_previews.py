@@ -623,15 +623,16 @@ fs = section("Form section layout", '<div style="max-width:480px">'
 pages.append(("33-form-section.html","Form Section","UI pattern: grouped fields, section header in text/primary, required asterisk in text/error.",fs))
 
 # 34 certifications ---------------------------------------------------------
+# CheckboxPill = pill + a real 16px SVG checkbox (cbox), not a ✓/+ text glyph.
 def pill(t,checked=False):
-    if checked: return (f'<button class="chip chip--active">✓ {t}</button>')
-    return f'<button class="chip">+ {t}</button>'
+    cls = "chip chip--active" if checked else "chip"
+    return f'<button class="{cls}">{cbox("checked" if checked else "unchecked")}{t}</button>'
 cf = section("Certifications as checkbox pills", '<div class="row">'
     + pill("ISO 27001",checked=True) + pill("SOC 2 Type II",checked=True) + pill("GDPR")
     + pill("HIPAA") + pill("PCI DSS") + pill("ISO 9001") + '</div>'
-    + '<p class="t-caption" style="margin-top:var(--space-lg)">Use pills for small, finite sets. '
-      'Switch to a multi-select dropdown when the option list is long.</p>')
-pages.append(("34-certifications.html","Certifications Pills","UI pattern: small finite multi-select as checkbox pills vs dropdown. Active = brand-subtle.",cf))
+    + '<p class="t-caption" style="margin-top:var(--space-lg)">Each pill carries a real 16px checkbox (brand fill + white SVG check when selected). '
+      'Use pills for small, finite sets; switch to a multi-select dropdown when the option list is long.</p>')
+pages.append(("34-certifications.html","Certifications Pills","UI pattern: small finite multi-select as checkbox pills vs dropdown. Each pill embeds the real Checkbox control (16px r4 2px, brand fill + white SVG check) — no ✓/+ glyph. Active pill = brand-subtle.",cf))
 
 # 35 toggle -----------------------------------------------------------------
 def toggle(opts, sel, vertical=False):
