@@ -52,6 +52,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - **Table Column Header** (530:3400): Sort × Filter = 6 variants, 40px.
 - **Toggle** (item set 574:62): Orientation(Horizontal/Vertical) × State(Unselected/Hover/Selected/Focused/Disabled) × Icon = 20 variants. Containers: Toggle — Horizontal 575:2 (segmented track surface/subtle + 1px border/subtle r4, items flush) + Toggle — Vertical 575:9 (stacked rows, 220w, gap sm). H item 32px hug; V item 40px FILL. Selected=brand-subtle+text/link Body Bold; Hover=surface/muted; Focused=2px border/focused; Disabled @40%. Ported/unified from DS 3.0 Horizontal toggle (18v) + Vertical Toggle (20v). Doc section in 157:1257.
 - **RAG Field** (577:23): RAG(Red/Amber/Green) = 3 variants. Risk status field for Certa TPRM. 240×40 r4 field, tinted bg (RAG L3) + value (Body 14 text/primary) + 24px full-height colored right-tab (RAG base) with vertical label (Inter Bold 10 white, rotated 90° via relativeTransform — Figma rotation pivots origin not center, use matrix [[0,-1,12+H/2],[1,0,20-W/2]] to center in 24×40). Red→HIGH/Orange→MED/Green→LOW. Label "Inherent risk" above. Ported from DS 3.0 Rag Field (r8→r4, tokenized to primitive hue scales). Doc section in 157:1257.
+- **Date Picker** (v1 — 2026-06-17): Date cell set 582:14 (State: Default/Hover/Today/Selected/Muted/Disabled, 40×40 r4, day# 12px grid-meta) + Date Picker panel 583:14 (280 grid, r8+shadow-lg overlay, header Icon Button prev/next chevron 180:893/899 + month Body Bold 14, weekday row 12 Caption text/secondary SUN-first, Today Link + Clear Text-S footer) + Date Field set 585:71 (State Empty/Filled = Input 157:1255 + overlaid trailing Calendar 180:2253 / Clear 180:1200). Single-selection. Today = 1px border/focused ring (no fill). Doc section in 157:1257. GOTCHA: Input set has NO Type=Date (types Text/Email/Password/URL/Search/Number/Phone) and instance trailing-icon is a non-swappable placeholder frame — realized date field by hiding placeholder ellipses (visible=false) + overlaying the real glyph positioned via absoluteBoundingBox. v2 backlog: range selection + date-time/time row.
 - Plugin gotchas: (1) variable-bound paint needs resolved raw fallback. (2) resize() after AUTO re-locks. (3) recolorSafe: IMAGE-fill icons flood. (4) Badge instances don't re-hug — set WIDTH_AND_HEIGHT + HUG. (5) throwing rolls back all. (6) screenshot backend lags fresh nodes.
 - Clonable icons: Eye 180:2119 · Download 180:1214 · Trashcan 180:1131 · Lock 180:2099 · Refresh 180:1206 · Close 180:1200 · Upload 180:1224 · Search 180:1637 · Check 180:1264 · Edit 180:1053 · Chevron-down 179:272 · Calendar 180:2253 · Envelope 180:1527 · Sort 180:945 · Filter 180:1633 · Chevron-up 180:907 · Dots/Kebab 180:1710 · Chart 180:1657.
 
@@ -119,6 +120,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - Toggle (item set 574:62, 20 variants + H container 575:2 + V container 575:9). Ported from DS 3.0 H/V toggles. Doc section in Forms & Inputs 157:1257.
 - RAG Field (577:23, 3 variants Red/Amber/Green) — TPRM risk status field. Ported from DS 3.0 Rag Field. Doc section in Forms & Inputs 157:1257.
 - Sprint 2026-06-17: Avatar + Toggle + RAG Field built back-to-back, each pushed to main.
+- Date Picker v1 (582:14 cell + 583:14 panel + 585:71 field). Ported from DS 3.0 Date Picker. Doc section in Forms & Inputs 157:1257. Single-selection; range + datetime = v2.
 - Catalyst DS 4.0 ZIP generated with 34 previews + JSX + UI Patterns section in README. Uploaded to Claude Design "Certa DS 4.0 — WIP".
 - Catalyst bundle committed to repo at catalyst-ds-4.0/ (+ catalyst-ds-4.0.zip). colors_and_type.css = full semantic token layer (primitives→semantic→type/space/effects); ui_kits/certa-studio/ = Primitives + AppShell + VendorsList + HomeDashboard + VendorDetail; preview/ = 34 standalone token-linked HTML files; index.html gallery; README UI Patterns documents all 10 composition rules. build_previews.py regenerates previews (excluded from zip). NOTE: programmatic upload to Claude Design unavailable from remote env — zip committed for manual upload.
 - Sidebar confirmed from production inspector: background = var(--colors-neutral-200) = light. Corrected in Catalyst 4.0.
@@ -145,7 +147,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - Forms backlog: Visualization fields (Gauge/Widget), Cascader, Slider (Toggle H/V — DONE 2026-06-17 · RAG Field — DONE 2026-06-17).
 
 ## Pending components
-High priority: Date picker (Empty State — DONE 2026-06-17 · Pagination — DONE 2026-06-17)
+High priority: (all done) — Empty State · Pagination · Date Picker v1 (DONE 2026-06-17). Date Picker v2 backlog: range selection + date-time/time row.
 Medium priority: Dashboard widget (Avatar — DONE 2026-06-17)
 Post-presentation: Full sidebar composition, Motion specs, Theming
 
