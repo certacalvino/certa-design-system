@@ -201,6 +201,76 @@ export function Input({ size = "m", error = false, disabled = false, ...rest }) 
 }
 
 /* ---------------------------------------------------------------------------
+   Checkbox — real control (set 179:420). 16px square, r4, 2px border.
+   Unchecked: border/default on white. Checked: brand bg + white SVG check.
+   Indeterminate: brand bg + white SVG dash. Pure CSS/SVG — no catalog icon.
+   --------------------------------------------------------------------------- */
+export function Checkbox({
+  checked = false,
+  indeterminate = false,
+  disabled = false,
+  error = false,
+  label,
+  onChange = () => {},
+}) {
+  const on = checked || indeterminate;
+  const borderColor = error
+    ? "var(--color-border-error)"
+    : on
+    ? "var(--color-action-primary)"
+    : "var(--color-border-strong)";
+  const box = (
+    <span
+      aria-hidden
+      style={{
+        width: 16,
+        height: 16,
+        flexShrink: 0,
+        borderRadius: "var(--radius-sm)",
+        border: `2px solid ${borderColor}`,
+        background: on ? "var(--color-action-primary)" : "var(--color-bg-page)",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        transition: "background .12s ease, border-color .12s ease",
+      }}
+    >
+      {indeterminate ? (
+        <svg width="12" height="12" viewBox="0 0 16 16">
+          <line x1="4" y1="8" x2="12" y2="8" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+      ) : checked ? (
+        <svg width="12" height="12" viewBox="0 0 16 16">
+          <path d="M3.5 8.5 L6.5 11.5 L12.5 5" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ) : null}
+    </span>
+  );
+  return (
+    <label
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "var(--space-md)",
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.4 : 1,
+      }}
+    >
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={onChange}
+        ref={(el) => el && (el.indeterminate = indeterminate)}
+        style={{ position: "absolute", opacity: 0, width: 0, height: 0 }}
+      />
+      {box}
+      {label && <span style={{ fontSize: "var(--font-body-size)" }}>{label}</span>}
+    </label>
+  );
+}
+
+/* ---------------------------------------------------------------------------
    Checkbox pill — UI PATTERN: certifications as multi-select checkbox pills
    --------------------------------------------------------------------------- */
 export function CheckboxPill({ checked = false, onChange, children }) {
@@ -566,9 +636,94 @@ export function CircularProgress({ size = "l", progress = 50, state = "Default" 
   );
 }
 
+/* ---------------------------------------------------------------------------
+   MultiSelect — tag chips in the field + dropdown panel whose rows carry a
+   real Checkbox. Selected rows show the brand fill + white check (no glyph
+   icon). Matches Multi-select 469:1283 + dropdown 470:1047.
+   --------------------------------------------------------------------------- */
+export function MultiSelect({ options = [], value = [], onChange = () => {}, open = true }) {
+  const toggle = (o) => onChange(value.includes(o) ? value.filter((x) => x !== o) : [...value, o]);
+  return (
+    <div style={{ position: "relative", width: 320 }}>
+      {/* field with tag chips */}
+      <div
+        style={{
+          minHeight: "var(--control-height-m)",
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "var(--space-sm)",
+          alignItems: "center",
+          padding: "var(--space-sm) var(--space-lg)",
+          border: "1px solid var(--color-border-default)",
+          borderRadius: "var(--radius-sm)",
+          background: "var(--color-bg-page)",
+        }}
+      >
+        {value.length === 0 && <span style={{ color: "var(--color-text-tertiary)" }}>Select…</span>}
+        {value.map((t) => (
+          <span
+            key={t}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "var(--space-sm)",
+              height: 24,
+              padding: "0 var(--space-md)",
+              borderRadius: "var(--radius-xs)",
+              background: "var(--color-bg-brand-subtle)",
+              color: "var(--color-text-link)",
+              fontSize: "var(--font-caption-size)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {t}
+            <span aria-hidden style={{ cursor: "pointer" }} onClick={() => toggle(t)}>×</span>
+          </span>
+        ))}
+      </div>
+      {/* dropdown panel */}
+      {open && (
+        <div
+          style={{
+            marginTop: "var(--space-sm)",
+            border: "1px solid var(--color-border-default)",
+            borderRadius: "var(--radius-lg)",
+            boxShadow: "var(--shadow-lg)",
+            background: "var(--color-bg-page)",
+            padding: "var(--space-sm)",
+          }}
+        >
+          {options.map((o) => {
+            const sel = value.includes(o);
+            return (
+              <div
+                key={o}
+                onClick={() => toggle(o)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "var(--space-md)",
+                  height: 36,
+                  padding: "0 var(--space-md)",
+                  borderRadius: "var(--radius-sm)",
+                  cursor: "pointer",
+                  background: sel ? "var(--color-surface-selected)" : "transparent",
+                }}
+              >
+                <Checkbox checked={sel} onChange={() => toggle(o)} />
+                <span style={{ fontSize: "var(--font-body-size)" }}>{o}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default {
   Button, Icon, Badge, ProcessStatus, Field, Input,
-  CheckboxPill, Card, SectionHeader, EmptyState, ProgressSteps,
+  Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps,
   Avatar, Toggle, RAGField, KPIStatCard, Gauge, CircularProgress,
   tokens, STATUS_COLOR, AVATAR_SIZE, AVATAR_TONES, RAG_LEVELS,
 };

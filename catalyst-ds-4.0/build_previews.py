@@ -168,19 +168,29 @@ ib += section("Split", '<div class="row"><div style="display:inline-flex">'
 pages.append(("03-icon-buttons.html","Icon · Round · Split","Icon-only (40px hit area, 20px glyph), round FAB-style, and split action buttons.",ib))
 
 # 04 checkbox ---------------------------------------------------------------
-def cb(checked, label, disabled=False, err=False):
-    bg = "var(--color-action-primary)" if checked else "var(--color-bg-page)"
-    bd = "var(--color-border-error)" if err else ("var(--color-action-primary)" if checked else "var(--color-border-strong)")
+# Real control (set 179:420): 16px square, r4, 2px border. Pure CSS box + inline
+# SVG mark — NO catalog icon. Checked = white check path; Indeterminate = white dash.
+CHECK_SVG = ('<svg width="12" height="12" viewBox="0 0 16 16">'
+    '<path d="M3.5 8.5 L6.5 11.5 L12.5 5" fill="none" stroke="#fff" stroke-width="2" '
+    'stroke-linecap="round" stroke-linejoin="round"/></svg>')
+DASH_SVG = ('<svg width="12" height="12" viewBox="0 0 16 16">'
+    '<line x1="4" y1="8" x2="12" y2="8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>')
+def cbox(state="unchecked", err=False):
+    on = state in ("checked","indeterminate")
+    bg = "var(--color-action-primary)" if on else "var(--color-bg-page)"
+    bd = "var(--color-border-error)" if err else ("var(--color-action-primary)" if on else "var(--color-border-strong)")
+    mark = CHECK_SVG if state=="checked" else (DASH_SVG if state=="indeterminate" else "")
+    return (f'<span style="width:16px;height:16px;flex-shrink:0;border-radius:var(--radius-sm);background:{bg};'
+            f'border:2px solid {bd};display:inline-flex;align-items:center;justify-content:center">{mark}</span>')
+def cb(state, label, disabled=False, err=False):
     op = "opacity:.4;" if disabled else ""
-    mark = '<span style="color:#fff;font-size:13px;line-height:1">✓</span>' if checked else ''
     return (f'<label style="display:inline-flex;align-items:center;gap:var(--space-md);{op}">'
-            f'<span style="width:18px;height:18px;border-radius:var(--radius-xs);background:{bg};'
-            f'border:1.5px solid {bd};display:inline-flex;align-items:center;justify-content:center">{mark}</span>'
-            f'<span style="font-size:var(--font-body-size)">{label}</span></label>')
+            f'{cbox(state,err)}<span style="font-size:var(--font-body-size)">{label}</span></label>')
 c = section("States", '<div class="row" style="gap:var(--space-3xl)">'
-    + cb(False,"Unchecked") + cb(True,"Checked") + cb(False,"Disabled",disabled=True)
-    + cb(True,"Disabled checked",disabled=True) + cb(False,"Error",err=True) + '</div>')
-pages.append(("04-checkbox.html","Checkbox","State × Status. 18px box, radius 2, brand fill when checked. Label 14px (interactive floor).",c))
+    + cb("unchecked","Unchecked") + cb("checked","Checked") + cb("indeterminate","Indeterminate")
+    + cb("unchecked","Disabled",disabled=True) + cb("checked","Disabled checked",disabled=True)
+    + cb("unchecked","Error",err=True) + '</div>')
+pages.append(("04-checkbox.html","Checkbox","Set 179:420 — 16px square, radius 4, 2px border. Unchecked = border/default on white; Checked = brand bg + white check (SVG); Indeterminate = brand bg + white dash. Pure CSS/SVG control — no catalog icon. Label 14px (interactive floor).",c))
 
 # 05 radio ------------------------------------------------------------------
 def rb(sel, label, disabled=False):
@@ -241,11 +251,21 @@ pages.append(("09-phone-input.html","Phone Input","Country selector (flag + dial
 def tag(t): return (f'<span style="display:inline-flex;align-items:center;gap:var(--space-sm);height:24px;'
     f'padding:0 var(--space-md);border-radius:var(--radius-xs);background:var(--color-bg-brand-subtle);'
     f'color:var(--color-text-link);font-size:var(--font-caption-size);white-space:nowrap">{t} ×</span>')
-ms = section("Multi-select", '<div class="col" style="max-width:420px">'
+def msrow(label, sel):
+    # selected row shows a real checked Checkbox (cbox), not a glyph icon
+    bg = "background:var(--color-surface-selected);" if sel else ""
+    return (f'<div style="display:flex;align-items:center;gap:var(--space-md);height:36px;padding:0 var(--space-md);'
+            f'border-radius:var(--radius-sm);{bg}">{cbox("checked" if sel else "unchecked")}'
+            f'<span style="font-size:var(--font-body-size)">{label}</span></div>')
+ms = section("Field (tag chips)", '<div style="width:320px">'
     '<div class="input" style="height:auto;min-height:var(--control-height-m);display:flex;flex-wrap:wrap;'
     'gap:var(--space-sm);align-items:center;padding:var(--space-sm) var(--space-lg)">'
-    + tag("ISO 27001") + tag("SOC 2") + tag("GDPR") + '<span style="color:var(--color-text-tertiary)">Add…</span></div></div>')
-pages.append(("10-multi-select.html","Multi-select","State × Size. Tag chip 24px r2 brand-subtle, NO_WRAP labels. Use for long option lists.",ms))
+    + tag("ISO 27001") + tag("SOC 2") + '<span style="color:var(--color-text-tertiary)">Add…</span></div></div>')
+ms += section("Open dropdown — selected rows show a checked Checkbox",
+    '<div class="overlay" style="width:320px;padding:var(--space-sm)">'
+    + msrow("ISO 27001", True) + msrow("SOC 2 Type II", True) + msrow("GDPR", False)
+    + msrow("HIPAA", False) + msrow("PCI DSS", False) + '</div>')
+pages.append(("10-multi-select.html","Multi-select","Tag chips (24px r2 brand-subtle, NO_WRAP) in the field; dropdown rows carry a real Checkbox (brand fill + white check) for the selected state — matches the Checkbox control, no glyph icon. Use for long option lists.",ms))
 
 # 11 country dropdown -------------------------------------------------------
 def crow(flag, name, dial, sel=False):
