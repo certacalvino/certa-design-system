@@ -48,7 +48,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - **Multi-select** (469:1283): State × Size = 10 variants. Dropdown 470:1047. Tag chip 24px r2 brand-subtle. NO_WRAP.
 - **File row** (489:1280): 5 variants M only. Badge stand-ins. FLAG: commission real file-type icons.
 - **File Upload Field** (493:1401): 9 states M only. Upload icon 180:1224.
-- **Dropdown Menu**: Menu Item 510:1825 (52 variants) + Menu Section 512:1668 + Menu Search 512:1670 + container 513:1669.
+- **Dropdown Menu**: Menu Item 510:1825 (52 variants) + Menu Section 512:1668 + Menu Search 512:1670 + container 513:1669. Composed example (513:1669) cleaned 2026-06-17: removed ACTIONS + DANGER ZONE section headers; structure = Search → Edit → Duplicate → Move to… → Mark as default → 1px border/subtle divider → Delete (red destructive communicates danger w/o label). All item icons 16px (contextual-menu exception).
 - **Read-only Field** (520:1872): Type(12) × State(Filled/Empty) = 24 variants.
 - **Table Cell** (529:94): 7 types, 52px. Entity avatar has 1px surface/default (white) ring (INSIDE) — clean separation from any row bg (Default/Hover/Selected); propagates to Table Row. Selected (530:94) AND Hover (530:56) row variants override the avatar FILL to surface/default (white) — Selected on brand-subtle, Hover on surface/muted (brand-subtle vs muted = 1.03:1 < 3:1). Only Default keeps brand-subtle fill. See Avatar-on-brand-subtle/muted system rule. Status badge bg is token-bound + opaque, holds across all row states (not overridden by row bg).
 - **Table Row** (530:132): Default/Hover/Selected, 52px.
