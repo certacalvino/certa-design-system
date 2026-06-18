@@ -39,9 +39,16 @@ catalyst-ds-4.0/
 ├── README.md                   # this file
 ├── build_previews.py           # regenerates preview/*.html from token data
 ├── ui_kits/certa-studio/
-│   ├── Primitives.jsx          # Button, Icon, Badge, ProcessStatus, Field, Input, CheckboxPill, Card,
-│   │                           #   SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, RAGField,
-│   │                           #   KPIStatCard, Gauge, CircularProgress
+│   ├── Primitives.jsx          # Button, Icon, Badge, ProcessStatus, Field, Input, Checkbox, CheckboxPill,
+│   │                           #   MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar,
+│   │                           #   Toggle, RAGField, KPIStatCard, Gauge, CircularProgress
+│   ├── components/             # standalone components — each a triple: .jsx + .d.ts + .prompt.md
+│   │   ├── FilterChip.*        #   pill 32px, State × Icon × Badge (430:487)
+│   │   ├── ReadOnlyField.*     #   display field, Type × Filled/Empty (520:1872)
+│   │   ├── MaskedField.*       #   masked value + reveal toggle, State × Size (453:800)
+│   │   ├── CountryDropdown.*   #   280w r8 picker, search + flag/name/dial rows (440:450/441:437)
+│   │   ├── PhoneInput.*        #   country selector + number, M/S (composes CountryDropdown)
+│   │   └── index.js            #   barrel re-export
 │   ├── AppShell.jsx            # light sidebar + topbar + nav active-state pattern
 │   ├── VendorsList.jsx         # data table: status mapping, hover row actions, empty state
 │   ├── HomeDashboard.jsx       # stat widgets + attention queue + activity feed
