@@ -18,7 +18,7 @@ Last updated: 2026-06-17
 - Button M label: Body Bold 14px
 - Process Status chip padding: 12px H (lg token)
 - Overlay containers (Dropdown, Toast, Modal): r8 exception to 4px default
-- Avatar background in selected/active contexts: when an Avatar appears inside a Selected row, active card, or any surface using bg/brand-subtle, override the avatar fill to surface/default (white) so it remains visible. This applies to Table Row Selected state and any future component where an avatar sits on a brand-subtle background.
+- Avatar background in selected/active contexts: when an Avatar appears inside a Selected row, active card, or any surface using bg/brand-subtle, override the avatar fill to surface/default (white) so it remains visible. This applies to Table Row Selected state and any future component where an avatar sits on a brand-subtle background. If an avatar appears on surface/muted or darker backgrounds in any future component, use surface/default (white) avatar fill. (Measured: brand-subtle #ecf2ff vs surface/muted #f4f5f5 = 1.03:1, below 3:1 → Table Row Hover avatar switched to white; note neither light fill reaches 3:1 on near-white greys, so the 1px white ring + initials carry separation.)
 
 ## New tokens added 2026-06-17
 - color/bg/overlay = rgba(17,24,39,0.45) — modal/dialog scrim (535:2, Semantic collection)
@@ -50,7 +50,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - **File Upload Field** (493:1401): 9 states M only. Upload icon 180:1224.
 - **Dropdown Menu**: Menu Item 510:1825 (52 variants) + Menu Section 512:1668 + Menu Search 512:1670 + container 513:1669.
 - **Read-only Field** (520:1872): Type(12) × State(Filled/Empty) = 24 variants.
-- **Table Cell** (529:94): 7 types, 52px. Entity avatar has 1px surface/default (white) ring (INSIDE) — clean separation from any row bg (Default/Hover/Selected); propagates to Table Row. Selected row variant (530:94) overrides the avatar FILL to surface/default (white) so it stays visible on the brand-subtle bg (Default/Hover keep brand-subtle fill) — see Avatar-on-brand-subtle system rule. Status badge bg is token-bound + opaque, holds across all row states (not overridden by row bg).
+- **Table Cell** (529:94): 7 types, 52px. Entity avatar has 1px surface/default (white) ring (INSIDE) — clean separation from any row bg (Default/Hover/Selected); propagates to Table Row. Selected (530:94) AND Hover (530:56) row variants override the avatar FILL to surface/default (white) — Selected on brand-subtle, Hover on surface/muted (brand-subtle vs muted = 1.03:1 < 3:1). Only Default keeps brand-subtle fill. See Avatar-on-brand-subtle/muted system rule. Status badge bg is token-bound + opaque, holds across all row states (not overridden by row bg).
 - **Table Row** (530:132): Default/Hover/Selected, 52px.
 - **Table Column Header** (530:3400): Sort × Filter = 6 variants, 40px.
 - **Toggle** (item set 574:62): Orientation(Horizontal/Vertical) × State(Unselected/Hover/Selected/Focused/Disabled) × Icon = 20 variants. Containers: Toggle — Horizontal 575:2 (segmented track surface/subtle + 1px border/subtle r4, items flush) + Toggle — Vertical 575:9 (stacked rows, 220w, gap sm). H item 32px hug; V item 40px FILL. Selected=brand-subtle+text/link Body Bold; Hover=surface/muted; Focused=2px border/focused; Disabled @40%. Ported/unified from DS 3.0 Horizontal toggle (18v) + Vertical Toggle (20v). Doc section in 157:1257.
