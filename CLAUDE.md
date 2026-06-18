@@ -69,6 +69,11 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - 140×140 gauge: 270° arc (start 135°, gap at bottom) via ELLIPSE arcData {startingAngle,endingAngle,innerRadius:0.74}. Track = surface/muted (3:74, #f4f5f5); colored arc sweep = value/5 × 270° in RAG base (Low Green/base 3:41 · Med Orange/base 3:35 · High Red/base 3:53). NO needle, NO dot (redesigned 2026-06-17) — the arc alone communicates the value. Center text = value only (Display 28 text/primary, number e.g. "1.5"); no "/ 5". "Risk" Caption 12 text/secondary below the gauge.
 - Sample scores: Low 1.5 / Med 2.5 / High 4.5. RAG mapping matches RAG Field 577:23. Zero hardcoded values.
 
+### Circular Progress — 2026-06-17 (ported/generalized from DS 3.0 11522:10378)
+- Set 609:116 — Size(S 40/L 80) × Progress(0/25/50/75/100) × State(Default/Success/Error) = 30 variants. Page: Data Display. Source: 252:93. Doc section in 198:44 (showcase 609:4427).
+- Full 360° ring via ELLIPSE arcData {0,2π,innerRadius:0.78}. Track = surface/muted (3:74). Progress arc from top (start 1.5π) clockwise, sweep = progress/100 × 2π; 0% = track only (no arc node), 100% = full ring. Arc color: Default bg/brand (3:76) · Success text/success (3:69) · Error text/error (3:68). Center % text/primary: Caption 12 (S) / Body Bold 14 (L), centered in NONE-layout frame.
+- Generalized from DS 3.0: dropped workflow Status (Delayed / About-to-be-delayed). Flat arc caps (arcData has no rounded caps). Zero hardcoded values.
+
 ### KPI / Stat Card — 2026-06-17 (greenfield)
 - Set 595:4282 — Icon(bool) × Delta(bool) = 4 variants. Page: Data Display. Source: 252:93. Doc section in 198:44 (showcase 596:6).
 - Card: 200w (height hugs), VERTICAL, surface/default + r4 + 1px border/subtle + shadow-xs, padding xl(16), gap md(8). Content: optional icon 24px text/disabled (Chart 180:1657, swappable) + title (Caption 12 uppercase text/secondary) + value (Display 28, text/primary) + optional delta (Body 14, ▲ text/success / ▼ text/error + %, unicode triangle in text run).
@@ -135,7 +140,8 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - Sprint 2026-06-17: Avatar + Toggle + RAG Field built back-to-back, each pushed to main.
 - Date Picker v1 (582:14 cell + 583:14 panel + 585:71 field). Ported from DS 3.0 Date Picker. Doc section in Forms & Inputs 157:1257. Single-selection; range + datetime = v2.
 - KPI / Stat Card (595:4282, 4 variants Icon×Delta) — greenfield dashboard widget. Doc section in Data Display 198:44. New shadow-xs + Display 28 styles. DS 3.0 had only risk-specific Gauge/Widget (no generic KPI card).
-- Gauge (598:32, 3 RAG variants) — ported from DS 3.0 Visualisation Field Gauge. Radial arc (arcData) + needle (relativeTransform). Doc section in Data Display 198:44. Reuses Display 28 + RAG hue scales.
+- Gauge (598:32, 3 RAG variants) — ported from DS 3.0 Visualisation Field Gauge. Radial arc (arcData), value-only center (no needle/dot). Doc section in Data Display 198:44.
+- Circular Progress (609:116, 30 variants Size×Progress×State) — ported/generalized from DS 3.0 (workflow statuses dropped). Doc section in Data Display 198:44.
 - Contrast/polish fixes 2026-06-17: RAG tabs → HIGH/LOW white (text/on-brand 3:64), MED dark (Orange/D2) for AA; Table Cell Entity avatar → 1px surface/default white ring; verified Status badge bg holds across row states. (Neutral/0 3:13 = black here — used 3:64 for white.)
 - Catalyst DS 4.0 ZIP generated with 34 previews + JSX + UI Patterns section in README. Uploaded to Claude Design "Certa DS 4.0 — WIP".
 - Catalyst bundle committed to repo at catalyst-ds-4.0/ (+ catalyst-ds-4.0.zip). colors_and_type.css = full semantic token layer (primitives→semantic→type/space/effects); ui_kits/certa-studio/ = Primitives + AppShell + VendorsList + HomeDashboard + VendorDetail; preview/ = 34 standalone token-linked HTML files; index.html gallery; README UI Patterns documents all 10 composition rules. build_previews.py regenerates previews (excluded from zip). NOTE: programmatic upload to Claude Design unavailable from remote env — zip committed for manual upload.
@@ -164,7 +170,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 
 ## Pending components
 High priority: (all done) — Empty State · Pagination · Date Picker v1 (DONE 2026-06-17). Date Picker v2 backlog: range selection + date-time/time row.
-Medium priority: (clear) — Avatar DONE · Dashboard widget = KPI Stat Card DONE · Gauge DONE 2026-06-17. DS 3.0 viz backlog: Circular Progress (11522:10378, risk/workflow-specific, optional port).
+Medium priority: (clear) — Avatar · KPI Stat Card · Gauge · Circular Progress all DONE 2026-06-17.
 Post-presentation: Full sidebar composition, Motion specs, Theming
 
 ## Tokenization state (as of 2026-06-17)
