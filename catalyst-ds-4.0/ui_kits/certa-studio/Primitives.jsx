@@ -406,27 +406,161 @@ export const RAG_LEVELS = {
   Medium: "medium",
   High: "high",
 };
-export function RAGField({ label = "Risk", level = "Low" }) {
+const RAG_TAB_TEXT = { Low: "LOW", Medium: "MED", High: "HIGH" };
+export function RAGField({ label = "Inherent risk", level = "Low", value }) {
   const key = RAG_LEVELS[level] || "low";
+  const text = value != null ? value : `${level} risk`;
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <span className="t-caption">{label}</span>
-      <span
+    <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}>
+      {label && <span className="t-caption">{label}</span>}
+      {/* 240×40 r4 field: tinted bg + value, 24px saturated right-tab w/ vertical label */}
+      <div
         style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "var(--space-md)",
-          background: `var(--color-rag-${key}-bg)`,
-          color: `var(--color-rag-${key}-fg)`,
+          position: "relative",
+          width: 240,
+          height: 40,
           borderRadius: "var(--radius-sm)",
-          padding: "2px var(--space-md)",
-          fontSize: "var(--font-body-size)",
-          fontWeight: "var(--font-weight-semibold)",
-          width: "fit-content",
+          background: `var(--color-rag-${key}-bg)`,
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
         }}
       >
-        <span style={{ width: 8, height: 8, borderRadius: "var(--radius-full)", background: `var(--color-rag-${key}-fg)` }} />
-        {level} risk
+        <span style={{ flex: 1, padding: "0 var(--space-lg)", fontSize: "var(--font-body-size)", color: "var(--color-text-primary)" }}>
+          {text}
+        </span>
+        {/* colored tab — label rotated 90°. HIGH+LOW white, MED dark (Orange/D2). */}
+        <span
+          style={{
+            width: 24,
+            height: "100%",
+            background: `var(--color-rag-${key}-base)`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span
+            style={{
+              transform: "rotate(-90deg)",
+              fontSize: 10,
+              fontWeight: "var(--font-weight-bold)",
+              letterSpacing: "0.04em",
+              color: `var(--color-rag-${key}-label)`,
+              whiteSpace: "nowrap",
+            }}
+          >
+            {RAG_TAB_TEXT[level]}
+          </span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   KPIStatCard — Icon(bool) × Delta(bool). 200w card, surface/default + r4 +
+   1px border/subtle + shadow-xs. Value = Display 28; delta ▲ success / ▼ error.
+   Matches Figma set 595:4282.
+   --------------------------------------------------------------------------- */
+export function KPIStatCard({ icon = null, title, value, delta = null }) {
+  const up = delta && !String(delta).trim().startsWith("-");
+  return (
+    <div
+      style={{
+        width: 200,
+        display: "flex",
+        flexDirection: "column",
+        gap: "var(--space-md)",
+        background: "var(--color-bg-page)",
+        border: "1px solid var(--color-border-subtle)",
+        borderRadius: "var(--radius-sm)",
+        boxShadow: "var(--shadow-xs)",
+        padding: "var(--space-xl)",
+      }}
+    >
+      {icon && <Icon glyph={icon} size={24} color="var(--color-text-disabled)" />}
+      <span className="t-meta" style={{ color: "var(--color-text-secondary)" }}>{title}</span>
+      <span className="t-display" style={{ color: "var(--color-text-primary)" }}>{value}</span>
+      {delta != null && (
+        <span style={{ fontSize: "var(--font-body-size)", fontWeight: "var(--font-weight-semibold)", color: up ? "var(--color-text-success)" : "var(--color-text-error)" }}>
+          {up ? "▲" : "▼"} {String(delta).replace(/^-/, "")}
+        </span>
+      )}
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   Gauge — RAG(Low/Medium/High). 140px, 270° arc (no needle/dot), surface/muted
+   track. Value-only center (Display 28). Matches Figma set 598:32. score 0–5.
+   --------------------------------------------------------------------------- */
+const GAUGE_BASE = { Low: "var(--color-rag-low-base)", Medium: "var(--color-rag-medium-base)", High: "var(--color-rag-high-base)" };
+export function Gauge({ level = "Low", score = 1.5, size = 140 }) {
+  const sweep = 270;
+  const r = size / 2 - 10;
+  const c = size / 2;
+  // 270° arc starting at 135° (gap at bottom)
+  const polar = (deg) => {
+    const rad = (deg - 90) * Math.PI / 180;
+    return [c + r * Math.cos(rad), c + r * Math.sin(rad)];
+  };
+  const arcPath = (fromDeg, toDeg) => {
+    const [x1, y1] = polar(fromDeg);
+    const [x2, y2] = polar(toDeg);
+    const large = toDeg - fromDeg > 180 ? 1 : 0;
+    return `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`;
+  };
+  const start = 135, end = 135 + sweep;
+  const valEnd = 135 + (Math.max(0, Math.min(5, score)) / 5) * sweep;
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "var(--space-md)" }}>
+      <div style={{ position: "relative", width: size, height: size }}>
+        <svg width={size} height={size} style={{ display: "block" }}>
+          <path d={arcPath(start, end)} fill="none" stroke="var(--color-bg-muted)" strokeWidth={size * 0.13} />
+          {score > 0 && <path d={arcPath(start, valEnd)} fill="none" stroke={GAUGE_BASE[level]} strokeWidth={size * 0.13} />}
+        </svg>
+        <span className="t-display" style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--color-text-primary)" }}>
+          {score}
+        </span>
+      </div>
+      <span className="t-caption">Risk</span>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   CircularProgress — Size(S 40 / L 80) × Progress(0/25/50/75/100) ×
+   State(Default/Success/Error). 360° ring, surface/muted track, arc from top.
+   Matches Figma set 609:116.
+   --------------------------------------------------------------------------- */
+const CP_STATE = { Default: "var(--color-action-primary)", Success: "var(--color-text-success)", Error: "var(--color-text-error)" };
+export function CircularProgress({ size = "l", progress = 50, state = "Default" }) {
+  const px = size === "s" ? 40 : 80;
+  const sw = px * 0.11;
+  const r = (px - sw) / 2;
+  const circ = 2 * Math.PI * r;
+  const c = px / 2;
+  return (
+    <div style={{ position: "relative", width: px, height: px }}>
+      <svg width={px} height={px} style={{ transform: "rotate(-90deg)" }}>
+        <circle cx={c} cy={c} r={r} fill="none" stroke="var(--color-bg-muted)" strokeWidth={sw} />
+        {progress > 0 && (
+          <circle
+            cx={c} cy={c} r={r} fill="none" stroke={CP_STATE[state]} strokeWidth={sw}
+            strokeDasharray={circ} strokeDashoffset={circ * (1 - progress / 100)}
+          />
+        )}
+      </svg>
+      <span
+        style={{
+          position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
+          color: "var(--color-text-primary)",
+          fontSize: size === "s" ? "var(--font-caption-size)" : "var(--font-body-bold-size)",
+          fontWeight: size === "s" ? "var(--font-weight-regular)" : "var(--font-weight-bold)",
+        }}
+      >
+        {progress}%
       </span>
     </div>
   );
@@ -435,6 +569,6 @@ export function RAGField({ label = "Risk", level = "Low" }) {
 export default {
   Button, Icon, Badge, ProcessStatus, Field, Input,
   CheckboxPill, Card, SectionHeader, EmptyState, ProgressSteps,
-  Avatar, Toggle, RAGField, tokens, STATUS_COLOR,
-  AVATAR_SIZE, AVATAR_TONES, RAG_LEVELS,
+  Avatar, Toggle, RAGField, KPIStatCard, Gauge, CircularProgress,
+  tokens, STATUS_COLOR, AVATAR_SIZE, AVATAR_TONES, RAG_LEVELS,
 };

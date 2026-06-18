@@ -411,58 +411,147 @@ nb = section("Sidebar nav (light #F7F8FA)", '<div style="width:248px;background:
 pages.append(("25-nav-bar.html","Nav Bar","State × Expanded × Badge. Active = brand-subtle fill + 2px left indicator + text/link bold.",nb))
 
 # 26 modal ------------------------------------------------------------------
-md = section("Modal (M / 520, r8, shadow-lg)", '<div style="background:var(--color-bg-overlay);padding:var(--space-4xl);border-radius:var(--radius-sm)">'
-    '<div class="overlay" style="width:520px;margin:0 auto;padding:var(--space-3xl)">'
-    '<div style="display:flex;justify-content:space-between;align-items:flex-start">'
-    '<h3 class="t-modal" style="margin:0">Delete vendor?</h3><span style="color:var(--color-text-tertiary)">✕</span></div>'
-    '<p class="t-body text-secondary">This permanently removes Globex Materials and all associated documents. This action cannot be undone.</p>'
-    '<div style="display:flex;justify-content:flex-end;gap:var(--space-md);margin-top:var(--space-xl)">'
-    '<button class="btn btn--outline">Cancel</button><button class="btn btn--danger">Delete</button></div></div></div>')
-pages.append(("26-modal.html","Modal","Size(S/M/L) × Type(Default/Destructive). Title 18/600, scrim overlay token, shadow-lg.",md))
+# Size(S 400 / M 520 / L 640) × Type(Default/Destructive). Header 18/600 title +
+# 32px Close hit-area / Body / Footer (Outline Cancel + Filled Save|Delete). r8 + shadow-lg.
+def modal(w, dest, title, body):
+    save = ('<button class="btn btn--danger">Delete</button>' if dest
+            else '<button class="btn btn--filled">Save</button>')
+    return (f'<div class="overlay" style="width:{w}px;padding:0;overflow:hidden">'
+            f'<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:var(--space-xl) var(--space-3xl)">'
+            f'<h3 class="t-modal" style="margin:0">{title}</h3>'
+            f'<span style="width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;'
+            f'color:var(--color-text-tertiary);cursor:pointer">✕</span></div>'
+            f'<div style="padding:0 var(--space-3xl) var(--space-xl)"><p class="t-body text-secondary" style="margin:0">{body}</p></div>'
+            f'<div style="display:flex;justify-content:flex-end;gap:var(--space-md);padding:var(--space-lg) var(--space-3xl);'
+            f'border-top:1px solid var(--color-border-subtle)">'
+            f'<button class="btn btn--outline">Cancel</button>{save}</div></div>')
+md = section("Default — Size S 400 / M 520 / L 640 (r8, shadow-lg)",
+    '<div class="col" style="gap:var(--space-xl)">'
+    + modal(400,False,"Add vendor","Enter the vendor's legal name and primary contact to create a record.")
+    + modal(520,False,"Edit profile","Update the company profile. Changes are saved to the vendor record immediately.")
+    + modal(640,False,"Assessment details","Review the full assessment scope, responses, and supporting documents before approving.")
+    + '</div>')
+md += section("Destructive — footer swaps Save → Delete",
+    modal(520,True,"Delete vendor?","This permanently removes Globex Materials and all associated documents. This action cannot be undone."))
+md += section("With scrim (color/bg/overlay)",
+    '<div style="background:var(--color-bg-overlay);padding:var(--space-4xl);border-radius:var(--radius-sm)">'
+    + modal(520,False,"On scrim","The overlay token (rgba 17,24,39,.45) dims the page behind the dialog.") + '</div>')
+pages.append(("26-modal.html","Modal","Size(S 400 / M 520 / L 640) × Type(Default/Destructive) = 6 variants. Header 18/600 title + 32px Close, scrollable Body, Footer (Outline Cancel + Filled Save; Destructive → Delete). r8, shadow-lg, color/bg/overlay scrim.",md))
 
 # 27 tabs -------------------------------------------------------------------
-def tabitem(t,active=False,badge_n=None):
-    col="color:var(--color-text-primary);font-weight:700;" if active else "color:var(--color-text-secondary);font-weight:500;"
-    ind='<span style="position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--color-text-link)"></span>' if active else ''
-    b=f' <span class="badge badge--neutral">{badge_n}</span>' if badge_n else ''
-    return (f'<div style="position:relative;height:40px;padding:0 var(--space-lg);display:inline-flex;align-items:center;'
-            f'{col}font-size:var(--font-body-size)">{t}{b}{ind}</div>')
-tb = section("Tab container (full-width baseline)", '<div style="display:flex;border-bottom:1px solid var(--color-border-default)">'
-    + tabitem("Overview",active=True) + tabitem("Activity") + tabitem("Files",badge_n="12") + tabitem("Settings") + '</div>')
-pages.append(("27-tabs.html","Tabs","20 variants: State × Badge × Icon. Selected = bold text/primary + 2px text/link indicator.",tb))
+# State(Unselected/Hover/Selected/Focused/Disabled) × Badge × Icon. 40px, icon 20px,
+# padding lg H, gap md. Selected=text/primary Bold + 2px text/link indicator.
+def tabitem(t,state="unselected",icon=None,badge_n=None):
+    base="position:relative;height:40px;padding:0 var(--space-lg);display:inline-flex;align-items:center;gap:var(--space-md);font-size:var(--font-body-size);"
+    col="color:var(--color-text-secondary);font-weight:500;"; extra=""; ind=""
+    if state=="selected": col="color:var(--color-text-primary);font-weight:700;"; ind='<span style="position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--color-text-link)"></span>'
+    elif state=="hover": extra="background:var(--color-surface-hover);border-radius:var(--radius-sm) var(--radius-sm) 0 0;"
+    elif state=="focused": extra="box-shadow:inset 0 0 0 2px var(--color-border-focused);border-radius:var(--radius-sm);"
+    elif state=="disabled": col="color:var(--color-text-disabled);font-weight:500;opacity:.4;"
+    ic=f'<span style="font-size:20px">{icon}</span>' if icon else ''
+    b=f'<span class="badge badge--neutral">{badge_n}</span>' if badge_n else ''
+    return f'<div style="{base}{col}{extra}">{ic}{t}{b}{ind}</div>'
+tb = section("Item states", '<div class="row" style="gap:var(--space-xl);align-items:flex-end">'
+    + tabitem("Unselected") + tabitem("Hover",state="hover") + tabitem("Selected",state="selected")
+    + tabitem("Focused",state="focused") + tabitem("Disabled",state="disabled") + '</div>')
+tb += section("With icon + badge", '<div class="row" style="gap:var(--space-xl)">'
+    + tabitem("Overview",state="selected",icon="▦") + tabitem("Files",icon="▤",badge_n="12") + '</div>')
+tb += section("Container — full-width baseline (border/subtle)",
+    '<div style="display:flex;border-bottom:1px solid var(--color-border-subtle)">'
+    + tabitem("Overview",state="selected") + tabitem("Activity") + tabitem("Files",badge_n="12") + tabitem("Settings") + '</div>')
+pages.append(("27-tabs.html","Tabs","Item set 542:83 — State(Unselected/Hover/Selected/Focused/Disabled) × Badge × Icon = 20 variants. 40px, icon 20px. Selected = text/primary Bold + 2px text/link indicator. Container 543:2 = full-width 1px border/subtle baseline.",tb))
 
 # 28 pagination -------------------------------------------------------------
-def pg(n,active=False):
-    bg="background:var(--color-bg-brand-subtle);color:var(--color-text-link);" if active else "color:var(--color-text-secondary);"
-    return f'<button class="btn btn--text" style="width:36px;height:36px;padding:0;justify-content:center;{bg}font-weight:600">{n}</button>'
-pgn = section("Pagination", '<div class="row" style="gap:var(--space-sm)">'
-    '<button class="btn btn--outline btn--s">← Prev</button>'
-    + pg("1",active=True) + pg("2") + pg("3") + '<span style="color:var(--color-text-tertiary)">…</span>' + pg("9")
-    + '<button class="btn btn--outline btn--s">Next →</button></div>')
-pages.append(("28-pagination.html","Pagination","High-priority pending component — first DS 4.0 pass. Active page = brand-subtle.",pgn))
+# Simple (range + First/Prev/Next/Last) + Numbered (range + Prev + page buttons + Next).
+# Arrows = Icon Button M 32px; page button 32×32 r4 Default/Hover/Selected; range 12px Caption.
+def iconarrow(g,disabled=False):
+    col="var(--color-text-disabled)" if disabled else "var(--color-text-secondary)"
+    cur="not-allowed" if disabled else "pointer"
+    return (f'<button style="width:32px;height:32px;border-radius:var(--radius-sm);border:1px solid var(--color-border-default);'
+            f'background:var(--color-bg-page);color:{col};cursor:{cur};display:inline-flex;align-items:center;justify-content:center;font-size:14px">{g}</button>')
+def pg(n,state="default"):
+    if state=="selected": s="background:var(--color-bg-brand);color:var(--color-text-inverse);font-weight:700;border:none;"
+    elif state=="hover": s="background:var(--color-surface-hover);color:var(--color-text-primary);border:none;"
+    else: s="background:transparent;color:var(--color-text-secondary);border:none;"
+    return f'<button style="width:32px;height:32px;border-radius:var(--radius-sm);cursor:pointer;{s}">{n}</button>'
+rng='<span class="t-caption">1–10 of 100</span>'
+pgn = section("Simple",
+    '<div class="row" style="justify-content:space-between;max-width:480px">' + rng
+    + '<div class="row" style="gap:var(--space-sm)">' + iconarrow("«") + iconarrow("‹") + iconarrow("›") + iconarrow("»") + '</div></div>')
+pgn += section("Numbered",
+    '<div class="row" style="justify-content:space-between;max-width:520px">' + rng
+    + '<div class="row" style="gap:var(--space-xs)">' + iconarrow("‹")
+    + pg("1",state="selected") + pg("2") + pg("3") + '<span style="color:var(--color-text-tertiary);padding:0 4px">…</span>' + pg("10")
+    + iconarrow("›") + '</div></div>')
+pgn += section("Page-button states", '<div class="row" style="gap:var(--space-lg)">'
+    + '<div class="col" style="gap:var(--space-sm);align-items:center">'+pg("2")+'<span class="t-caption">Default</span></div>'
+    + '<div class="col" style="gap:var(--space-sm);align-items:center">'+pg("2",state="hover")+'<span class="t-caption">Hover</span></div>'
+    + '<div class="col" style="gap:var(--space-sm);align-items:center">'+pg("2",state="selected")+'<span class="t-caption">Selected</span></div>' + '</div>')
+pgn += section("Disabled edges (page 1)", '<div class="row" style="gap:var(--space-sm)">'
+    + iconarrow("«",disabled=True) + iconarrow("‹",disabled=True) + iconarrow("›") + iconarrow("»") + '</div>')
+pages.append(("28-pagination.html","Pagination","Type(Simple/Numbered). Simple = range ↔ First/Prev/Next/Last (Icon Button M 32px). Numbered = range ↔ Prev + page buttons + Next. Page button 32×32 r4: Default/Hover/Selected(bg/brand). Range 12px Caption text/secondary. Disabled edges greyed on first/last page.",pgn))
 
 # 29 empty state ------------------------------------------------------------
-es = section("Empty state", '<div style="display:flex;flex-direction:column;align-items:center;text-align:center;'
-    'padding:var(--space-4xl);gap:var(--space-md)"><div style="font-size:40px;opacity:.6">❏</div>'
-    '<div class="t-title-s">No vendors yet</div>'
-    '<div class="t-body text-secondary" style="max-width:360px">Add your first vendor to start tracking '
-    'certifications, assessments, and compliance status.</div>'
-    '<button class="btn btn--filled" style="margin-top:var(--space-md)"><span>+</span>New vendor</button></div>')
-pages.append(("29-empty-state.html","Empty State","Icon + title + supporting body + primary action. High-priority pending.",es))
+# Context(Page/Card/Table) × Action(bool). icon text/disabled + Body Bold 14 title
+# + Body 14 desc + optional Filled button. Page: icon 32/gap xl/w400/M btn. Card/Table: icon 24/gap md/S btn.
+def empty(icon_px, gap, w, title, desc, btn=None):
+    b = f'<button class="btn {btn}" style="margin-top:var(--space-md)"><span>+</span>Add</button>' if btn else ''
+    return (f'<div style="display:flex;flex-direction:column;align-items:center;text-align:center;'
+            f'gap:{gap};width:{w}px;max-width:100%;padding:var(--space-3xl) 0;margin:0 auto">'
+            f'<div style="font-size:{icon_px}px;color:var(--color-text-disabled)">🔍</div>'
+            f'<div class="t-body-bold">{title}</div>'
+            f'<div class="t-body text-secondary">{desc}</div>{b}</div>')
+es = section("Page (icon 32, gap xl, 400w, Filled M)",
+    empty(32,"var(--space-xl)",400,"No results found","Try adjusting your filters or search terms to find what you're looking for.",btn="btn--filled"))
+es += section("Card (icon 24, gap md, 320w, Filled S)",
+    '<div class="pv-section" style="margin:0">'
+    + empty(24,"var(--space-md)",320,"Nothing here yet","Items you add will show up in this card.",btn="btn--filled btn--s") + '</div>')
+es += section("Table (icon 24, gap md, spans body, Filled S) — no action",
+    '<table><tbody><tr><td colspan="3" style="height:auto">'
+    + empty(24,"var(--space-md)",640,"No data found","No records match the current view.") + '</td></tr></tbody></table>')
+pages.append(("29-empty-state.html","Empty State","Context(Page/Card/Table) × Action(bool) = 6 variants. Icon-led (text/disabled), Body Bold 14 title + Body 14 desc + optional Filled button. Page: icon 32 / 400w / M button. Card+Table: icon 24 / S button. 14px floor.",es))
 
-# 30 date picker ------------------------------------------------------------
-def day(n,active=False,muted=False):
-    s="background:var(--color-action-primary);color:#fff;" if active else ("color:var(--color-text-disabled);" if muted else "")
-    return f'<div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);font-size:var(--font-body-size);{s}">{n}</div>'
-cells="".join(day(d) for d in range(1,15)) + day(15,active=True) + "".join(day(d) for d in range(16,31))
-dp = section("Date picker", '<div class="overlay" style="width:300px;padding:var(--space-lg)">'
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-md)">'
-    '<span style="color:var(--color-text-tertiary)">‹</span><span style="font-weight:600">June 2026</span>'
-    '<span style="color:var(--color-text-tertiary)">›</span></div>'
-    '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px">'
-    + "".join(f'<div class="t-meta" style="text-align:center">{d}</div>' for d in ["S","M","T","W","T","F","S"])
-    + cells + '</div></div>')
-pages.append(("30-date-picker.html","Date Picker","High-priority pending component — first DS 4.0 pass. Selected day = brand fill.",dp))
+# 30 date picker (v2 — range) ----------------------------------------------
+# Cell 40×40, day# 12px. States: Default/Hover/Today/Selected/Muted/Disabled + In-Range.
+# Today = 1px border/focused ring (no fill). Range band: start/end brand fill (per-corner
+# radius), in-range brand-subtle + text/link, flush (r0) → continuous.
+def day(n,state="default",radius="var(--radius-sm)"):
+    base=f"width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:var(--font-caption-size);border-radius:{radius};"
+    s="color:var(--color-text-primary);"
+    if state=="selected": s="background:var(--color-action-primary);color:var(--color-text-inverse);font-weight:700;"
+    elif state=="in-range": s="background:var(--color-bg-brand-subtle);color:var(--color-text-link);"
+    elif state=="today": s="color:var(--color-text-primary);box-shadow:inset 0 0 0 1px var(--color-border-focused);"
+    elif state=="hover": s="background:var(--color-surface-hover);color:var(--color-text-primary);"
+    elif state=="muted": s="color:var(--color-text-disabled);"
+    elif state=="disabled": s="color:var(--color-text-disabled);opacity:.4;text-decoration:line-through;"
+    return f'<div style="{base}{s}">{n}</div>'
+def panel(grid):
+    return ('<div class="overlay" style="width:280px;padding:var(--space-lg)">'
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-md)">'
+        '<span style="width:32px;height:32px;border:1px solid var(--color-border-default);border-radius:var(--radius-sm);'
+        'display:inline-flex;align-items:center;justify-content:center;color:var(--color-text-secondary)">‹</span>'
+        '<span class="t-body-bold">June 2026</span>'
+        '<span style="width:32px;height:32px;border:1px solid var(--color-border-default);border-radius:var(--radius-sm);'
+        'display:inline-flex;align-items:center;justify-content:center;color:var(--color-text-secondary)">›</span></div>'
+        '<div style="display:grid;grid-template-columns:repeat(7,1fr)">'
+        + "".join(f'<div class="t-caption" style="text-align:center;height:32px;line-height:32px">{d}</div>' for d in ["SUN","MON","TUE","WED","THU","FRI","SAT"])
+        + grid + '</div>'
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-md);padding-top:var(--space-md);border-top:1px solid var(--color-border-subtle)">'
+        '<button class="btn btn--link">Today</button><button class="btn btn--text btn--s">Clear</button></div></div>')
+dp = section("Cell states (40×40, day# 12px)", '<div class="row" style="gap:var(--space-md)">'
+    + "".join(f'<div class="col" style="gap:var(--space-sm);align-items:center">{day(15,state=s)}<span class="t-caption">{lbl}</span></div>'
+        for s,lbl in [("default","Default"),("hover","Hover"),("today","Today"),("selected","Selected"),("in-range","In-range"),("muted","Muted"),("disabled","Disabled")]) + '</div>')
+single = "".join(day(d,state="muted") for d in range(1,8)) + day(8) + day(9) + day(10) + day(11) + day(12,state="today") + day(13) + day(14) \
+    + day(15,state="selected") + "".join(day(d) for d in range(16,30))
+dp += section("Single selection", panel(single))
+# range: start=18 (TL+BL r4), in-range 19–21, end=22 (TR+BR r4)
+LR="var(--radius-sm) 0 0 var(--radius-sm)"; RR="0 var(--radius-sm) var(--radius-sm) 0"
+rangecells = "".join(day(d) for d in range(1,18)) \
+    + day(18,state="selected",radius=LR) + day(19,state="in-range",radius="0") + day(20,state="in-range",radius="0") \
+    + day(21,state="in-range",radius="0") + day(22,state="selected",radius=RR) \
+    + "".join(day(d) for d in range(23,31))
+dp += section("Range selection (v2 — start / in-range / end)", panel(rangecells))
+pages.append(("30-date-picker.html","Date Picker v2","Cell 40×40 (day# 12px): Default/Hover/Today/Selected/Muted/Disabled + In-Range. Today = 1px border/focused ring (no fill). Panel 280w r8 + shadow-lg, SUN-first weekday row, Today/Clear footer. v2 range: start/end brand fill + per-corner radii, in-range brand-subtle + text/link, flush → continuous band.",dp))
 
 # 31 avatar -----------------------------------------------------------------
 AV_SIZES = [("S",24),("M",32),("L",40),("XL",56)]
@@ -547,20 +636,90 @@ tg += section("Vertical (220w, item 40px fill)", toggle(["Overview","Activity","
 pages.append(("35-toggle.html","Toggle","Segmented control — horizontal & vertical (Figma 574:62 / 575:2 / 575:9). Track on surface/subtle + 1px border/subtle, items flush. Selected = brand-subtle fill + text/link Body Bold.",tg))
 
 # 36 RAG field --------------------------------------------------------------
-def rag(label, level):
-    key = {"Low":"low","Medium":"medium","High":"high"}[level]
-    return (f'<div class="col" style="gap:2px"><span class="t-caption">{label}</span>'
-            f'<span style="display:inline-flex;align-items:center;gap:var(--space-md);'
-            f'background:var(--color-rag-{key}-bg);color:var(--color-rag-{key}-fg);border-radius:var(--radius-sm);'
-            f'padding:2px var(--space-md);font-size:var(--font-body-size);font-weight:600;width:fit-content">'
-            f'<span style="width:8px;height:8px;border-radius:var(--radius-full);background:var(--color-rag-{key}-fg)"></span>'
-            f'{level} risk</span></div>')
-rg = section("RAG risk levels (Red / Amber / Green)", '<div class="row" style="gap:var(--space-4xl)">'
-    + rag("Inherent risk","Low") + rag("Residual risk","Medium") + rag("Overall risk","High") + '</div>')
-rg += section("In a record", '<div class="row" style="gap:var(--space-4xl)">'
-    + rag("Financial","Low") + rag("Operational","Medium") + rag("Cybersecurity","High")
-    + rag("Compliance","Low") + '</div>')
-pages.append(("36-rag-field.html","RAG Field","Low / Medium / High risk status display. Read-only field: 12px caption label + colored dot + level. Green→Low, Amber→Medium, Red→High.",rg))
+# Figma 577:23: 240×40 r4 field, tinted bg (RAG L3) + value (Body 14 text/primary)
+# + 24px full-height colored right-tab (RAG base) with rotated vertical label.
+# A11y: HIGH+LOW label white (text/on-brand); MED dark (Orange/D2).
+RAG_TAB={"Low":"LOW","Medium":"MED","High":"HIGH"}
+def rag(label, level, value):
+    key={"Low":"low","Medium":"medium","High":"high"}[level]
+    return (f'<div class="col" style="gap:var(--space-sm)"><span class="t-caption">{label}</span>'
+            f'<div style="position:relative;width:240px;height:40px;border-radius:var(--radius-sm);'
+            f'background:var(--color-rag-{key}-bg);overflow:hidden;display:flex;align-items:center">'
+            f'<span style="flex:1;padding:0 var(--space-lg);font-size:var(--font-body-size);color:var(--color-text-primary)">{value}</span>'
+            f'<span style="width:24px;height:100%;background:var(--color-rag-{key}-base);display:flex;align-items:center;justify-content:center">'
+            f'<span style="transform:rotate(-90deg);font-size:10px;font-weight:700;letter-spacing:.04em;'
+            f'color:var(--color-rag-{key}-label);white-space:nowrap">{RAG_TAB[level]}</span></span></div></div>')
+rg = section("RAG risk field (240×40, colored right-tab)", '<div class="row" style="gap:var(--space-4xl)">'
+    + rag("Inherent risk","Low","Low — 1.5") + rag("Residual risk","Medium","Medium — 2.5") + rag("Overall risk","High","High — 4.5") + '</div>')
+rg += section("Tab label contrast — HIGH+LOW white, MED dark (Orange/D2)", '<div class="row" style="gap:var(--space-4xl)">'
+    + rag("Financial","Low","Low") + rag("Operational","Medium","Medium") + rag("Cybersecurity","High","High") + '</div>'
+    + '<p class="t-caption" style="margin-top:var(--space-lg)">White on Orange/base fails WCAG AA, so the MED tab label uses Orange/D2 (dark). '
+      'HIGH (Red/base) and LOW (Green/base) carry white labels.</p>')
+pages.append(("36-rag-field.html","RAG Field","Figma 577:23 — RAG(Red/Amber/Green) = 3 variants. 240×40 r4 field, tinted bg (RAG L3) + value (Body 14 text/primary) + 24px colored right-tab (RAG base) with rotated vertical label. Red→HIGH / Orange→MED / Green→LOW. A11y: HIGH+LOW labels white, MED dark (Orange/D2).",rg))
+
+# 37 KPI / Stat Card --------------------------------------------------------
+# Set 595:4282 — Icon(bool) × Delta(bool) = 4 variants. 200w card, surface/default
+# + r4 + 1px border/subtle + shadow-xs, padding xl, gap md. Value Display 28.
+def kpi(title, value, icon=None, delta=None):
+    up = delta and not str(delta).startswith("-")
+    ic = f'<span style="font-size:24px;color:var(--color-text-disabled)">{icon}</span>' if icon else ''
+    d = ''
+    if delta is not None:
+        col = "var(--color-text-success)" if up else "var(--color-text-error)"
+        d = f'<span style="font-size:var(--font-body-size);font-weight:600;color:{col}">{"▲" if up else "▼"} {str(delta).lstrip("-")}</span>'
+    return (f'<div style="width:200px;display:flex;flex-direction:column;gap:var(--space-md);background:var(--color-bg-page);'
+            f'border:1px solid var(--color-border-subtle);border-radius:var(--radius-sm);box-shadow:var(--shadow-xs);padding:var(--space-xl)">'
+            f'{ic}<span class="t-meta" style="color:var(--color-text-secondary)">{title}</span>'
+            f'<span class="t-display">{value}</span>{d}</div>')
+kp = section("Icon × Delta (4 variants)", '<div class="row" style="gap:var(--space-xl);align-items:stretch">'
+    + kpi("Active vendors","124",icon="📊",delta="6%")
+    + kpi("Pending review","18",delta="3%")
+    + kpi("Expiring soon","7",icon="📊",delta="-2%")
+    + kpi("Total spend","$1.2M") + '</div>')
+pages.append(("37-kpi-stat-card.html","KPI / Stat Card","Set 595:4282 — Icon(bool) × Delta(bool) = 4 variants. 200w card, surface/default + r4 + 1px border/subtle + shadow-xs. Title Caption uppercase + value Display 28 + optional icon 24px (text/disabled) + delta ▲ text/success / ▼ text/error. Delta direction is a content swap.",kp))
+
+# 38 gauge ------------------------------------------------------------------
+# Set 598:32 — RAG(Low/Medium/High). 140px 270° arc (no needle/dot), surface/muted track.
+import math
+def gauge(level, score, size=140):
+    base={"Low":"var(--color-rag-low-base)","Medium":"var(--color-rag-medium-base)","High":"var(--color-rag-high-base)"}[level]
+    r=size/2-12; c=size/2; sweep=270; start=135
+    def polar(deg):
+        rad=math.radians(deg-90); return (c+r*math.cos(rad), c+r*math.sin(rad))
+    def arc(a,b):
+        x1,y1=polar(a); x2,y2=polar(b); large=1 if (b-a)>180 else 0
+        return f'M {x1:.2f} {y1:.2f} A {r:.2f} {r:.2f} 0 {large} 1 {x2:.2f} {y2:.2f}'
+    val=start+(max(0,min(5,score))/5)*sweep
+    sweeparc=f'<path d="{arc(start,val)}" fill="none" stroke="{base}" stroke-width="{size*0.13:.0f}"/>' if score>0 else ''
+    return (f'<div class="col" style="align-items:center;gap:var(--space-md)">'
+            f'<div style="position:relative;width:{size}px;height:{size}px">'
+            f'<svg width="{size}" height="{size}" style="display:block">'
+            f'<path d="{arc(start,start+sweep)}" fill="none" stroke="var(--color-bg-muted)" stroke-width="{size*0.13:.0f}"/>{sweeparc}</svg>'
+            f'<span class="t-display" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">{score}</span></div>'
+            f'<span class="t-caption">Risk</span></div>')
+gg = section("RAG gauges — arc only, no needle (270° sweep, score 0–5)", '<div class="row" style="gap:var(--space-4xl)">'
+    + gauge("Low",1.5) + gauge("Medium",2.5) + gauge("High",4.5) + '</div>')
+pages.append(("38-gauge.html","Gauge","Set 598:32 — RAG(Low/Medium/High) = 3 variants. 140px, 270° arc (start 135°, gap at bottom). Track = surface/muted; colored sweep = score/5 × 270° in RAG base. NO needle / NO dot — the arc communicates the value. Center = value only (Display 28). 'Risk' caption below.",gg))
+
+# 39 circular progress ------------------------------------------------------
+# Set 609:116 — Size(S 40 / L 80) × Progress(0/25/50/75/100) × State(Default/Success/Error) = 30.
+def circ(progress, state="Default", size="l"):
+    px=40 if size=="s" else 80; sw=px*0.11; r=(px-sw)/2; c=px/2; circ_len=2*math.pi*r
+    col={"Default":"var(--color-action-primary)","Success":"var(--color-text-success)","Error":"var(--color-text-error)"}[state]
+    arc=f'<circle cx="{c}" cy="{c}" r="{r:.2f}" fill="none" stroke="{col}" stroke-width="{sw:.1f}" stroke-dasharray="{circ_len:.2f}" stroke-dashoffset="{circ_len*(1-progress/100):.2f}"/>' if progress>0 else ''
+    fs="var(--font-caption-size)" if size=="s" else "var(--font-body-bold-size)"
+    fw="400" if size=="s" else "700"
+    return (f'<div style="position:relative;width:{px}px;height:{px}px">'
+            f'<svg width="{px}" height="{px}" style="transform:rotate(-90deg)">'
+            f'<circle cx="{c}" cy="{c}" r="{r:.2f}" fill="none" stroke="var(--color-bg-muted)" stroke-width="{sw:.1f}"/>{arc}</svg>'
+            f'<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:{fs};font-weight:{fw}">{progress}%</span></div>')
+cpv = section("Default — Progress 0 / 25 / 50 / 75 / 100 (L 80)", '<div class="row" style="gap:var(--space-xl)">'
+    + "".join(circ(p) for p in [0,25,50,75,100]) + '</div>')
+cpv += section("State — Success / Error (L)", '<div class="row" style="gap:var(--space-xl)">'
+    + circ(75,"Success") + circ(40,"Error") + '</div>')
+cpv += section("Size S (40)", '<div class="row" style="gap:var(--space-xl)">'
+    + "".join(circ(p,"Default","s") for p in [25,50,100]) + circ(60,"Success","s") + '</div>')
+pages.append(("39-circular-progress.html","Circular Progress","Set 609:116 — Size(S 40 / L 80) × Progress(0/25/50/75/100) × State(Default/Success/Error) = 30 variants. 360° ring, track surface/muted, arc from top clockwise. Default bg/brand · Success text/success · Error text/error. Center % (Caption S / Body Bold L). Flat caps.",cpv))
 
 # --- write -----------------------------------------------------------------
 for fn, title, blurb, body in pages:

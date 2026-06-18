@@ -39,31 +39,34 @@ catalyst-ds-4.0/
 ├── README.md                   # this file
 ├── build_previews.py           # regenerates preview/*.html from token data
 ├── ui_kits/certa-studio/
-│   ├── Primitives.jsx          # Button, Icon, Badge, ProcessStatus, Field, Input, CheckboxPill,
-│   │                           #   Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, RAGField
+│   ├── Primitives.jsx          # Button, Icon, Badge, ProcessStatus, Field, Input, CheckboxPill, Card,
+│   │                           #   SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, RAGField,
+│   │                           #   KPIStatCard, Gauge, CircularProgress
 │   ├── AppShell.jsx            # light sidebar + topbar + nav active-state pattern
 │   ├── VendorsList.jsx         # data table: status mapping, hover row actions, empty state
 │   ├── HomeDashboard.jsx       # stat widgets + attention queue + activity feed
 │   └── VendorDetail.jsx        # tabs + multi-step progress + form sections + cert pills + upload
-└── preview/                    # 36 standalone HTML previews (open any in a browser)
-    ├── 01-tokens.html               19-table-column-header.html
-    ├── 02-buttons.html              20-table.html
-    ├── 03-icon-buttons.html         21-process-status.html
-    ├── 04-checkbox.html             22-badge.html
-    ├── 05-radio.html                23-toast.html
-    ├── 06-switch.html               24-alert-banner.html
-    ├── 07-input.html                25-nav-bar.html
-    ├── 08-masked-field.html         26-modal.html
-    ├── 09-phone-input.html          27-tabs.html
-    ├── 10-multi-select.html         28-pagination.html
-    ├── 11-country-dropdown.html     29-empty-state.html
-    ├── 12-filter-chip.html          30-date-picker.html
-    ├── 13-dropdown-menu.html        31-avatar.html
-    ├── 14-read-only-field.html      32-progress-steps.html
-    ├── 15-file-row.html             33-form-section.html
-    ├── 16-file-upload.html          34-certifications.html
-    ├── 17-table-cell.html           35-toggle.html
-    └── 18-table-row.html            36-rag-field.html
+└── preview/                    # 39 standalone HTML previews (open any in a browser)
+    ├── 01-tokens.html               21-process-status.html
+    ├── 02-buttons.html              22-badge.html
+    ├── 03-icon-buttons.html         23-toast.html
+    ├── 04-checkbox.html             24-alert-banner.html
+    ├── 05-radio.html                25-nav-bar.html
+    ├── 06-switch.html               26-modal.html          (S/M/L × Default/Destructive)
+    ├── 07-input.html                27-tabs.html           (5 states + container)
+    ├── 08-masked-field.html         28-pagination.html     (Simple + Numbered)
+    ├── 09-phone-input.html          29-empty-state.html    (Page/Card/Table)
+    ├── 10-multi-select.html         30-date-picker.html    (v2 — range selection)
+    ├── 11-country-dropdown.html     31-avatar.html         (24 variants)
+    ├── 12-filter-chip.html          32-progress-steps.html
+    ├── 13-dropdown-menu.html        33-form-section.html
+    ├── 14-read-only-field.html      34-certifications.html
+    ├── 15-file-row.html             35-toggle.html         (H + V)
+    ├── 16-file-upload.html          36-rag-field.html      (240×40 + colored tab)
+    ├── 17-table-cell.html           37-kpi-stat-card.html  (Icon × Delta)
+    ├── 18-table-row.html            38-gauge.html          (RAG, arc-only)
+    ├── 19-table-column-header.html  39-circular-progress.html (Size × Progress × State)
+    └── 20-table.html
 ```
 
 Every preview links `../colors_and_type.css`, so swatches render with the real
@@ -183,4 +186,6 @@ Carried over from `CLAUDE.md` "Open decisions":
 - **Masked field** — no eye-slash icon yet.
 - **File-type icons** — File Row uses badge stand-ins (PDF/DOC/XLS).
 - **Focus ring** — Checkbox (center) vs Radio (outside) not yet standardized.
-- **Elevation** — `shadow-lg` + `bg/overlay` are the first effect/overlay tokens; formalize a full elevation scale later.
+- **Elevation** — `shadow-xs` (cards) + `shadow-lg` + `bg/overlay` are the effect/overlay tokens so far; formalize a full elevation scale later.
+- **Date Picker v2** — range selection landed (start / in-range / end band). Date-time / time-of-day row still pending (v2 remaining).
+- **Gauge / Circular Progress** — SVG-rendered here (arc via `<path>` / `stroke-dasharray`), mirroring the Figma `arcData` ellipses; flat caps, no rounded ends.
