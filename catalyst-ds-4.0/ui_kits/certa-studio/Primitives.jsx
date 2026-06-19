@@ -741,9 +741,106 @@ export function MultiSelect({ options = [], value = [], onChange = () => {}, ope
   );
 }
 
+/* ---------------------------------------------------------------------------
+   SplitButton — outline (DS 3.0 pattern, Figma 113:792, rebuilt 2026-06-18).
+   surface/default bg + 1px border/default + r4 (clipped). text/primary label
+   section and chevron section share ONE full-height 1px border/default divider —
+   no gap/channel. Heights S 32 / M 36; chevron-down 16px text/secondary.
+   --------------------------------------------------------------------------- */
+export function SplitButton({ size = "m", state = "default", onClick = () => {}, onTrigger = () => {}, children }) {
+  const height = size === "s" ? 32 : 36;
+  const padV = size === "s" ? "6px" : "var(--space-md)";   // S 6 is the one raw value (no 6px token)
+  const padH = size === "s" ? "var(--space-lg)" : "var(--space-xl)";
+  const bg = state === "hover" ? "var(--color-bg-subtle)" : state === "pressed" ? "var(--color-bg-muted)" : "var(--color-bg-page)";
+  const border = state === "focused" ? "2px solid var(--color-border-focused)" : "1px solid var(--color-border-default)";
+  return (
+    <div style={{ display: "inline-flex", height, border, borderRadius: "var(--radius-sm)", overflow: "hidden", background: bg }}>
+      <button
+        type="button"
+        onClick={onClick}
+        style={{
+          display: "inline-flex", alignItems: "center", padding: `${padV} ${padH}`,
+          border: "none", background: "transparent", cursor: "pointer",
+          fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-bold-size)",
+          fontWeight: "var(--font-weight-bold)", color: "var(--color-text-primary)",
+        }}
+      >
+        {children}
+      </button>
+      <button
+        type="button"
+        aria-label="More actions"
+        onClick={onTrigger}
+        style={{
+          display: "inline-flex", alignItems: "center", justifyContent: "center",
+          padding: "0 var(--space-md)", border: "none",
+          borderLeft: "1px solid var(--color-border-default)",   /* full-height divider, no channel */
+          background: "transparent", cursor: "pointer", color: "var(--color-text-secondary)",
+        }}
+      >
+        <Icon glyph="▾" size={16} label="Open menu" />
+      </button>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   TimeField — Date Picker v2 time row (632:2 / 632:76). HH 56×40 r4
+   border/subtle + ':' + MM + AM/PM segmented toggle (AM selected = brand-subtle
+   + text/link). Used inside the date-time and time-only panels.
+   --------------------------------------------------------------------------- */
+export function TimeField({ hh = "09", mm = "30", meridiem = "AM", onChange = () => {} }) {
+  const field = (v) => (
+    <span style={{ width: 56, height: 40, display: "inline-flex", alignItems: "center", justifyContent: "center", border: "1px solid var(--color-border-subtle)", borderRadius: "var(--radius-sm)", fontSize: "var(--font-body-size)", color: "var(--color-text-primary)" }}>{v}</span>
+  );
+  const seg = (t) => {
+    const on = t === meridiem;
+    return (
+      <button type="button" onClick={() => onChange({ hh, mm, meridiem: t })}
+        style={{ height: 36, padding: "0 var(--space-md)", border: "none", borderRadius: "var(--radius-sm)", cursor: "pointer", fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-size)", fontWeight: on ? "var(--font-weight-bold)" : "var(--font-weight-medium)", background: on ? "var(--color-bg-brand-subtle)" : "transparent", color: on ? "var(--color-text-link)" : "var(--color-text-secondary)" }}>{t}</button>
+    );
+  };
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "var(--space-md)" }}>
+      {field(hh)}
+      <span style={{ color: "var(--color-text-secondary)" }}>:</span>
+      {field(mm)}
+      <span style={{ display: "inline-flex", background: "var(--color-bg-subtle)", border: "1px solid var(--color-border-subtle)", borderRadius: "var(--radius-sm)", padding: "var(--space-xs)" }}>
+        {seg("AM")}{seg("PM")}
+      </span>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   FileDropzone — upload field (Figma 493:1401). Hover (493:1244) = 2px dashed
+   border/focused + bg/brand-subtle fill, distinct from the Empty 1px dashed
+   border/default dropzone.
+   --------------------------------------------------------------------------- */
+export function FileDropzone({ hover = false, caption = "PDF, DOCX up to 25 MB" }) {
+  return (
+    <div
+      style={{
+        border: hover ? "2px dashed var(--color-border-focused)" : "1px dashed var(--color-border-default)",
+        background: hover ? "var(--color-bg-brand-subtle)" : "var(--color-bg-page)",
+        borderRadius: "var(--radius-sm)",
+        padding: "var(--space-4xl)",
+        textAlign: "center",
+      }}
+    >
+      <Icon glyph="↥" size={28} label="Upload" />
+      <div style={{ fontWeight: "var(--font-weight-semibold)", marginTop: "var(--space-md)" }}>
+        Drag files here or <span className="text-link">browse</span>
+      </div>
+      <div className="t-caption">{hover ? "Drop to upload" : caption}</div>
+    </div>
+  );
+}
+
 export default {
   Button, Icon, Badge, ProcessStatus, Field, Input,
   Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps,
   Avatar, Toggle, RAGField, KPIStatCard, Gauge, CircularProgress,
+  SplitButton, TimeField, FileDropzone,
   tokens, STATUS_COLOR, AVATAR_SIZE, AVATAR_TONES, RAG_LEVELS,
 };

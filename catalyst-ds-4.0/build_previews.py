@@ -161,11 +161,29 @@ ib = section("Icon button (M)", '<div class="row">'+ "".join(iconbtn(g) for g in
 ib += section("Round", '<div class="row">'+ "".join(
     f'<button class="btn btn--filled" style="width:40px;height:40px;padding:0;border-radius:var(--radius-full);justify-content:center">{g}</button>'
     for g in ["+","✓","→"]) +'</div>')
-ib += section("Split", '<div class="row"><div style="display:inline-flex">'
-    '<button class="btn btn--filled" style="border-top-right-radius:0;border-bottom-right-radius:0">Save</button>'
-    '<button class="btn btn--filled" style="border-top-left-radius:0;border-bottom-left-radius:0;'
-    'border-left:1px solid rgba(255,255,255,.3);padding:0 var(--space-md)">▾</button></div></div>')
-pages.append(("03-icon-buttons.html","Icon · Round · Split","Icon-only (40px hit area, 20px glyph), round FAB-style, and split action buttons.",ib))
+# Split Button — outline (DS 3.0 pattern, rebuilt 113:792 2026-06-18): surface/default bg,
+# 1px border/default all sides, r4, clip. Label (text/primary Body Bold) + full-height chevron
+# section divided by a single 1px border/default LEFT — no gap/channel between sections.
+def splitbtn(label, size="m", state="default"):
+    h = "32px" if size=="s" else "36px"
+    padV = "6px" if size=="s" else "var(--space-md)"          # S 6 is the one raw value (no 6px token)
+    padH = "var(--space-lg)" if size=="s" else "var(--space-xl)"
+    bg = "var(--color-bg-page)"
+    if state=="hover": bg="var(--color-bg-subtle)"
+    elif state=="pressed": bg="var(--color-bg-muted)"
+    border = "2px solid var(--color-border-focused)" if state=="focused" else "1px solid var(--color-border-default)"
+    return (f'<div style="display:inline-flex;height:{h};border:{border};border-radius:var(--radius-sm);'
+            f'overflow:hidden;background:{bg}">'
+            f'<span style="display:inline-flex;align-items:center;padding:{padV} {padH};'
+            f'font:700 var(--font-body-bold-size)/1 var(--font-family-base);color:var(--color-text-primary)">{label}</span>'
+            f'<span style="display:inline-flex;align-items:center;justify-content:center;padding:0 var(--space-md);'
+            f'border-left:1px solid var(--color-border-default);color:var(--color-text-secondary)">'
+            f'<span style="font-size:16px;line-height:1">▾</span></span></div>')
+ib += section("Split — outline, full-height divider (no channel)", '<div class="row" style="gap:var(--space-xl)">'
+    + splitbtn("Save","m") + splitbtn("Save","s") + '</div>')
+ib += section("Split — states", '<div class="row" style="gap:var(--space-xl)">'
+    + splitbtn("Save","m","hover") + splitbtn("Save","m","pressed") + splitbtn("Save","m","focused") + '</div>')
+pages.append(("03-icon-buttons.html","Icon · Round · Split","Icon-only (40px hit area, 20px glyph), round FAB-style, and Split Button (113:792, outline). Split = surface/default bg + 1px border/default + r4 clip; text/primary label section and chevron section share a single 1px border/default divider that spans full height — no gap/channel. Heights S 32 / M 36, chevron-down 16px.",ib))
 
 # 04 checkbox ---------------------------------------------------------------
 # Real control (set 179:420): 16px square, r4, 2px border. Pure CSS box + inline
@@ -303,10 +321,24 @@ pages.append(("13-dropdown-menu.html","Dropdown Menu","Menu item (16px icons) + 
 def ro(label,val):
     return (f'<div class="col" style="gap:2px"><span class="t-caption">{label}</span>'
             f'<span style="font-size:var(--font-body-size);font-weight:500">{val}</span></div>')
+# Pill value types (Boolean/Select/Multi) carry a 1px border/subtle stroke so the
+# badge pills have a visible boundary on white (added 2026-06-18, set 520:1872).
+def ropill(label, *pills):
+    chips = "".join(
+        f'<span style="display:inline-flex;align-items:center;height:24px;padding:0 var(--space-md);'
+        f'border-radius:var(--radius-xs);background:var(--color-bg-muted);border:1px solid var(--color-border-subtle);'
+        f'color:var(--color-text-secondary);font-size:var(--font-caption-size);font-weight:600">{p}</span>'
+        for p in pills)
+    return (f'<div class="col" style="gap:var(--space-sm)"><span class="t-caption">{label}</span>'
+            f'<div style="display:flex;gap:var(--space-sm);flex-wrap:wrap">{chips}</div></div>')
 rof = section("Read-only field (Filled)", '<div class="row" style="gap:var(--space-4xl)">'
     + ro("Vendor ID","VND-00842") + ro("Category","Manufacturing") + ro("Owner","A. Singh") + '</div>')
+rof += section("Pill value types — 1px border/subtle stroke (Boolean / Select / Multi)",
+    '<div class="row" style="gap:var(--space-4xl)">'
+    + ropill("Active (Boolean)","Yes") + ropill("Tier (Select)","Critical")
+    + ropill("Regions (Multi)","US","EU","APAC") + '</div>')
 rof += section("Empty", '<div class="row">' + ro("Tax ID","<span style=\'color:var(--color-text-disabled)\'>—</span>") + '</div>')
-pages.append(("14-read-only-field.html","Read-only Field","Type(12) × State(Filled/Empty). Label 12px caption (non-interactive), value 14px.",rof))
+pages.append(("14-read-only-field.html","Read-only Field","Type(12) × State(Filled/Empty). Label 12px caption (non-interactive), value 14px. Boolean/Select/Multi values render as Badge pills with a 1px border/subtle stroke (visible boundary on white).",rof))
 
 # 15 file row ---------------------------------------------------------------
 def filerow(badge_txt,bg,fg,name,meta):
@@ -324,12 +356,18 @@ fr = section("File rows", '<div class="col" style="max-width:480px">'
 pages.append(("15-file-row.html","File Row","5 variants (M). File-type badge stand-ins — real icons flagged for commission.",fr))
 
 # 16 file upload ------------------------------------------------------------
-fu = section("Upload field", '<div style="max-width:480px">'
-    '<div style="border:1px dashed var(--color-border-strong);border-radius:var(--radius-sm);'
-    'padding:var(--space-4xl);text-align:center"><div style="font-size:28px">↥</div>'
-    '<div style="font-weight:600;margin-top:var(--space-md)">Drag files here or <span class="text-link">browse</span></div>'
-    '<div class="t-caption">PDF, DOCX up to 25 MB</div></div></div>')
-pages.append(("16-file-upload.html","File Upload Field","9 states (M). Dropzone + browse, then renders File Rows on upload.",fu))
+# Dropzone states. Hover (493:1244, fixed 2026-06-18) = 2px DASHED border/focused
+# + bg/brand-subtle fill — now visually distinct from Empty (1px dashed border/default).
+def dropzone(border, bg, caption):
+    return (f'<div style="border:{border};border-radius:var(--radius-sm);background:{bg};'
+            f'padding:var(--space-4xl);text-align:center"><div style="font-size:28px">↥</div>'
+            f'<div style="font-weight:600;margin-top:var(--space-md)">Drag files here or <span class="text-link">browse</span></div>'
+            f'<div class="t-caption">{caption}</div></div>')
+fu = section("Empty", '<div style="max-width:480px">'
+    + dropzone("1px dashed var(--color-border-default)", "var(--color-bg-page)", "PDF, DOCX up to 25 MB") + '</div>')
+fu += section("Hover — 2px dashed border/focused + brand-subtle fill (distinct from Empty)", '<div style="max-width:480px">'
+    + dropzone("2px dashed var(--color-border-focused)", "var(--color-bg-brand-subtle)", "Drop to upload") + '</div>')
+pages.append(("16-file-upload.html","File Upload Field","9 states (M). Dropzone + browse, renders File Rows on upload. Hover (493:1244) = 2px dashed border/focused + bg/brand-subtle fill — distinct from the Empty 1px dashed border/default dropzone.",fu))
 
 # 17 table cell -------------------------------------------------------------
 tc = section("Cell types (52px)", '<table><tbody>'
@@ -571,7 +609,38 @@ rangecells = "".join(day(d) for d in range(1,18)) \
     + day(21,state="in-range",radius="0") + day(22,state="selected",radius=RR) \
     + "".join(day(d) for d in range(23,31))
 dp += section("Range selection (v2 — start / in-range / end)", panel(rangecells))
-pages.append(("30-date-picker.html","Date Picker v2","Cell 40×40 (day# 12px): Default/Hover/Today/Selected/Muted/Disabled + In-Range. Today = 1px border/focused ring (no fill). Panel 280w r8 + shadow-lg, SUN-first weekday row, Today/Clear footer. v2 range: start/end brand fill + per-corner radii, in-range brand-subtle + text/link, flush → continuous band.",dp))
+
+# v2 time row (632:2 / 632:76): HH 56×40 r4 border/subtle + ':' + MM + AM/PM segmented toggle.
+def timeseg(hh,mm,ampm="AM"):
+    def field(v): return (f'<span style="width:56px;height:40px;display:inline-flex;align-items:center;justify-content:center;'
+        f'border:1px solid var(--color-border-subtle);border-radius:var(--radius-sm);'
+        f'font-size:var(--font-body-size);color:var(--color-text-primary)">{v}</span>')
+    def seg(t,on):
+        s=("background:var(--color-bg-brand-subtle);color:var(--color-text-link);font-weight:700;" if on
+           else "background:transparent;color:var(--color-text-secondary);font-weight:500;")
+        return f'<button style="height:36px;padding:0 var(--space-md);border:none;border-radius:var(--radius-sm);cursor:pointer;font:14px var(--font-family-base);{s}">{t}</button>'
+    toggle=(f'<span style="display:inline-flex;background:var(--color-bg-subtle);border:1px solid var(--color-border-subtle);'
+            f'border-radius:var(--radius-sm);padding:var(--space-xs)">{seg("AM",ampm=="AM")}{seg("PM",ampm=="PM")}</span>')
+    return (f'<div style="display:flex;align-items:center;justify-content:center;gap:var(--space-md)">'
+            f'{field(hh)}<span style="color:var(--color-text-secondary)">:</span>{field(mm)}{toggle}</div>')
+def footer(left,right):
+    return (f'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:var(--space-md);'
+            f'padding-top:var(--space-md);border-top:1px solid var(--color-border-subtle)">'
+            f'<button class="btn btn--link">{left}</button><button class="btn btn--text btn--s">{right}</button></div>')
+# Date-Time panel (632:2): calendar grid + time row before footer; shell hugs.
+dt_cal = ('<div style="display:grid;grid-template-columns:repeat(7,1fr)">'
+    + "".join(f'<div class="t-caption" style="text-align:center;height:32px;line-height:32px">{d}</div>' for d in ["SUN","MON","TUE","WED","THU","FRI","SAT"])
+    + single + '</div>')
+dp += section("Date-Time panel (632:2 — calendar + time row)",
+    '<div class="overlay" style="width:296px;padding:var(--space-xl);display:flex;flex-direction:column;gap:var(--space-lg)">'
+    '<div style="display:flex;justify-content:space-between;align-items:center"><span style="color:var(--color-text-secondary)">‹</span>'
+    '<span class="t-body-bold">June 2026</span><span style="color:var(--color-text-secondary)">›</span></div>'
+    + dt_cal + timeseg("09","30","AM") + footer("Today","Clear") + '</div>')
+# Time-Only panel (632:76): time row fills + centered, Now/Clear footer.
+dp += section("Time-only panel (632:76 — time row + Now/Clear)",
+    '<div class="overlay" style="width:296px;padding:var(--space-xl);display:flex;flex-direction:column;gap:var(--space-lg)">'
+    + timeseg("11","45","PM") + footer("Now","Clear") + '</div>')
+pages.append(("30-date-picker.html","Date Picker v2","Cell 40×40 (day# 12px): Default/Hover/Today/Selected/Muted/Disabled + In-Range. Today = 1px border/focused ring. Panel 280w r8 + shadow-lg, SUN-first, Today/Clear footer. Range = start/end brand fill + per-corner radii, in-range brand-subtle. v2 adds Date-Time (632:2 — calendar + time row, 296w) and Time-only (632:76) panels; time row = HH 56×40 r4 border/subtle + ':' + MM + AM/PM segmented toggle (AM selected = brand-subtle + text/link).",dp))
 
 # 31 avatar -----------------------------------------------------------------
 AV_SIZES = [("S",24),("M",32),("L",40),("XL",56)]

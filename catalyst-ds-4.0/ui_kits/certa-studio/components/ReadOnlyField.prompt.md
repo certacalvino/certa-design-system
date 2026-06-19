@@ -25,17 +25,23 @@ Label            ← 12px Caption, text/secondary
 ## States
 - **Filled** — shows `value` (+ optional icon).
 - **Empty** — shows `emptyText` (default `—`) in `text/disabled`; the icon is hidden.
+- **Pill (Boolean/Select/Multi)** — `pills` renders one or more Badge chips, each
+  with a **1px `border/subtle` stroke** + `bg/muted` so they read as bounded chips
+  on white (added 2026-06-18).
 
 ## Props
 - `label?: string`
 - `value?: ReactNode` — null/`""` → empty state.
 - `icon?: ReactNode` — 16px, only shown when filled.
 - `emptyText?: string` — default `"—"`.
+- `pills?: ReactNode[]` — Boolean/Select/Multi chips; takes precedence over `value`.
 
 ## Usage
 ```jsx
 <ReadOnlyField label="Vendor ID" value="VND-00842" />
 <ReadOnlyField label="Owner" value="A. Singh" icon="👤" />
+<ReadOnlyField label="Active (Boolean)" pills={["Yes"]} />
+<ReadOnlyField label="Regions (Multi)" pills={["US", "EU", "APAC"]} />
 <ReadOnlyField label="Tax ID" />            {/* empty → "—" */}
 ```
 

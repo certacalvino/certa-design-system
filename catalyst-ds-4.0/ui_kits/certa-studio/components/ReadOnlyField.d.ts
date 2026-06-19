@@ -12,6 +12,9 @@ export interface ReadOnlyFieldProps {
   icon?: React.ReactNode;
   /** Placeholder shown when empty. Defaults to an em-dash. */
   emptyText?: string;
+  /** Boolean/Select/Multi value(s) rendered as Badge pills with a 1px
+   *  border/subtle stroke. When present, takes precedence over `value`. */
+  pills?: React.ReactNode[] | null;
 }
 
 export declare function ReadOnlyField(props: ReadOnlyFieldProps): JSX.Element;
