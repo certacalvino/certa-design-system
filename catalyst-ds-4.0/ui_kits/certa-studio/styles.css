@@ -203,21 +203,25 @@ button { font-family: inherit; }
 .ck-badge-green { background: var(--color-status-success-fg); color: #fff; }
 .ck-badge-neutral { background: var(--color-border-default); color: var(--color-text-primary); }
 
-/* ===== Avatar ===== */
+/* ===== Avatar (DS 4.0 toned: light tint bg + saturated Semi-Bold initials) ===== */
 .ck-avatar {
   display: inline-flex; align-items: center; justify-content: center;
   width: 28px; height: 28px; border-radius: 50%;
-  background: var(--color-action-primary); color: #fff;
+  background: var(--color-avatar-brand-bg); color: var(--color-avatar-brand-fg);
   font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
   flex-shrink: 0;
 }
 .ck-avatar-sm { width: 22px; height: 22px; font-size: 10px; }
 .ck-avatar-lg { width: 40px; height: 40px; font-size: 14px; }
 .ck-avatar-xl { width: 56px; height: 56px; font-size: 20px; }
-.ck-avatar-neutral { background: var(--color-border-strong); color: var(--color-text-primary); }
-.ck-avatar-purple { background: var(--brand-600); }
-.ck-avatar-teal { background: var(--teal-500); }
-.ck-avatar-orange { background: var(--color-status-warning-fg); color: var(--color-text-primary); }
+.ck-avatar-brand   { background: var(--color-avatar-brand-bg);   color: var(--color-avatar-brand-fg); }
+.ck-avatar-teal    { background: var(--color-avatar-teal-bg);    color: var(--color-avatar-teal-fg); }
+.ck-avatar-green   { background: var(--color-avatar-green-bg);   color: var(--color-avatar-green-fg); }
+.ck-avatar-orange  { background: var(--color-avatar-orange-bg);  color: var(--color-avatar-orange-fg); }
+.ck-avatar-red     { background: var(--color-avatar-red-bg);     color: var(--color-avatar-red-fg); }
+.ck-avatar-neutral { background: var(--color-avatar-neutral-bg); color: var(--color-avatar-neutral-fg); }
+/* purple has no DS 4.0 avatar tone → map to green so existing refs stay valid */
+.ck-avatar-purple  { background: var(--color-avatar-green-bg);   color: var(--color-avatar-green-fg); }
 
 /* ===== Tabs ===== */
 .ck-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--color-border-default); }

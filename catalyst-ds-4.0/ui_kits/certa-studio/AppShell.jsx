@@ -1,13 +1,12 @@
-// Catalyst app shell: top app bar + collapsible left sidebar.
+// Certa Studio app shell: top app bar + left sidebar.
 
 function Sidebar({ active, onNav }) {
   const items = [
-    { id: 'home', label: 'Home', Icon: I.Home },
-    { id: 'tasks', label: 'Tasks', Icon: I.Tasks, badge: 5 },
+    { id: 'dashboard', label: 'Dashboard', Icon: I.Home },
     { id: 'vendors', label: 'Vendors', Icon: I.Vendors },
     { id: 'workflows', label: 'Workflows', Icon: I.Workflow },
-    { id: 'risk', label: 'Risk assessments', Icon: I.Risk },
-    { id: 'reports', label: 'Reports', Icon: I.Reports },
+    { id: 'records', label: 'Records', Icon: I.Reports },
+    { id: 'changes', label: 'Change Requests', Icon: I.Tasks },
   ];
   return (
     <aside className="ck-sidebar">
@@ -37,7 +36,7 @@ function TopBar({ user }) {
     <header className="ck-topbar">
       <div className="ck-topbar-brand">
         <I.Logo />
-        <span className="ck-wordmark">Catalyst</span>
+        <span className="ck-wordmark">Certa Studio</span>
       </div>
       <div className="ck-topbar-search">
         <div className="ck-field">

@@ -144,7 +144,7 @@ function VendorsList({ onOpenVendor, onAddVendor }) {
                 </td>
                 <td>
                   <div className="ck-vendor-cell">
-                    <span className={`ck-avatar ck-avatar-${['brand','teal','purple','orange','neutral'][v.id.charCodeAt(0) % 5]}`}>{v.name.slice(0,1)}</span>
+                    <span className={`ck-avatar ck-avatar-${['brand','teal','green','orange','neutral'][v.id.charCodeAt(0) % 5]}`}>{v.name.slice(0,1)}</span>
                     <div>
                       <div className="ck-name">{v.name}</div>
                       <div className="ck-sub">{v.region}</div>
@@ -159,7 +159,7 @@ function VendorsList({ onOpenVendor, onAddVendor }) {
                     <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-primary)' }}>{v.riskScore}</span>
                   </div>
                 </td>
-                <td><Avatar initials={v.owner} size="sm" tone={['brand','teal','purple','orange','neutral'][v.owner.charCodeAt(0) % 5]} /></td>
+                <td><Avatar initials={v.owner} size="sm" tone={['brand','teal','green','orange','neutral'][v.owner.charCodeAt(0) % 5]} /></td>
                 <td style={{ textAlign: 'right', color: 'var(--color-text-secondary)', fontSize: 12 }}>{v.updated}</td>
               </tr>
             ))}

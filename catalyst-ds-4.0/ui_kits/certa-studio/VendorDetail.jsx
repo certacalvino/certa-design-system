@@ -167,7 +167,7 @@ function VendorDetail({ vendor, onBack, onApprove }) {
                   <Tag tone="orange" dot>Pending</Tag>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Avatar initials="EL" size="sm" tone="purple" />
+                  <Avatar initials="EL" size="sm" tone="green" />
                   <div style={{ flex: 1, fontSize: 13 }}>Elena Lopez<div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Procurement</div></div>
                   <Tag tone="neutral" dot>Not started</Tag>
                 </div>

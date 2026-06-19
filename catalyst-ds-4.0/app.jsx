@@ -1,17 +1,18 @@
 // Top-level app: routes between Home, Vendors list, Vendor detail; click-thru prototype.
 
 function App() {
-  const [route, setRoute] = React.useState({ name: 'home' });
-  const [active, setActive] = React.useState('home');
+  const [route, setRoute] = React.useState({ name: 'dashboard' });
+  const [active, setActive] = React.useState('dashboard');
   const [addOpen, setAddOpen] = React.useState(false);
   const [approveOpen, setApproveOpen] = React.useState(false);
   const [toast, setToast] = React.useState(null);
 
+  const LABELS = { workflows: 'Workflows', records: 'Records', changes: 'Change Requests' };
   const onNav = (id) => {
     setActive(id);
-    if (id === 'home') setRoute({ name: 'home' });
+    if (id === 'dashboard') setRoute({ name: 'dashboard' });
     else if (id === 'vendors') setRoute({ name: 'vendors' });
-    else setRoute({ name: 'placeholder', label: id });
+    else setRoute({ name: 'placeholder', label: LABELS[id] || id });
   };
 
   const showToast = (msg) => {
@@ -21,7 +22,7 @@ function App() {
 
   return (
     <AppShell active={active} onNav={onNav} user={{ initials: 'JS', name: 'Jamie Souza' }}>
-      {route.name === 'home' && <HomeDashboard />}
+      {route.name === 'dashboard' && <HomeDashboard />}
       {route.name === 'vendors' && (
         <VendorsList
           onOpenVendor={(v) => setRoute({ name: 'vendor', vendor: v })}
@@ -41,7 +42,7 @@ function App() {
           <Card style={{ marginTop: 20 }}>
             <div className="ck-empty">
               <div className="ck-empty-title">This surface is not part of the kit yet</div>
-              <div className="ck-empty-desc">Use Home, Tasks, or Vendors to see the click-thru prototype.</div>
+              <div className="ck-empty-desc">Use Dashboard or Vendors to see the click-thru prototype.</div>
             </div>
           </Card>
         </div>

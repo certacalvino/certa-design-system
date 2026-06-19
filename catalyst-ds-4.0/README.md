@@ -27,11 +27,13 @@ python3 -m http.server 8080      # then open http://localhost:8080/
 Serve the folder (don't open via `file://` — browsers block Babel from fetching
 the `.jsx` modules over the file protocol). The app demonstrates:
 
-- **Top app bar** — brand logo + wordmark, global search (⌘K), help/notifications,
-  user avatar ("JS").
-- **Light sidebar** (`bg/sidebar` #F7F8FA) with nav: Home · Tasks (badge) · Vendors ·
-  Workflows · Risk assessments · Reports, plus Settings / Help — active item uses
-  `bg/brand-subtle` + `text/link` bold.
+- **Top app bar** — "Certa Studio" logo + wordmark, global search (⌘K),
+  help/notifications, user avatar.
+- **Light sidebar** (`bg/sidebar` #F7F8FA) with nav: Dashboard · Vendors · Workflows ·
+  Records · Change Requests, plus Settings / Help — active item uses `bg/brand-subtle`
+  + brand `#1B4FD8` indicator.
+- **Avatars** are DS 4.0 toned (light tint bg + saturated initials per the Avatar
+  spec), not solid-brand fills.
 - **Home dashboard** — 4 stat cards, "Your tasks" list with checkboxes + due-date
   tags, risk-distribution meters, upcoming renewals.
 - **Vendors list** — stat row, tabs (All / In review / Approved / Drafts) with counts,
