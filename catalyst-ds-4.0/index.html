@@ -1,43 +1,46 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Certa Studio — DS 4.0 Catalyst</title>
+  <meta charset="utf-8" />
+  <title>Certa Studio — Vendor risk & procurement (DS 4.0)</title>
+  <meta name="viewport" content="width=1280" />
 
   <!-- Inter font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- DS 4.0 semantic token layer -->
-  <link rel="stylesheet" href="colors_and_type.css">
-
-  <!-- React 18 + Babel standalone (in-browser JSX transform) -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+  <!-- App-shell CSS (ported DS 3.0 → DS 4.0 tokens); @imports ../../colors_and_type.css -->
+  <link rel="stylesheet" href="ui_kits/certa-studio/styles.css" />
 
   <style>
-    html, body { height: 100%; }
-    body { margin: 0; background: var(--color-bg-subtle); }
-    /* gallery link pill */
-    .gallery-link {
-      position: fixed; right: 16px; bottom: 16px; z-index: 50;
+    .ck-gallery-link {
+      position: fixed; right: 16px; bottom: 16px; z-index: 1500;
       display: inline-flex; align-items: center; gap: 8px;
-      height: 36px; padding: 0 16px; border-radius: 9999px;
+      height: 34px; padding: 0 14px; border-radius: var(--radius-full);
       background: var(--color-bg-page); border: 1px solid var(--color-border-default);
       box-shadow: var(--shadow-md); color: var(--color-text-secondary);
-      font: 600 14px/1 var(--font-family-base); text-decoration: none;
+      font: 600 13px/1 var(--font-family-base); text-decoration: none;
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
-  <a class="gallery-link" href="gallery.html">◧ Component gallery</a>
+  <a class="ck-gallery-link" href="gallery.html">◧ Component gallery</a>
 
-  <!-- Certa Studio click-through app (composes DS 4.0 components) -->
-  <script type="text/babel" src="app.jsx" data-presets="react"></script>
+  <!-- React 18 + Babel standalone (in-browser JSX transform) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+
+  <!-- Ported DS 3.0 app shell — global-scope (window) modules, loaded in dependency order -->
+  <script type="text/babel" src="ui_kits/certa-studio/Icons.jsx"></script>
+  <script type="text/babel" src="ui_kits/certa-studio/AppKit.jsx"></script>
+  <script type="text/babel" src="ui_kits/certa-studio/AppShell.jsx"></script>
+  <script type="text/babel" src="ui_kits/certa-studio/HomeDashboard.jsx"></script>
+  <script type="text/babel" src="ui_kits/certa-studio/VendorsList.jsx"></script>
+  <script type="text/babel" src="ui_kits/certa-studio/VendorDetail.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
 
   <noscript>This demo requires JavaScript enabled.</noscript>
 </body>

@@ -1,130 +1,179 @@
-/* ============================================================================
-   Certa DS 4.0 — VendorsList.jsx
-   Data table screen. Demonstrates:
-   - UI PATTERN: status badge color mapping (ProcessStatus / STATUS_COLOR)
-   - UI PATTERN: table row actions revealed on hover
-   - UI PATTERN: empty state structure
-   - UI PATTERN: column header meta (10px uppercase) + filter chips
-   ============================================================================ */
-import React, { useState } from "react";
-import AppShell from "./AppShell.jsx";
-import { Button, Icon, ProcessStatus, Card, EmptyState } from "./Primitives.jsx";
+// Page: Vendors list (table view)
 
-const VENDORS = [
-  { id: 1, name: "Acme Logistics", category: "Transportation", owner: "M. Reyes", status: "Approved", updated: "2d ago" },
-  { id: 2, name: "Northwind Cloud", category: "SaaS", owner: "J. Park", status: "In Review", updated: "5h ago" },
-  { id: 3, name: "Globex Materials", category: "Manufacturing", owner: "A. Singh", status: "Expiring", updated: "1d ago" },
-  { id: 4, name: "Initech Audit Co.", category: "Professional Svc.", owner: "M. Reyes", status: "Rejected", updated: "3d ago" },
-  { id: 5, name: "Umbrella Pharma", category: "Healthcare", owner: "L. Chen", status: "Draft", updated: "just now" },
-];
+function VendorsList({ onOpenVendor, onAddVendor }) {
+  const [tab, setTab] = React.useState('all');
+  const [selected, setSelected] = React.useState(new Set());
+  const [filter, setFilter] = React.useState('');
 
-const COLS = ["Vendor", "Category", "Owner", "Status", "Updated", ""];
+  const vendors = [
+    { id: 'acme',   name: 'Acme Logistics, Inc.',   region: 'North America', tier: 'Tier 1', status: 'approved',  risk: 'low',    riskScore: 94, owner: 'PR', updated: '2h ago' },
+    { id: 'blue',   name: 'Bluebird Cloud Services', region: 'EU',            tier: 'Tier 2', status: 'review',    risk: 'medium', riskScore: 76, owner: 'MK', updated: 'Yesterday' },
+    { id: 'north',  name: 'Northwind Parts Co.',    region: 'North America', tier: 'Tier 1', status: 'rejected',  risk: 'high',   riskScore: 42, owner: 'AS', updated: 'Mar 24' },
+    { id: 'helio',  name: 'Helio Energy Co.',       region: 'APAC',          tier: 'Tier 3', status: 'draft',     risk: 'low',    riskScore: 88, owner: 'EL', updated: 'Mar 22' },
+    { id: 'parker', name: 'Parker & Sons Mfg.',     region: 'North America', tier: 'Tier 2', status: 'approved',  risk: 'medium', riskScore: 71, owner: 'DC', updated: 'Mar 21' },
+    { id: 'sunrise',name: 'Sunrise Diagnostics',    region: 'EU',            tier: 'Tier 1', status: 'review',    risk: 'low',    riskScore: 90, owner: 'RM', updated: 'Mar 20' },
+  ];
 
-function Row({ v }) {
-  const [hover, setHover] = useState(false);
-  const cell = { padding: "0 var(--space-lg)", height: 52, verticalAlign: "middle", borderBottom: "1px solid var(--color-border-subtle)", fontSize: "var(--font-body-size)" };
+  const filtered = vendors.filter(v => {
+    if (tab !== 'all' && v.status !== tab) return false;
+    if (filter && !v.name.toLowerCase().includes(filter.toLowerCase())) return false;
+    return true;
+  });
+
+  const counts = {
+    all: vendors.length,
+    approved: vendors.filter(v => v.status === 'approved').length,
+    review: vendors.filter(v => v.status === 'review').length,
+    draft: vendors.filter(v => v.status === 'draft').length,
+  };
+
+  const statusTag = (s) => ({
+    approved: <Tag tone="green" dot>Approved</Tag>,
+    review:   <Tag tone="orange" dot>In review</Tag>,
+    rejected: <Tag tone="red" dot>Rejected</Tag>,
+    draft:    <Tag tone="teal" dot>Draft</Tag>,
+  }[s]);
+
+  const toggleAll = () => {
+    if (selected.size === filtered.length) setSelected(new Set());
+    else setSelected(new Set(filtered.map(v => v.id)));
+  };
+  const toggleOne = (id) => {
+    const next = new Set(selected);
+    if (next.has(id)) next.delete(id); else next.add(id);
+    setSelected(next);
+  };
+
   return (
-    <tr
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      style={{ background: hover ? "var(--color-surface-hover)" : "transparent" }}
-    >
-      <td style={{ ...cell, fontWeight: 600, color: "var(--color-text-primary)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)" }}>
-          <span style={{ width: 28, height: 28, borderRadius: "var(--radius-full)", background: "var(--color-bg-muted)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "var(--color-text-secondary)" }}>
-            {v.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
-          </span>
-          {v.name}
+    <div className="ck-page ck-page-wide">
+      <div className="ck-page-head">
+        <div>
+          <div className="ck-breadcrumb">
+            <a href="#">Home</a><span className="sep">/</span><span>Vendors</span>
+          </div>
+          <h1 className="ck-page-title">Vendors</h1>
+          <div className="ck-page-sub">Onboard, review, and manage your supplier base.</div>
         </div>
-      </td>
-      <td style={{ ...cell, color: "var(--color-text-secondary)" }}>{v.category}</td>
-      <td style={{ ...cell, color: "var(--color-text-secondary)" }}>{v.owner}</td>
-      <td style={cell}><ProcessStatus status={v.status} /></td>
-      <td style={{ ...cell, color: "var(--color-text-tertiary)" }}>{v.updated}</td>
-      <td style={{ ...cell, width: 96, textAlign: "right" }}>
-        {/* Row actions appear on hover only */}
-        <div style={{ display: "flex", gap: "var(--space-sm)", justifyContent: "flex-end", visibility: hover ? "visible" : "hidden" }}>
-          <IconBtn glyph="✎" label="Edit" />
-          <IconBtn glyph="⋯" label="More" />
+        <div className="ck-page-actions">
+          <Button variant="outline" tone="neutral" leadingIcon={<I.Download />}>Export</Button>
+          <Button variant="filled" tone="brand" leadingIcon={<I.Plus />} onClick={onAddVendor}>Add vendor</Button>
         </div>
-      </td>
-    </tr>
-  );
-}
-
-function IconBtn({ glyph, label }) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      style={{ width: 28, height: 28, borderRadius: "var(--radius-sm)", border: "1px solid var(--color-border-default)", background: "var(--color-bg-page)", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "var(--color-text-secondary)" }}
-    >
-      <Icon glyph={glyph} size={16} label={label} />
-    </button>
-  );
-}
-
-export default function VendorsList({ onNavigate, empty = false }) {
-  const headCell = { textAlign: "left", padding: "0 var(--space-lg)", height: 40, borderBottom: "1px solid var(--color-border-default)" };
-  return (
-    <AppShell
-      active="vendors"
-      onNavigate={onNavigate}
-      title="Vendors"
-      actions={<Button variant="filled" iconLeft={<Icon glyph="+" size={20} />}>New vendor</Button>}
-    >
-      {/* Filter row */}
-      <div style={{ display: "flex", gap: "var(--space-md)", marginBottom: "var(--space-xl)" }}>
-        <FilterChip active>All</FilterChip>
-        <FilterChip>Approved</FilterChip>
-        <FilterChip>In Review</FilterChip>
-        <FilterChip>Expiring</FilterChip>
       </div>
 
-      <Card>
-        {empty ? (
-          <EmptyState
-            icon="❏"
-            title="No vendors yet"
-            body="Add your first vendor to start tracking certifications, assessments, and compliance status."
-            action={<Button variant="filled" iconLeft={<Icon glyph="+" size={20} />}>New vendor</Button>}
+      <div className="ck-stats">
+        <div className="ck-stat">
+          <div className="ck-stat-label">Active vendors</div>
+          <div className="ck-stat-value">248</div>
+          <div className="ck-stat-delta up">▲ 12 this month</div>
+        </div>
+        <div className="ck-stat">
+          <div className="ck-stat-label">Pending review</div>
+          <div className="ck-stat-value">17</div>
+          <div className="ck-stat-delta down">▼ 4 vs last week</div>
+        </div>
+        <div className="ck-stat">
+          <div className="ck-stat-label">High-risk</div>
+          <div className="ck-stat-value" style={{ color: 'var(--color-status-danger-fg)' }}>3</div>
+          <div className="ck-stat-delta up">▲ 1 new</div>
+        </div>
+        <div className="ck-stat">
+          <div className="ck-stat-label">Avg. risk score</div>
+          <div className="ck-stat-value">81</div>
+          <div className="ck-stat-delta up">▲ 2 pts</div>
+        </div>
+      </div>
+
+      <Card padded={false}>
+        <div style={{ padding: '0 20px' }}>
+          <Tabs
+            value={tab}
+            onChange={setTab}
+            items={[
+              { id: 'all', label: 'All vendors', count: counts.all },
+              { id: 'review', label: 'In review', count: counts.review },
+              { id: 'approved', label: 'Approved', count: counts.approved },
+              { id: 'draft', label: 'Drafts', count: counts.draft },
+            ]}
           />
-        ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr>
-                {COLS.map((c, i) => (
-                  <th key={i} style={headCell} className="t-meta">{c}</th>
-                ))}
+        </div>
+        <div style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Field
+            value={filter}
+            onChange={setFilter}
+            placeholder="Search vendors…"
+            leadingIcon={<I.Search style={{ color: 'var(--color-text-secondary)' }} />}
+            style={{ width: 280 }}
+          />
+          <Button variant="outline" tone="neutral" size="sm" leadingIcon={<I.Filter />}>Region: All</Button>
+          <Button variant="outline" tone="neutral" size="sm" leadingIcon={<I.Filter />}>Tier: All</Button>
+          <Button variant="text" tone="brand" size="sm">Clear filters</Button>
+          <div style={{ flex: 1 }} />
+          {selected.size > 0 && (
+            <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>
+              {selected.size} selected · <a href="#" onClick={(e) => { e.preventDefault(); setSelected(new Set()); }}>Clear</a>
+            </span>
+          )}
+        </div>
+        <table className="ck-table">
+          <thead>
+            <tr>
+              <th style={{ width: 40 }}>
+                <Checkbox
+                  checked={selected.size > 0 && selected.size === filtered.length}
+                  indeterminate={selected.size > 0 && selected.size < filtered.length}
+                  onChange={toggleAll}
+                />
+              </th>
+              <th>Vendor</th>
+              <th style={{ minWidth: 90 }}>Tier</th>
+              <th style={{ minWidth: 110 }}>Status</th>
+              <th style={{ minWidth: 140 }}>Risk</th>
+              <th>Owner</th>
+              <th style={{ textAlign: 'right' }}>Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map(v => (
+              <tr
+                key={v.id}
+                className={selected.has(v.id) ? 'selected' : ''}
+                onClick={() => onOpenVendor?.(v)}
+              >
+                <td onClick={(e) => e.stopPropagation()}>
+                  <Checkbox checked={selected.has(v.id)} onChange={() => toggleOne(v.id)} />
+                </td>
+                <td>
+                  <div className="ck-vendor-cell">
+                    <span className={`ck-avatar ck-avatar-${['brand','teal','purple','orange','neutral'][v.id.charCodeAt(0) % 5]}`}>{v.name.slice(0,1)}</span>
+                    <div>
+                      <div className="ck-name">{v.name}</div>
+                      <div className="ck-sub">{v.region}</div>
+                    </div>
+                  </div>
+                </td>
+                <td><Tag tone={v.tier === 'Tier 1' ? 'purple' : v.tier === 'Tier 2' ? 'blueberry' : 'neutral'}>{v.tier}</Tag></td>
+                <td>{statusTag(v.status)}</td>
+                <td>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 120 }}>
+                    <div className="ck-meter"><div className={`ck-meter-fill ck-risk-${v.risk}`} style={{ width: `${v.riskScore}%` }} /></div>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-primary)' }}>{v.riskScore}</span>
+                  </div>
+                </td>
+                <td><Avatar initials={v.owner} size="sm" tone={['brand','teal','purple','orange','neutral'][v.owner.charCodeAt(0) % 5]} /></td>
+                <td style={{ textAlign: 'right', color: 'var(--color-text-secondary)', fontSize: 12 }}>{v.updated}</td>
               </tr>
-            </thead>
-            <tbody>
-              {VENDORS.map((v) => <Row key={v.id} v={v} />)}
-            </tbody>
-          </table>
-        )}
+            ))}
+          </tbody>
+        </table>
+        <div style={{ padding: '12px 20px', borderTop: '1px solid var(--color-bg-muted)', display: 'flex', alignItems: 'center', fontSize: 12, color: 'var(--color-text-secondary)' }}>
+          <span>Showing {filtered.length} of {vendors.length}</span>
+          <div style={{ flex: 1 }} />
+          <Button variant="text" tone="neutral" size="sm">Previous</Button>
+          <Button variant="text" tone="neutral" size="sm">Next</Button>
+        </div>
       </Card>
-    </AppShell>
+    </div>
   );
 }
 
-function FilterChip({ active = false, children }) {
-  return (
-    <button
-      type="button"
-      style={{
-        height: 32,
-        padding: "0 var(--space-lg)",
-        borderRadius: "var(--radius-full)",
-        border: `1px solid ${active ? "var(--color-border-focused)" : "var(--color-border-default)"}`,
-        background: active ? "var(--color-bg-brand-subtle)" : "var(--color-bg-page)",
-        color: active ? "var(--color-text-link)" : "var(--color-text-secondary)",
-        fontSize: "var(--font-body-size)",
-        fontWeight: 500,
-        cursor: "pointer",
-      }}
-    >
-      {children}
-    </button>
-  );
-}
+window.VendorsList = VendorsList;

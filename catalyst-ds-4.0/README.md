@@ -14,8 +14,10 @@ designer needs to consume the system without a Figma seat.
 ## Running the demo
 
 **`index.html` is the primary entry point** — the **Certa Studio** click-through
-app. It boots `app.jsx` with React 18 + Babel-standalone (in-browser JSX
-transform) and the `colors_and_type.css` token layer, in Inter.
+app, **ported from the DS 3.0 Catalyst app shell** with its layout, density, and
+copy preserved 1:1 and every token swapped to the DS 4.0 semantic layer. It loads
+the `ui_kits/certa-studio/` global-scope modules + `styles.css` (which `@import`s
+`colors_and_type.css`) with React 18 + Babel-standalone, in Inter.
 
 ```bash
 cd catalyst-ds-4.0
@@ -23,24 +25,29 @@ python3 -m http.server 8080      # then open http://localhost:8080/
 ```
 
 Serve the folder (don't open via `file://` — browsers block Babel from fetching
-`app.jsx` over the file protocol). The app demonstrates:
+the `.jsx` modules over the file protocol). The app demonstrates:
 
-- **Light sidebar** (`surface/subtle` #F7F8FA) with nav: Dashboard (active) ·
-  Vendors · Workflows · Records · Change Requests — using the NavItem active pattern
-  (brand-subtle fill + 2px left indicator + text/link bold).
-- **Top bar** with search input + user Avatar (initials "CC", brand tone).
-- **Home Dashboard** — 4 KPI stat cards (Total Vendors / High Risk / Pending
-  Reviews / Compliance Score), recent-activity table with status badges + avatars,
-  alert banner.
-- **Vendor List** — table with Entity cells (avatar + name + date), risk badges
-  (Low/Medium/High → success/warning/danger), filter chips, split button "Export".
-  Rows click through to →
-- **Vendor Detail** — tabs (Overview / Documents / Assessment), read-only fields
-  in a 2-column grid (company name / website / country / business type /
-  certifications as pills), file upload + file rows, split button "Save draft".
+- **Top app bar** — brand logo + wordmark, global search (⌘K), help/notifications,
+  user avatar ("JS").
+- **Light sidebar** (`bg/sidebar` #F7F8FA) with nav: Home · Tasks (badge) · Vendors ·
+  Workflows · Risk assessments · Reports, plus Settings / Help — active item uses
+  `bg/brand-subtle` + `text/link` bold.
+- **Home dashboard** — 4 stat cards, "Your tasks" list with checkboxes + due-date
+  tags, risk-distribution meters, upcoming renewals.
+- **Vendors list** — stat row, tabs (All / In review / Approved / Drafts) with counts,
+  search + filter toolbar, multi-select table with vendor entity cells (avatar + name +
+  region), tier/status tags, risk meters, owner avatars; rows click through to →
+- **Vendor detail** — breadcrumb, status/tier tags, warning alert, tabs (Overview /
+  Documents / Risks / Activity / Settings), a workflow stepper, recent-activity feed,
+  required-documents rows, risk-score / details / reviewers cards.
+- **Dialogs + toast** — "Add new vendor" and "Approve this vendor?" modals (scrim =
+  `bg/overlay`), success toast.
 
-`gallery.html` is the component gallery (links every `preview/*.html`). The app
-and gallery cross-link in the corner.
+Risk/status mapping is preserved on DS 4.0 tokens: low → success, medium → warning,
+high → danger; approved → success, in review → warning, rejected → danger, draft → info.
+
+`gallery.html` is the component gallery (links every `preview/*.html`). The app and
+gallery cross-link in the corner.
 
 ---
 
@@ -68,13 +75,22 @@ neutral, and status ramps all resolve through a single semantic layer.
 
 ```
 catalyst-ds-4.0/
-├── index.html                  # ▶ PRIMARY DEMO — Certa Studio click-through app (loads app.jsx)
-├── app.jsx                     # full click-through app: sidebar nav + 3 screens (composes DS 4.0 components)
+├── index.html                  # ▶ PRIMARY DEMO — Certa Studio click-through app (ported from DS 3.0)
+├── app.jsx                     # router: Home / Vendors / Vendor detail + Add/Approve dialogs + toast
 ├── gallery.html                # component gallery — links every preview/*.html
 ├── colors_and_type.css         # primitives → semantic tokens → type/space/effects
 ├── README.md                   # this file
 ├── build_previews.py           # regenerates preview/*.html from token data
 ├── ui_kits/certa-studio/
+│   │  # ── Ported DS 3.0 app shell (global-scope Babel modules; DS 4.0 tokens) ──
+│   ├── styles.css              # app-shell CSS, ported DS 3.0 → DS 4.0 tokens (@imports colors_and_type.css)
+│   ├── Icons.jsx               # inline SVG icon set (window.I)
+│   ├── AppKit.jsx              # class-based primitives: Button/Tag/Badge/Field/Avatar/Tabs/Card/Alert/Dialog/Switch/Checkbox
+│   ├── AppShell.jsx            # top bar + sidebar (Home/Tasks/Vendors/Workflows/Risk/Reports)
+│   ├── HomeDashboard.jsx       # stats + tasks + risk distribution + renewals
+│   ├── VendorsList.jsx         # tabs + toolbar + multi-select table + pagination
+│   ├── VendorDetail.jsx        # tabs + workflow stepper + activity + docs + risk/details/reviewers
+│   │  # ── Component library (importable kit + previews source) ──
 │   ├── Primitives.jsx          # Button, Icon, Badge, ProcessStatus, Field, Input, Checkbox, CheckboxPill,
 │   │                           #   MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle,
 │   │                           #   RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone

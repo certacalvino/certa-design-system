@@ -1,165 +1,217 @@
-/* ============================================================================
-   Certa DS 4.0 — VendorDetail.jsx
-   Vendor record screen. Concentrates the form UI patterns:
-   - Tabs (Overview / Assessment / Documents / Settings)
-   - Multi-step progress indicator (onboarding)
-   - Form section layout (grouped fields, section header in text/primary)
-   - Required field asterisk (text/error)
-   - Certifications as checkbox pills (vs a dropdown — see README)
-   - File upload field with file row
-   - Read-only field display (12px caption label)
-   ============================================================================ */
-import React, { useState } from "react";
-import AppShell from "./AppShell.jsx";
-import {
-  Button, Icon, Card, SectionHeader, Field, Input, CheckboxPill,
-  ProgressSteps, ProcessStatus, Badge,
-} from "./Primitives.jsx";
+// Page: Vendor detail with tabs, activity, documents, workflow stepper.
 
-const TABS = ["Overview", "Assessment", "Documents", "Settings"];
-const CERTS = ["ISO 27001", "SOC 2 Type II", "GDPR", "HIPAA", "PCI DSS", "ISO 9001"];
+function VendorDetail({ vendor, onBack, onApprove }) {
+  const v = vendor || { name: 'Acme Logistics, Inc.', region: 'North America', tier: 'Tier 1', status: 'review' };
+  const [tab, setTab] = React.useState('overview');
 
-function Tabs({ tabs, active, onChange }) {
   return (
-    <div style={{ display: "flex", borderBottom: "1px solid var(--color-border-default)", marginBottom: "var(--space-3xl)" }}>
-      {tabs.map((t) => {
-        const on = t === active;
-        return (
-          <button
-            key={t}
-            type="button"
-            onClick={() => onChange(t)}
-            style={{
-              position: "relative",
-              height: 40,
-              padding: "0 var(--space-lg)",
-              border: "none",
-              background: "transparent",
-              cursor: "pointer",
-              fontSize: "var(--font-body-size)",
-              fontWeight: on ? "var(--font-weight-bold)" : "var(--font-weight-medium)",
-              color: on ? "var(--color-text-primary)" : "var(--color-text-secondary)",
-            }}
-          >
-            {t}
-            {on && <span aria-hidden style={{ position: "absolute", left: 0, right: 0, bottom: -1, height: 2, background: "var(--color-text-link)" }} />}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-function ReadOnly({ label, value }) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <span className="t-caption">{label}</span>
-      <span style={{ fontSize: "var(--font-body-size)", color: "var(--color-text-primary)", fontWeight: 500 }}>{value}</span>
-    </div>
-  );
-}
-
-function FileRow({ name, meta }) {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", padding: "var(--space-md) var(--space-lg)", border: "1px solid var(--color-border-default)", borderRadius: "var(--radius-sm)" }}>
-      <span style={{ width: 32, height: 32, borderRadius: "var(--radius-sm)", background: "var(--color-bg-danger-subtle)", color: "var(--color-text-error)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700 }}>PDF</span>
-      <div style={{ flex: 1 }}>
-        <div style={{ fontSize: "var(--font-body-size)", fontWeight: 600 }}>{name}</div>
-        <div className="t-caption">{meta}</div>
+    <div className="ck-page">
+      <div className="ck-page-head">
+        <div>
+          <div className="ck-breadcrumb">
+            <a href="#" onClick={(e) => { e.preventDefault(); onBack?.(); }}>Vendors</a>
+            <span className="sep">/</span>
+            <span>{v.name}</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <h1 className="ck-page-title">{v.name}</h1>
+            <Tag tone="orange" dot>In review</Tag>
+            <Tag tone="purple">{v.tier}</Tag>
+          </div>
+          <div className="ck-page-sub">{v.region} · ID VND-2041 · Onboarded Jan 2026</div>
+        </div>
+        <div className="ck-page-actions">
+          <Button variant="outline" tone="neutral">Request docs</Button>
+          <Button variant="outline" tone="red">Reject</Button>
+          <Button variant="filled" tone="brand" onClick={onApprove}>Approve</Button>
+        </div>
       </div>
-      <button type="button" aria-label="Download" style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--color-text-secondary)" }}><Icon glyph="↧" size={16} /></button>
-      <button type="button" aria-label="Remove" style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--color-text-secondary)" }}><Icon glyph="🗑" size={16} /></button>
-    </div>
-  );
-}
 
-export default function VendorDetail({ onNavigate }) {
-  const [tab, setTab] = useState("Overview");
-  const [certs, setCerts] = useState(["ISO 27001", "SOC 2 Type II"]);
-  const toggle = (c) => setCerts((p) => (p.includes(c) ? p.filter((x) => x !== c) : [...p, c]));
+      <Alert tone="warning" icon={<I.Warn style={{ color: 'var(--color-status-warning-fg)' }} />}>
+        <strong>3 documents</strong> are due within 7 days — SOC 2 attestation expires Apr 7, 2026.
+        <span style={{ marginLeft: 8 }}><Button variant="text" tone="brand" size="sm">Review</Button></span>
+      </Alert>
 
-  return (
-    <AppShell
-      active="vendors"
-      onNavigate={onNavigate}
-      title="Globex Materials"
-      actions={
-        <>
-          <ProcessStatus status="Expiring" />
-          <Button variant="outline">Edit</Button>
-          <Button variant="filled">Save</Button>
-        </>
-      }
-    >
-      {/* Onboarding progress */}
-      <Card style={{ padding: "var(--space-xl)", marginBottom: "var(--space-3xl)" }}>
-        <ProgressSteps steps={["Profile", "Certifications", "Assessment", "Approval"]} current={2} />
-      </Card>
+      <div style={{ marginTop: 20 }}>
+        <Tabs
+          value={tab}
+          onChange={setTab}
+          items={[
+            { id: 'overview', label: 'Overview' },
+            { id: 'documents', label: 'Documents', count: 12 },
+            { id: 'risks', label: 'Risks', count: 3 },
+            { id: 'activity', label: 'Activity' },
+            { id: 'settings', label: 'Settings' },
+          ]}
+        />
+      </div>
 
-      <Tabs tabs={TABS} active={tab} onChange={setTab} />
+      {tab === 'overview' && (
+        <div className="ck-detail-grid" style={{ marginTop: 20 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <Card title="Workflow progress">
+              <div className="ck-stepper">
+                <div className="ck-step done"><span className="ck-step-bullet">✓</span><span className="ck-step-label">Submitted</span></div>
+                <div className="ck-step-line done" />
+                <div className="ck-step done"><span className="ck-step-bullet">✓</span><span className="ck-step-label">Documents</span></div>
+                <div className="ck-step-line done" />
+                <div className="ck-step active"><span className="ck-step-bullet">3</span><span className="ck-step-label">Risk assessment</span></div>
+                <div className="ck-step-line" />
+                <div className="ck-step todo"><span className="ck-step-bullet">4</span><span className="ck-step-label">Approval</span></div>
+                <div className="ck-step-line" />
+                <div className="ck-step todo"><span className="ck-step-bullet">5</span><span className="ck-step-label">Onboarded</span></div>
+              </div>
+            </Card>
 
-      {tab === "Overview" && (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3xl)" }}>
-          {/* Form section: company profile */}
-          <Card style={{ padding: "var(--space-xl)" }}>
-            <SectionHeader>Company profile</SectionHeader>
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
-              <Field label="Legal name" required><Input defaultValue="Globex Materials Inc." /></Field>
-              <Field label="Primary contact email" required help="Used for assessment notifications">
-                <Input type="email" defaultValue="compliance@globex.com" />
-              </Field>
-              <Field label="Tax ID"><Input defaultValue="" placeholder="Optional" /></Field>
-            </div>
-          </Card>
+            <Card title="Recent activity" action={<Button variant="text" tone="brand" size="sm">View all</Button>}>
+              <div className="ck-activity">
+                <div className="ck-activity-item">
+                  <Avatar initials="PR" size="sm" />
+                  <div>
+                    <div className="ck-activity-text"><strong>Priya Rao</strong> uploaded <strong>Vendor agreement v3.2</strong></div>
+                    <div className="ck-activity-time">2 hours ago</div>
+                  </div>
+                </div>
+                <div className="ck-activity-item">
+                  <Avatar initials="MK" size="sm" tone="teal" />
+                  <div>
+                    <div className="ck-activity-text"><strong>Michael Kim</strong> assigned risk owner: <strong>Compliance team</strong></div>
+                    <div className="ck-activity-time">Yesterday at 4:12 PM</div>
+                  </div>
+                </div>
+                <div className="ck-activity-item">
+                  <span className="ck-avatar ck-avatar-sm" style={{ background: 'var(--color-status-success-fg)' }}><I.Check style={{ color: '#fff', width: 12, height: 12 }} /></span>
+                  <div>
+                    <div className="ck-activity-text">SOC 2 Type II attestation <strong>verified</strong></div>
+                    <div className="ck-activity-time">Mar 24</div>
+                  </div>
+                </div>
+                <div className="ck-activity-item">
+                  <Avatar initials="AS" size="sm" tone="orange" />
+                  <div>
+                    <div className="ck-activity-text"><strong>Alex Singh</strong> commented on <strong>Risk question 12</strong></div>
+                    <div className="ck-activity-time">Mar 23</div>
+                  </div>
+                </div>
+              </div>
+            </Card>
 
-          {/* Read-only summary */}
-          <Card style={{ padding: "var(--space-xl)" }}>
-            <SectionHeader>Record</SectionHeader>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-xl)" }}>
-              <ReadOnly label="Vendor ID" value="VND-00842" />
-              <ReadOnly label="Category" value="Manufacturing" />
-              <ReadOnly label="Owner" value="A. Singh" />
-              <ReadOnly label="Created" value="Mar 14, 2026" />
-            </div>
-          </Card>
+            <Card title="Required documents" action={<Button variant="outline" tone="brand" size="sm" leadingIcon={<I.Upload />}>Upload</Button>}>
+              <div className="ck-doc-row">
+                <span className="ck-doc-icon"><I.Doc /></span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 500, fontSize: 13 }}>SOC 2 Type II Report.pdf</div>
+                  <div className="ck-doc-meta">Verified · 4.2 MB · Uploaded by Priya Rao</div>
+                </div>
+                <Tag tone="green" dot>Verified</Tag>
+                <IconButton label="More"><I.More /></IconButton>
+              </div>
+              <div className="ck-doc-row">
+                <span className="ck-doc-icon"><I.Doc /></span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 500, fontSize: 13 }}>ISO 27001 Certificate.pdf</div>
+                  <div className="ck-doc-meta">Pending review · 1.1 MB</div>
+                </div>
+                <Tag tone="orange" dot>Pending</Tag>
+                <IconButton label="More"><I.More /></IconButton>
+              </div>
+              <div className="ck-doc-row">
+                <span className="ck-doc-icon" style={{ background: 'var(--color-status-danger-bg)', color: 'var(--color-status-danger-fg)' }}><I.Doc /></span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 500, fontSize: 13 }}>Cyber insurance certificate</div>
+                  <div className="ck-doc-meta" style={{ color: 'var(--color-status-danger-fg)' }}>Expired Mar 12, 2026 — request renewal</div>
+                </div>
+                <Tag tone="red" dot>Expired</Tag>
+                <IconButton label="More"><I.More /></IconButton>
+              </div>
+            </Card>
+          </div>
 
-          {/* Certifications — checkbox pills */}
-          <Card style={{ padding: "var(--space-xl)", gridColumn: "1 / -1" }}>
-            <SectionHeader>Certifications</SectionHeader>
-            <p className="t-body text-secondary" style={{ marginTop: 0 }}>
-              Select all that apply. Use pills when the set is small and finite ({CERTS.length} options) — multi-select dropdown is reserved for long lists.
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-md)" }}>
-              {CERTS.map((c) => (
-                <CheckboxPill key={c} checked={certs.includes(c)} onChange={() => toggle(c)}>{c}</CheckboxPill>
-              ))}
-            </div>
-          </Card>
+          <aside style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <Card title="Risk score">
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                <span style={{ fontSize: 40, fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em' }}>76</span>
+                <Tag tone="orange">Medium</Tag>
+              </div>
+              <div className="ck-meter" style={{ marginTop: 12 }}>
+                <div className="ck-meter-fill ck-risk-medium" style={{ width: '76%' }} />
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 8 }}>
+                Last assessed Mar 18, 2026 by Michael Kim
+              </div>
+            </Card>
+
+            <Card title="Details">
+              <div className="ck-meta-row"><div className="ck-meta-label">Vendor ID</div><div className="ck-meta-value">VND-2041</div></div>
+              <div className="ck-meta-row"><div className="ck-meta-label">Category</div><div className="ck-meta-value">Logistics & shipping</div></div>
+              <div className="ck-meta-row"><div className="ck-meta-label">HQ</div><div className="ck-meta-value">Boston, MA · USA</div></div>
+              <div className="ck-meta-row"><div className="ck-meta-label">Spend YTD</div><div className="ck-meta-value">$2.4M</div></div>
+              <div className="ck-meta-row"><div className="ck-meta-label">Renewal</div><div className="ck-meta-value">Jan 14, 2027</div></div>
+              <div className="ck-meta-row"><div className="ck-meta-label">Owner</div>
+                <div className="ck-meta-value" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <Avatar initials="PR" size="sm" /> Priya Rao
+                </div>
+              </div>
+            </Card>
+
+            <Card title="Reviewers">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Avatar initials="MK" size="sm" tone="teal" />
+                  <div style={{ flex: 1, fontSize: 13 }}>Michael Kim<div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Compliance lead</div></div>
+                  <Tag tone="green" dot>Approved</Tag>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Avatar initials="AS" size="sm" tone="orange" />
+                  <div style={{ flex: 1, fontSize: 13 }}>Alex Singh<div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Security</div></div>
+                  <Tag tone="orange" dot>Pending</Tag>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Avatar initials="EL" size="sm" tone="purple" />
+                  <div style={{ flex: 1, fontSize: 13 }}>Elena Lopez<div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Procurement</div></div>
+                  <Tag tone="neutral" dot>Not started</Tag>
+                </div>
+              </div>
+            </Card>
+          </aside>
         </div>
       )}
 
-      {tab === "Documents" && (
-        <Card style={{ padding: "var(--space-xl)" }}>
-          <SectionHeader>Documents</SectionHeader>
-          {/* File upload field */}
-          <div style={{ border: "1px dashed var(--color-border-strong)", borderRadius: "var(--radius-sm)", padding: "var(--space-3xl)", textAlign: "center", marginBottom: "var(--space-xl)" }}>
-            <div style={{ fontSize: 28 }}><Icon glyph="↥" size={28} /></div>
-            <div style={{ fontWeight: 600, marginTop: "var(--space-md)" }}>Drag files here or <span className="text-link">browse</span></div>
-            <div className="t-caption">PDF, DOCX up to 25 MB</div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-md)" }}>
-            <FileRow name="SOC2-Type-II-2026.pdf" meta="2.4 MB · uploaded 1d ago" />
-            <FileRow name="ISO-27001-cert.pdf" meta="880 KB · uploaded 1d ago" />
+      {tab === 'documents' && (
+        <Card style={{ marginTop: 20 }} title="All documents" action={<Button variant="filled" tone="brand" size="sm" leadingIcon={<I.Upload />}>Upload</Button>}>
+          <div className="ck-empty">
+            <div className="ck-empty-title">12 documents on file</div>
+            <div className="ck-empty-desc">Switch to the Overview tab to see required documents at a glance.</div>
           </div>
         </Card>
       )}
-
-      {(tab === "Assessment" || tab === "Settings") && (
-        <Card style={{ padding: "var(--space-4xl)", textAlign: "center" }}>
-          <div className="t-title-s">{tab}</div>
-          <p className="t-body text-secondary">Section content for {tab} composes the same primitives.</p>
+      {tab === 'risks' && (
+        <Card style={{ marginTop: 20 }} title="Risk findings">
+          <div className="ck-empty">
+            <div className="ck-empty-title">3 open risks</div>
+            <div className="ck-empty-desc">Risk detail view connects to your assessment workflow.</div>
+          </div>
         </Card>
       )}
-    </AppShell>
+      {tab === 'activity' && (
+        <Card style={{ marginTop: 20 }} title="Activity timeline">
+          <div className="ck-empty">
+            <div className="ck-empty-title">Full activity log</div>
+            <div className="ck-empty-desc">Filter by user, action, or document.</div>
+          </div>
+        </Card>
+      )}
+      {tab === 'settings' && (
+        <Card style={{ marginTop: 20 }} title="Vendor settings">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <Switch checked label="Auto-renew documents 30 days before expiry" />
+            <Switch label="Notify owner on risk score change" />
+            <Switch checked label="Include in quarterly board report" />
+          </div>
+        </Card>
+      )}
+    </div>
   );
 }
+
+window.VendorDetail = VendorDetail;

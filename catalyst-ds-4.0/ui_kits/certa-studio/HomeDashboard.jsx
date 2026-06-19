@@ -1,97 +1,86 @@
-/* ============================================================================
-   Certa DS 4.0 — HomeDashboard.jsx
-   Landing dashboard: stat widgets, activity feed, attention queue.
-   Demonstrates status badge color mapping and section-header pattern.
-   ============================================================================ */
-import React from "react";
-import AppShell from "./AppShell.jsx";
-import { Button, Icon, Card, SectionHeader, ProcessStatus, Badge } from "./Primitives.jsx";
+// Page: Home dashboard
 
-const STATS = [
-  { label: "Active vendors", value: "124", delta: "+6", tone: "success" },
-  { label: "Pending review", value: "18", delta: "+3", tone: "info" },
-  { label: "Expiring soon", value: "7", delta: "−2", tone: "warning" },
-  { label: "Action needed", value: "4", delta: "+1", tone: "danger" },
-];
-
-const ATTENTION = [
-  { name: "Globex Materials", reason: "ISO 27001 expires in 9 days", status: "Expiring" },
-  { name: "Initech Audit Co.", reason: "Assessment returned with findings", status: "Rejected" },
-  { name: "Umbrella Pharma", reason: "Awaiting initial documents", status: "Draft" },
-];
-
-const ACTIVITY = [
-  { who: "J. Park", what: "approved Northwind Cloud", when: "5h ago" },
-  { who: "A. Singh", what: "uploaded SOC 2 report for Globex", when: "1d ago" },
-  { who: "M. Reyes", what: "requested re-assessment of Initech", when: "3d ago" },
-];
-
-function Stat({ s }) {
-  const toneFg = {
-    success: "var(--color-text-success)",
-    info: "var(--color-text-link)",
-    warning: "var(--color-text-warning)",
-    danger: "var(--color-text-error)",
-  }[s.tone];
+function HomeDashboard() {
   return (
-    <Card style={{ padding: "var(--space-xl)", flex: 1, minWidth: 0 }}>
-      <div className="t-caption">{s.label}</div>
-      <div style={{ display: "flex", alignItems: "baseline", gap: "var(--space-md)", marginTop: "var(--space-sm)" }}>
-        <span className="t-title-m" style={{ fontWeight: 700 }}>{s.value}</span>
-        <span style={{ fontSize: "var(--font-caption-size)", fontWeight: 700, color: toneFg }}>{s.delta}</span>
-      </div>
-    </Card>
-  );
-}
-
-export default function HomeDashboard({ onNavigate }) {
-  return (
-    <AppShell
-      active="home"
-      onNavigate={onNavigate}
-      title="Home"
-      actions={<Button variant="outline" iconLeft={<Icon glyph="↧" size={20} />}>Export</Button>}
-    >
-      {/* Stat widgets */}
-      <div style={{ display: "flex", gap: "var(--space-xl)", marginBottom: "var(--space-3xl)" }}>
-        {STATS.map((s) => <Stat key={s.label} s={s} />)}
+    <div className="ck-page">
+      <div className="ck-page-head">
+        <div>
+          <h1 className="ck-page-title">Good afternoon, Jamie</h1>
+          <div className="ck-page-sub">You have 5 open tasks and 2 vendors awaiting your review.</div>
+        </div>
+        <div className="ck-page-actions">
+          <Button variant="outline" tone="neutral" leadingIcon={<I.Calendar />}>Last 30 days</Button>
+        </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: "var(--space-3xl)" }}>
-        {/* Attention queue */}
-        <Card style={{ padding: "var(--space-xl)" }}>
-          <SectionHeader action={<Button variant="link">View all</Button>}>Needs attention</SectionHeader>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {ATTENTION.map((a, i) => (
-              <div key={a.name} style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", padding: "var(--space-md) 0", borderTop: i ? "1px solid var(--color-border-subtle)" : "none" }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600 }}>{a.name}</div>
-                  <div className="t-caption">{a.reason}</div>
+      <div className="ck-stats">
+        <div className="ck-stat"><div className="ck-stat-label">Open tasks</div><div className="ck-stat-value">5</div><div className="ck-stat-delta down">▼ 3 since yesterday</div></div>
+        <div className="ck-stat"><div className="ck-stat-label">Awaiting review</div><div className="ck-stat-value">2</div><div className="ck-stat-delta up">▲ 1 new today</div></div>
+        <div className="ck-stat"><div className="ck-stat-label">SLA compliance</div><div className="ck-stat-value">98%</div><div className="ck-stat-delta up">▲ 1 pt</div></div>
+        <div className="ck-stat"><div className="ck-stat-label">Spend reviewed</div><div className="ck-stat-value">$8.2M</div><div className="ck-stat-delta up">▲ $1.1M</div></div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16 }}>
+        <Card title="Your tasks" action={<Button variant="text" tone="brand" size="sm">View all</Button>}>
+          <div className="ck-activity">
+            {[
+              { vendor: 'Acme Logistics, Inc.', task: 'Approve risk assessment', due: 'Due today', tone: 'orange' },
+              { vendor: 'Bluebird Cloud Services', task: 'Verify SOC 2 attestation', due: 'Due tomorrow', tone: 'orange' },
+              { vendor: 'Northwind Parts Co.', task: 'Re-onboard after rejection', due: 'In 3 days', tone: 'neutral' },
+              { vendor: 'Sunrise Diagnostics', task: 'Annual review', due: 'In 7 days', tone: 'neutral' },
+              { vendor: 'Helio Energy Co.', task: 'Initial review', due: 'In 14 days', tone: 'neutral' },
+            ].map((t, i) => (
+              <div key={i} className="ck-activity-item" style={{ gridTemplateColumns: '24px 1fr auto' }}>
+                <Checkbox />
+                <div>
+                  <div className="ck-activity-text"><strong>{t.task}</strong> · {t.vendor}</div>
+                  <div className="ck-activity-time">Workflow: Vendor onboarding</div>
                 </div>
-                <ProcessStatus status={a.status} />
+                <Tag tone={t.tone} dot>{t.due}</Tag>
               </div>
             ))}
           </div>
         </Card>
 
-        {/* Activity feed */}
-        <Card style={{ padding: "var(--space-xl)" }}>
-          <SectionHeader>Recent activity</SectionHeader>
-          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-lg)" }}>
-            {ACTIVITY.map((a, i) => (
-              <div key={i} style={{ display: "flex", gap: "var(--space-md)" }}>
-                <span style={{ width: 28, height: 28, borderRadius: "var(--radius-full)", background: "var(--color-bg-muted)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "var(--color-text-secondary)" }}>
-                  {a.who.replace(/[^A-Z]/g, "")}
-                </span>
-                <div style={{ fontSize: "var(--font-body-size)" }}>
-                  <span style={{ fontWeight: 600 }}>{a.who}</span> <span className="text-secondary">{a.what}</span>
-                  <div className="t-caption">{a.when}</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <Card title="Risk distribution">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {[
+                { label: 'Low', count: 198, pct: 80, tone: 'low' },
+                { label: 'Medium', count: 47, pct: 19, tone: 'medium' },
+                { label: 'High', count: 3, pct: 1, tone: 'high' },
+              ].map(r => (
+                <div key={r.label}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, fontWeight: 500, color: 'var(--color-text-primary)' }}>
+                    <span>{r.label}</span><span>{r.count}</span>
+                  </div>
+                  <div className="ck-meter" style={{ marginTop: 4 }}>
+                    <div className={`ck-meter-fill ck-risk-${r.tone}`} style={{ width: `${r.pct}%` }} />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </Card>
+              ))}
+            </div>
+          </Card>
+
+          <Card title="Upcoming renewals">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
+              {[
+                { v: 'Parker & Sons Mfg.', d: 'Apr 7, 2026' },
+                { v: 'Sunrise Diagnostics', d: 'Apr 14, 2026' },
+                { v: 'Acme Logistics', d: 'Apr 22, 2026' },
+              ].map(r => (
+                <div key={r.v} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <I.Calendar style={{ color: 'var(--color-text-secondary)' }} />
+                  <span style={{ flex: 1 }}>{r.v}</span>
+                  <span style={{ color: 'var(--color-text-secondary)', fontSize: 12 }}>{r.d}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
       </div>
-    </AppShell>
+    </div>
   );
 }
+
+window.HomeDashboard = HomeDashboard;

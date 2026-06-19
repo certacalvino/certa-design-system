@@ -1,0 +1,32 @@
+// Catalyst icon set — small inline SVGs matched to the codebase style:
+// 16px frame, 1.5px stroke, currentColor.
+
+const I = {
+  Home: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M2 7l6-5 6 5v7H2V7z"/><path d="M6 14V9h4v5"/></svg>),
+  Tasks: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><rect x="2" y="3" width="12" height="11" rx="1"/><path d="M2 6h12M5 3V1m6 2V1M5.5 9.5l1.5 1.5 3-3"/></svg>),
+  Vendors: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M2 13V5l6-3 6 3v8M2 13h12M6 13V8h4v5"/></svg>),
+  Workflow: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" {...p}><circle cx="3" cy="3" r="1.5"/><circle cx="13" cy="3" r="1.5"/><circle cx="8" cy="13" r="1.5"/><path d="M3 4.5V8h10V4.5M8 9.5v2"/></svg>),
+  Reports: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M2 12V3h12v9H2z"/><path d="M5 10V6m3 4V8m3 2V5"/></svg>),
+  Risk: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M8 1.5l6.5 11.5h-13L8 1.5z"/><path d="M8 6v3"/><circle cx="8" cy="11.2" r="0.5" fill="currentColor"/></svg>),
+  Settings: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" {...p}><circle cx="8" cy="8" r="2"/><path d="M8 1v2m0 10v2M3.5 3.5L5 5m6 6l1.5 1.5M1 8h2m10 0h2M3.5 12.5L5 11m6-6l1.5-1.5"/></svg>),
+  Search: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" {...p}><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>),
+  Plus: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" {...p}><path d="M8 3v10M3 8h10"/></svg>),
+  Bell: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M3 12V7a5 5 0 0110 0v5l1 2H2l1-2z"/><path d="M6.5 14.5a2 2 0 003 0"/></svg>),
+  Help: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" {...p}><circle cx="8" cy="8" r="6.5"/><path d="M6 6.5C6 5 7 4 8 4s2 1 2 2.2c0 1.3-2 1.5-2 2.8" strokeLinecap="round"/><circle cx="8" cy="11.5" r="0.5" fill="currentColor"/></svg>),
+  Caret: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 6l4 4 4-4"/></svg>),
+  Close: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" {...p}><path d="M4 4l8 8M12 4l-8 8"/></svg>),
+  Filter: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M2 3h12l-4.5 6v4l-3 1.5V9L2 3z"/></svg>),
+  Sort: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" {...p}><path d="M5 3v10M3 11l2 2 2-2M11 13V3M9 5l2-2 2 2"/></svg>),
+  Doc: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M3 14V2h7l3 3v9H3z"/><path d="M10 2v3h3M5 8h6M5 11h4"/></svg>),
+  Download: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M8 2v9M5 8l3 3 3-3M3 14h10"/></svg>),
+  Upload: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M8 12V3M5 6l3-3 3 3M3 14h10"/></svg>),
+  More: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" {...p}><circle cx="3" cy="8" r="1.3"/><circle cx="8" cy="8" r="1.3"/><circle cx="13" cy="8" r="1.3"/></svg>),
+  Calendar: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" {...p}><rect x="2" y="3" width="12" height="11" rx="1"/><path d="M2 6h12M5 3V1m6 2V1"/></svg>),
+  Check: (p) => (<svg viewBox="0 0 16 16" fill="currentColor" width="16" height="16" {...p}><path d="M8 0a8 8 0 100 16A8 8 0 008 0zM6.5 11.6L3 8.1l1.5-1.5 2 2 4-4L12 6l-5.5 5.6z"/></svg>),
+  Warn: (p) => (<svg viewBox="0 0 16 16" fill="currentColor" width="16" height="16" {...p}><path d="M8 1l8 14H0L8 1z"/><rect x="7.25" y="6" width="1.5" height="4.5" fill="#fff"/><circle cx="8" cy="12" r="0.8" fill="#fff"/></svg>),
+  X: (p) => (<svg viewBox="0 0 16 16" fill="currentColor" width="16" height="16" {...p}><circle cx="8" cy="8" r="8"/><path d="M5 5l6 6m0-6l-6 6" stroke="#fff" strokeWidth="1.6" fill="none" strokeLinecap="round"/></svg>),
+  Info: (p) => (<svg viewBox="0 0 16 16" fill="currentColor" width="16" height="16" {...p}><circle cx="8" cy="8" r="8"/><path d="M7 7h2v5H7zm0-3h2v2H7z" fill="#fff"/></svg>),
+  Logo: (p) => (<svg viewBox="0 0 24 24" width="24" height="24" {...p}><rect width="24" height="24" rx="6" style={{ fill: 'var(--color-action-primary)' }}/><path d="M16 8.6c-1-1.2-2.4-1.9-4-1.9-3 0-5.4 2.3-5.4 5.3 0 3 2.4 5.3 5.3 5.3 1.7 0 3.2-.7 4.2-2l-1.8-1.3c-.6.7-1.4 1.2-2.4 1.2-1.7 0-3.1-1.4-3.1-3.3s1.4-3.3 3.1-3.3c1 0 1.7.4 2.3 1.1l1.8-1.1z" fill="#fff"/></svg>),
+};
+
+window.I = I;
