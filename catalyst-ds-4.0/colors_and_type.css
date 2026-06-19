@@ -81,6 +81,9 @@
   --color-bg-subtle:        var(--slate-50);
   --color-bg-muted:         var(--slate-100);
   --color-bg-sidebar:       #F7F8FA;          /* production-confirmed light */
+  /* Surface hierarchy (DS 4.0): page = surface/subtle (#F7F8FA), cards = surface/default (white) */
+  --color-surface-default:  var(--white);
+  --color-surface-subtle:   #F7F8FA;
   --color-bg-brand:         var(--brand-500);
   --color-bg-brand-hover:   var(--brand-600);
   --color-bg-brand-subtle:  var(--brand-50);

@@ -13,7 +13,7 @@ designer needs to consume the system without a Figma seat.
 
 ## Running the demo
 
-**`index.html` is the primary entry point** — the **Certa Studio** click-through
+**`index.html` is the primary entry point** — the **Certa Platform** click-through
 app, **ported from the DS 3.0 Catalyst app shell** with its layout, density, and
 copy preserved 1:1 and every token swapped to the DS 4.0 semantic layer. It loads
 the `ui_kits/certa-studio/` global-scope modules + `styles.css` (which `@import`s
@@ -27,7 +27,7 @@ python3 -m http.server 8080      # then open http://localhost:8080/
 Serve the folder (don't open via `file://` — browsers block Babel from fetching
 the `.jsx` modules over the file protocol). The app demonstrates:
 
-- **Top app bar** — "Certa Studio" logo + wordmark, global search (⌘K),
+- **Top app bar** — "Certa Platform" logo + wordmark, global search (⌘K),
   help/notifications, user avatar.
 - **Light sidebar** (`bg/sidebar` #F7F8FA) with nav: Dashboard · Vendors · Workflows ·
   Records · Change Requests, plus Settings / Help — active item uses `bg/brand-subtle`
@@ -77,14 +77,14 @@ neutral, and status ramps all resolve through a single semantic layer.
 
 ```
 catalyst-ds-4.0/
-├── index.html                  # ▶ PRIMARY DEMO — Certa Studio click-through app (ported from DS 3.0)
+├── index.html                  # ▶ PRIMARY DEMO — Certa Platform click-through app (ported from DS 3.0)
 ├── app.jsx                     # router: Home / Vendors / Vendor detail + Add/Approve dialogs + toast
 ├── gallery.html                # component gallery — links every preview/*.html
 ├── colors_and_type.css         # primitives → semantic tokens → type/space/effects
 ├── README.md                   # this file
 ├── build_previews.py           # regenerates preview/*.html from token data
 ├── ui_kits/certa-studio/
-│   │  # ── Certa Studio app shell (global-scope Babel; consumes the canonical kit) ──
+│   │  # ── Certa Platform app shell (global-scope Babel; consumes the canonical kit) ──
 │   ├── styles.css              # app-chrome CSS (sidebar/topbar/table/stepper), DS 4.0 tokens
 │   ├── Icons.jsx               # inline SVG icon set (window.I)
 │   ├── build_kit.py            # generates kit.global.jsx from Primitives.jsx + components/

@@ -1,4 +1,4 @@
-// Certa Studio app shell: top app bar + left sidebar.
+// Certa Platform app shell: top app bar + left sidebar.
 
 function Sidebar({ active, onNav }) {
   const items = [
@@ -36,7 +36,7 @@ function TopBar({ user }) {
     <header className="ck-topbar">
       <div className="ck-topbar-brand">
         <I.Logo />
-        <span className="ck-wordmark">Certa Studio</span>
+        <span className="ck-wordmark">Certa Platform</span>
       </div>
       <div className="ck-topbar-search">
         <div className="ck-field">

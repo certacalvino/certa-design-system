@@ -342,8 +342,8 @@ function Card({ children, style, title = null, action = null, footer = null, pad
   return (
     <div
       style={{
-        background: "var(--color-bg-page)",
-        border: "1px solid var(--color-border-default)",
+        background: "var(--color-surface-default)",
+        border: "1px solid var(--color-border-subtle)",
         borderRadius: "var(--radius-sm)",
         display: "flex",
         flexDirection: "column",
