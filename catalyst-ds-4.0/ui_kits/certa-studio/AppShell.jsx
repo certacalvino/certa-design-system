@@ -52,7 +52,7 @@ function TopBar({ user }) {
           <span className="ck-icon-dot" />
         </button>
         <div className="ck-user">
-          <span className="ck-avatar">{user?.initials || 'JS'}</span>
+          <span className="ck-avatar ck-avatar-brand">{user?.initials || 'JS'}</span>
           <span className="ck-user-name">{user?.name || 'Jamie Souza'}</span>
           <I.Caret style={{ color: 'var(--color-text-secondary)' }} />
         </div>

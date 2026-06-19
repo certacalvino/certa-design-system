@@ -1,12 +1,26 @@
-// Page: Home dashboard
+// Page: Vendor Risk Overview (TPRM dashboard)
 
 function HomeDashboard() {
+  const activity = [
+    { vendor: 'Acme Logistics, Inc.', tone: 'brand',   action: 'Risk assessment approved',       status: 'approved', date: '2h ago' },
+    { vendor: 'Bluebird Cloud Services', tone: 'teal',  action: 'SOC 2 verification requested',    status: 'review',   date: 'Yesterday' },
+    { vendor: 'Northwind Parts Co.', tone: 'orange',    action: 'Onboarding rejected — findings',  status: 'rejected', date: 'Mar 24' },
+    { vendor: 'Sunrise Diagnostics', tone: 'green',     action: 'Annual review started',           status: 'review',   date: 'Mar 22' },
+    { vendor: 'Helio Energy Co.', tone: 'neutral',      action: 'Added to vendor register',        status: 'draft',    date: 'Mar 21' },
+  ];
+  const statusTag = (s) => ({
+    approved: <Tag tone="green" dot>Approved</Tag>,
+    review:   <Tag tone="orange" dot>In review</Tag>,
+    rejected: <Tag tone="red" dot>Rejected</Tag>,
+    draft:    <Tag tone="teal" dot>Draft</Tag>,
+  }[s]);
+
   return (
     <div className="ck-page">
       <div className="ck-page-head">
         <div>
-          <h1 className="ck-page-title">Good afternoon, Jamie</h1>
-          <div className="ck-page-sub">You have 5 open tasks and 2 vendors awaiting your review.</div>
+          <h1 className="ck-page-title">Vendor Risk Overview</h1>
+          <div className="ck-page-sub">Monitor third-party risk across your supplier base.</div>
         </div>
         <div className="ck-page-actions">
           <Button variant="outline" tone="neutral" leadingIcon={<I.Calendar />}>Last 30 days</Button>
@@ -14,32 +28,39 @@ function HomeDashboard() {
       </div>
 
       <div className="ck-stats">
-        <div className="ck-stat"><div className="ck-stat-label">Open tasks</div><div className="ck-stat-value">5</div><div className="ck-stat-delta down">▼ 3 since yesterday</div></div>
-        <div className="ck-stat"><div className="ck-stat-label">Awaiting review</div><div className="ck-stat-value">2</div><div className="ck-stat-delta up">▲ 1 new today</div></div>
-        <div className="ck-stat"><div className="ck-stat-label">SLA compliance</div><div className="ck-stat-value">98%</div><div className="ck-stat-delta up">▲ 1 pt</div></div>
-        <div className="ck-stat"><div className="ck-stat-label">Spend reviewed</div><div className="ck-stat-value">$8.2M</div><div className="ck-stat-delta up">▲ $1.1M</div></div>
+        <div className="ck-stat"><div className="ck-stat-label">Total Vendors</div><div className="ck-stat-value">248</div><div className="ck-stat-delta up">▲ 12 this month</div></div>
+        <div className="ck-stat"><div className="ck-stat-label">High Risk</div><div className="ck-stat-value" style={{ color: 'var(--color-status-danger-fg)' }}>3</div><div className="ck-stat-delta up">▲ 1 new</div></div>
+        <div className="ck-stat"><div className="ck-stat-label">Pending Reviews</div><div className="ck-stat-value">17</div><div className="ck-stat-delta down">▼ 4 vs last week</div></div>
+        <div className="ck-stat"><div className="ck-stat-label">Compliance Score</div><div className="ck-stat-value">92%</div><div className="ck-stat-delta up">▲ 1 pt</div></div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16 }}>
-        <Card title="Your tasks" action={<Button variant="text" tone="brand" size="sm">View all</Button>}>
-          <div className="ck-activity">
-            {[
-              { vendor: 'Acme Logistics, Inc.', task: 'Approve risk assessment', due: 'Due today', tone: 'orange' },
-              { vendor: 'Bluebird Cloud Services', task: 'Verify SOC 2 attestation', due: 'Due tomorrow', tone: 'orange' },
-              { vendor: 'Northwind Parts Co.', task: 'Re-onboard after rejection', due: 'In 3 days', tone: 'neutral' },
-              { vendor: 'Sunrise Diagnostics', task: 'Annual review', due: 'In 7 days', tone: 'neutral' },
-              { vendor: 'Helio Energy Co.', task: 'Initial review', due: 'In 14 days', tone: 'neutral' },
-            ].map((t, i) => (
-              <div key={i} className="ck-activity-item" style={{ gridTemplateColumns: '24px 1fr auto' }}>
-                <Checkbox />
-                <div>
-                  <div className="ck-activity-text"><strong>{t.task}</strong> · {t.vendor}</div>
-                  <div className="ck-activity-time">Workflow: Vendor onboarding</div>
-                </div>
-                <Tag tone={t.tone} dot>{t.due}</Tag>
-              </div>
-            ))}
-          </div>
+        <Card title="Recent vendor activity" action={<Button variant="text" tone="brand" size="sm">View all</Button>} padded={false}>
+          <table className="ck-table">
+            <thead>
+              <tr>
+                <th>Vendor</th>
+                <th>Activity</th>
+                <th style={{ minWidth: 110 }}>Status</th>
+                <th style={{ textAlign: 'right' }}>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {activity.map((a, i) => (
+                <tr key={i} style={{ cursor: 'default' }}>
+                  <td>
+                    <div className="ck-vendor-cell">
+                      <span className={`ck-avatar ck-avatar-sm ck-avatar-${a.tone}`}>{a.vendor.slice(0, 1)}</span>
+                      <span className="ck-name">{a.vendor}</span>
+                    </div>
+                  </td>
+                  <td style={{ color: 'var(--color-text-secondary)' }}>{a.action}</td>
+                  <td>{statusTag(a.status)}</td>
+                  <td style={{ textAlign: 'right', color: 'var(--color-text-secondary)', fontSize: 12 }}>{a.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </Card>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
