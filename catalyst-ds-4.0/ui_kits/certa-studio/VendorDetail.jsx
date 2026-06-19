@@ -6,34 +6,16 @@ function RiskBadge({ level }) {
   return <span className={`ck-riskbadge ck-riskbadge-${lvl}`}>{map[lvl]}</span>;
 }
 
-function RoField({ label, value }) {
-  return (
-    <div className="ck-ro-field">
-      <span className="ck-ro-label">{label}</span>
-      <span className="ck-ro-value">{value}</span>
-    </div>
-  );
-}
-
-function SplitButton({ children, onClick }) {
-  return (
-    <span className="ck-split">
-      <button className="ck-split-main" onClick={onClick}>{children}</button>
-      <button className="ck-split-trigger" aria-label="More save options"><I.Caret /></button>
-    </span>
-  );
-}
-
 function VendorDetail({ vendor, onBack, onApprove }) {
   const v = vendor || { name: 'Acme Logistics, Inc.', region: 'North America', tier: 'Tier 1', status: 'review', risk: 'high' };
   const [tab, setTab] = React.useState('overview');
 
   const statusTag = ({
-    approved: <Tag tone="green" dot>Approved</Tag>,
-    review:   <Tag tone="orange" dot>In review</Tag>,
-    rejected: <Tag tone="red" dot>Rejected</Tag>,
-    draft:    <Tag tone="teal" dot>Draft</Tag>,
-  })[v.status] || <Tag tone="orange" dot>In review</Tag>;
+    approved: <Tag color="success" dot>Approved</Tag>,
+    review:   <Tag color="warning" dot>In review</Tag>,
+    rejected: <Tag color="danger" dot>Rejected</Tag>,
+    draft:    <Tag color="info" dot>Draft</Tag>,
+  })[v.status] || <Tag color="warning" dot>In review</Tag>;
 
   return (
     <div className="ck-page">
@@ -82,10 +64,10 @@ function VendorDetail({ vendor, onBack, onApprove }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <Card title="Company profile">
               <div className="ck-ro-grid">
-                <RoField label="Company name" value={v.name} />
-                <RoField label="Website" value="acmelogistics.com" />
-                <RoField label="Country" value="United States" />
-                <RoField label="Business type" value="Logistics & shipping" />
+                <ReadOnlyField label="COMPANY NAME" value={v.name} />
+                <ReadOnlyField label="WEBSITE" value="acmelogistics.com" />
+                <ReadOnlyField label="COUNTRY" value="United States" />
+                <ReadOnlyField label="BUSINESS TYPE" value="Logistics & shipping" />
               </div>
               <div style={{ marginTop: 20 }}>
                 <div className="ck-ro-label" style={{ marginBottom: 8 }}>Certifications</div>
@@ -145,17 +127,17 @@ function VendorDetail({ vendor, onBack, onApprove }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <Avatar initials="MK" size="sm" tone="teal" />
                   <div style={{ flex: 1, fontSize: 13 }}>Michael Kim<div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Compliance lead</div></div>
-                  <Tag tone="green" dot>Approved</Tag>
+                  <Tag color="success" dot>Approved</Tag>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <Avatar initials="AS" size="sm" tone="orange" />
                   <div style={{ flex: 1, fontSize: 13 }}>Alex Singh<div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Security</div></div>
-                  <Tag tone="orange" dot>Pending</Tag>
+                  <Tag color="warning" dot>Pending</Tag>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <Avatar initials="EL" size="sm" tone="green" />
                   <div style={{ flex: 1, fontSize: 13 }}>Elena Lopez<div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Procurement</div></div>
-                  <Tag tone="neutral" dot>Not started</Tag>
+                  <Tag color="neutral" dot>Not started</Tag>
                 </div>
               </div>
             </Card>
@@ -176,7 +158,7 @@ function VendorDetail({ vendor, onBack, onApprove }) {
               <div style={{ fontWeight: 500, fontSize: 13 }}>SOC 2 Type II Report.pdf</div>
               <div className="ck-doc-meta">Verified · 4.2 MB · Uploaded by Priya Rao</div>
             </div>
-            <Tag tone="green" dot>Verified</Tag>
+            <Tag color="success" dot>Verified</Tag>
             <IconButton label="More"><I.More /></IconButton>
           </div>
           <div className="ck-doc-row">
@@ -185,7 +167,7 @@ function VendorDetail({ vendor, onBack, onApprove }) {
               <div style={{ fontWeight: 500, fontSize: 13 }}>ISO 27001 Certificate.pdf</div>
               <div className="ck-doc-meta">Pending review · 1.1 MB</div>
             </div>
-            <Tag tone="orange" dot>Pending</Tag>
+            <Tag color="warning" dot>Pending</Tag>
             <IconButton label="More"><I.More /></IconButton>
           </div>
           <div className="ck-doc-row">
@@ -194,7 +176,7 @@ function VendorDetail({ vendor, onBack, onApprove }) {
               <div style={{ fontWeight: 500, fontSize: 13 }}>Cyber insurance certificate</div>
               <div className="ck-doc-meta" style={{ color: 'var(--color-status-danger-fg)' }}>Expired Mar 12, 2026 — request renewal</div>
             </div>
-            <Tag tone="red" dot>Expired</Tag>
+            <Tag color="danger" dot>Expired</Tag>
             <IconButton label="More"><I.More /></IconButton>
           </div>
         </Card>

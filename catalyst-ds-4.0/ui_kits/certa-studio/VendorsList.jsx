@@ -28,10 +28,10 @@ function VendorsList({ onOpenVendor, onAddVendor }) {
   };
 
   const statusTag = (s) => ({
-    approved: <Tag tone="green" dot>Approved</Tag>,
-    review:   <Tag tone="orange" dot>In review</Tag>,
-    rejected: <Tag tone="red" dot>Rejected</Tag>,
-    draft:    <Tag tone="teal" dot>Draft</Tag>,
+    approved: <Tag color="success" dot>Approved</Tag>,
+    review:   <Tag color="warning" dot>In review</Tag>,
+    rejected: <Tag color="danger" dot>Rejected</Tag>,
+    draft:    <Tag color="info" dot>Draft</Tag>,
   }[s]);
 
   const toggleAll = () => {
@@ -97,9 +97,9 @@ function VendorsList({ onOpenVendor, onAddVendor }) {
           />
         </div>
         <div style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Field
+          <Input
             value={filter}
-            onChange={setFilter}
+            onChange={(e) => setFilter(e.target.value)}
             placeholder="Search vendors…"
             leadingIcon={<I.Search style={{ color: 'var(--color-text-secondary)' }} />}
             style={{ width: 280 }}
@@ -151,7 +151,7 @@ function VendorsList({ onOpenVendor, onAddVendor }) {
                     </div>
                   </div>
                 </td>
-                <td><Tag tone={v.tier === 'Tier 1' ? 'purple' : v.tier === 'Tier 2' ? 'blueberry' : 'neutral'}>{v.tier}</Tag></td>
+                <td><Tag color={v.tier === 'Tier 1' ? 'brand' : v.tier === 'Tier 2' ? 'info' : 'neutral'}>{v.tier}</Tag></td>
                 <td>{statusTag(v.status)}</td>
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 120 }}>

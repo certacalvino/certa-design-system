@@ -59,20 +59,20 @@ function App() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <label>
             <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Legal name</div>
-            <Field placeholder="e.g. Acme Logistics, Inc." style={{ width: '100%' }} />
+            <Input placeholder="e.g. Acme Logistics, Inc." style={{ width: '100%' }} />
           </label>
           <label>
             <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Primary contact email</div>
-            <Field placeholder="contact@vendor.com" style={{ width: '100%' }} />
+            <Input placeholder="contact@vendor.com" style={{ width: '100%' }} />
           </label>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             <label>
               <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Tier</div>
-              <Field placeholder="Tier 2" style={{ width: '100%' }} trailingIcon={<I.Caret />} />
+              <Input placeholder="Tier 2" style={{ width: '100%' }} trailingIcon={<I.Caret />} />
             </label>
             <label>
               <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: 4 }}>Region</div>
-              <Field placeholder="North America" style={{ width: '100%' }} trailingIcon={<I.Caret />} />
+              <Input placeholder="North America" style={{ width: '100%' }} trailingIcon={<I.Caret />} />
             </label>
           </div>
         </div>

@@ -84,15 +84,16 @@ catalyst-ds-4.0/
 ├── README.md                   # this file
 ├── build_previews.py           # regenerates preview/*.html from token data
 ├── ui_kits/certa-studio/
-│   │  # ── Ported DS 3.0 app shell (global-scope Babel modules; DS 4.0 tokens) ──
-│   ├── styles.css              # app-shell CSS, ported DS 3.0 → DS 4.0 tokens (@imports colors_and_type.css)
+│   │  # ── Certa Studio app shell (global-scope Babel; consumes the canonical kit) ──
+│   ├── styles.css              # app-chrome CSS (sidebar/topbar/table/stepper), DS 4.0 tokens
 │   ├── Icons.jsx               # inline SVG icon set (window.I)
-│   ├── AppKit.jsx              # class-based primitives: Button/Tag/Badge/Field/Avatar/Tabs/Card/Alert/Dialog/Switch/Checkbox
-│   ├── AppShell.jsx            # top bar + sidebar (Home/Tasks/Vendors/Workflows/Risk/Reports)
-│   ├── HomeDashboard.jsx       # stats + tasks + risk distribution + renewals
+│   ├── build_kit.py            # generates kit.global.jsx from Primitives.jsx + components/
+│   ├── kit.global.jsx          # GENERATED runtime kit — the real DS 4.0 components as globals
+│   ├── AppShell.jsx            # top bar + sidebar (Dashboard/Vendors/Workflows/Records/Change Requests)
+│   ├── HomeDashboard.jsx       # Vendor Risk Overview — KPIs + recent activity + risk/renewals
 │   ├── VendorsList.jsx         # tabs + toolbar + multi-select table + pagination
-│   ├── VendorDetail.jsx        # tabs + workflow stepper + activity + docs + risk/details/reviewers
-│   │  # ── Component library (importable kit + previews source) ──
+│   ├── VendorDetail.jsx        # tabs + read-only fields + cert pills + docs + risk/details/reviewers
+│   │  # ── Canonical component library (single source of truth) ──
 │   ├── Primitives.jsx          # Button, Icon, Badge, ProcessStatus, Field, Input, Checkbox, CheckboxPill,
 │   │                           #   MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle,
 │   │                           #   RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone

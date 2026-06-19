@@ -33,9 +33,10 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
 
-  <!-- Ported DS 3.0 app shell — global-scope (window) modules, loaded in dependency order -->
+  <!-- Certa Studio app — global-scope (window) modules, loaded in dependency order -->
   <script type="text/babel" src="ui_kits/certa-studio/Icons.jsx"></script>
-  <script type="text/babel" src="ui_kits/certa-studio/AppKit.jsx"></script>
+  <!-- Canonical DS 4.0 kit (generated from Primitives.jsx + components/ by build_kit.py) -->
+  <script type="text/babel" src="ui_kits/certa-studio/kit.global.jsx"></script>
   <script type="text/babel" src="ui_kits/certa-studio/AppShell.jsx"></script>
   <script type="text/babel" src="ui_kits/certa-studio/HomeDashboard.jsx"></script>
   <script type="text/babel" src="ui_kits/certa-studio/VendorsList.jsx"></script>

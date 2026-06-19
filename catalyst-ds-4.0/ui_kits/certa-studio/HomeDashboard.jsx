@@ -9,10 +9,10 @@ function HomeDashboard() {
     { vendor: 'Helio Energy Co.', tone: 'neutral',      action: 'Added to vendor register',        status: 'draft',    date: 'Mar 21' },
   ];
   const statusTag = (s) => ({
-    approved: <Tag tone="green" dot>Approved</Tag>,
-    review:   <Tag tone="orange" dot>In review</Tag>,
-    rejected: <Tag tone="red" dot>Rejected</Tag>,
-    draft:    <Tag tone="teal" dot>Draft</Tag>,
+    approved: <Tag color="success" dot>Approved</Tag>,
+    review:   <Tag color="warning" dot>In review</Tag>,
+    rejected: <Tag color="danger" dot>Rejected</Tag>,
+    draft:    <Tag color="info" dot>Draft</Tag>,
   }[s]);
 
   return (
