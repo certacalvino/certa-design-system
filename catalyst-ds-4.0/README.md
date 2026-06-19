@@ -1,13 +1,46 @@
 # Certa Design System 4.0 — Catalyst Bundle (WIP)
 
 A self-contained reference bundle for **Certa DS 4.0**. It ships the semantic
-token layer, the React UI-kit primitives + app screens, and 34 standalone
-component previews — everything an engineer or designer needs to consume the
-system without a Figma seat.
+token layer, the React UI-kit primitives + components, a **click-through app
+demo**, and 39 standalone component previews — everything an engineer or
+designer needs to consume the system without a Figma seat.
 
 > Last synced: **2026-06-17**. Token decisions are sourced from
 > [`CLAUDE.md`](../CLAUDE.md) ("System decisions (locked)") in
 > [certacalvino/certa-design-system](https://github.com/certacalvino/certa-design-system).
+
+---
+
+## Running the demo
+
+**`index.html` is the primary entry point** — the **Certa Studio** click-through
+app. It boots `app.jsx` with React 18 + Babel-standalone (in-browser JSX
+transform) and the `colors_and_type.css` token layer, in Inter.
+
+```bash
+cd catalyst-ds-4.0
+python3 -m http.server 8080      # then open http://localhost:8080/
+```
+
+Serve the folder (don't open via `file://` — browsers block Babel from fetching
+`app.jsx` over the file protocol). The app demonstrates:
+
+- **Light sidebar** (`surface/subtle` #F7F8FA) with nav: Dashboard (active) ·
+  Vendors · Workflows · Records · Change Requests — using the NavItem active pattern
+  (brand-subtle fill + 2px left indicator + text/link bold).
+- **Top bar** with search input + user Avatar (initials "CC", brand tone).
+- **Home Dashboard** — 4 KPI stat cards (Total Vendors / High Risk / Pending
+  Reviews / Compliance Score), recent-activity table with status badges + avatars,
+  alert banner.
+- **Vendor List** — table with Entity cells (avatar + name + date), risk badges
+  (Low/Medium/High → success/warning/danger), filter chips, split button "Export".
+  Rows click through to →
+- **Vendor Detail** — tabs (Overview / Documents / Assessment), read-only fields
+  in a 2-column grid (company name / website / country / business type /
+  certifications as pills), file upload + file rows, split button "Save draft".
+
+`gallery.html` is the component gallery (links every `preview/*.html`). The app
+and gallery cross-link in the corner.
 
 ---
 
@@ -35,13 +68,16 @@ neutral, and status ramps all resolve through a single semantic layer.
 
 ```
 catalyst-ds-4.0/
+├── index.html                  # ▶ PRIMARY DEMO — Certa Studio click-through app (loads app.jsx)
+├── app.jsx                     # full click-through app: sidebar nav + 3 screens (composes DS 4.0 components)
+├── gallery.html                # component gallery — links every preview/*.html
 ├── colors_and_type.css         # primitives → semantic tokens → type/space/effects
 ├── README.md                   # this file
 ├── build_previews.py           # regenerates preview/*.html from token data
 ├── ui_kits/certa-studio/
 │   ├── Primitives.jsx          # Button, Icon, Badge, ProcessStatus, Field, Input, Checkbox, CheckboxPill,
-│   │                           #   MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar,
-│   │                           #   Toggle, RAGField, KPIStatCard, Gauge, CircularProgress
+│   │                           #   MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle,
+│   │                           #   RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone
 │   ├── components/             # standalone components — each a triple: .jsx + .d.ts + .prompt.md
 │   │   ├── FilterChip.*        #   pill 32px, State × Icon × Badge (430:487)
 │   │   ├── ReadOnlyField.*     #   display field, Type × Filled/Empty (520:1872)
