@@ -986,6 +986,22 @@ function Dialog({ open = false, title, description = null, children, primary = n
   );
 }
 
+/* ---------------------------------------------------------------------------
+   Tooltip — overlay (DS 4.0, 2026-06-24). text/primary bg, white 12px caption,
+   r4, shadow-sm, 4 positions + 6px CSS arrow, hover+focus-within, fade+scale.
+   disabled prop renders children unwrapped. Zero hardcoded values.
+   Needs .ck-tip / .ck-tip-{position} / .ck-tip-bubble CSS from styles.css.
+   --------------------------------------------------------------------------- */
+function Tooltip({ content, position = "top", disabled = false, children }) {
+  if (disabled) return React.createElement(React.Fragment, null, children);
+  return (
+    <span className={`ck-tip ck-tip-${position}`}>
+      {children}
+      <span className="ck-tip-bubble" role="tooltip">{content}</span>
+    </span>
+  );
+}
+
 
 /* ===== components/CountryDropdown.jsx ===== */
 /* ============================================================================

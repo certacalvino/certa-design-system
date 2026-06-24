@@ -982,10 +982,26 @@ export function Dialog({ open = false, title, description = null, children, prim
   );
 }
 
+/* ---------------------------------------------------------------------------
+   Tooltip — overlay (DS 4.0, 2026-06-24). text/primary bg, white 12px caption,
+   r4, shadow-sm, 4 positions + 6px CSS arrow, hover+focus-within, fade+scale.
+   disabled prop renders children unwrapped. Zero hardcoded values.
+   Needs .ck-tip / .ck-tip-{position} / .ck-tip-bubble CSS from styles.css.
+   --------------------------------------------------------------------------- */
+export function Tooltip({ content, position = "top", disabled = false, children }) {
+  if (disabled) return React.createElement(React.Fragment, null, children);
+  return (
+    <span className={`ck-tip ck-tip-${position}`}>
+      {children}
+      <span className="ck-tip-bubble" role="tooltip">{content}</span>
+    </span>
+  );
+}
+
 export default {
   Button, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton,
   Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps,
   Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress,
-  SplitButton, TimeField, FileDropzone,
+  SplitButton, TimeField, FileDropzone, Tooltip,
   tokens, STATUS_COLOR, AVATAR_SIZE, AVATAR_TONES, RAG_LEVELS,
 };

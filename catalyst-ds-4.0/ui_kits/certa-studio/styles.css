@@ -490,6 +490,87 @@ button { font-family: inherit; }
 }
 .ck-split-main:hover, .ck-split-trigger:hover { background: var(--color-bg-subtle); }
 
+/* ===== Tooltip (DS 4.0 — Figma overlay/Tooltip 2026-06-24) ===== */
+.ck-tip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.ck-tip-bubble {
+  position: absolute;
+  z-index: 200;
+  max-width: 200px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-text-primary);
+  color: var(--color-text-inverse);
+  font-family: var(--font-family-base);
+  font-size: var(--font-caption-size);
+  line-height: var(--font-caption-lh);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  white-space: normal;
+  word-break: break-word;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+.ck-tip:hover .ck-tip-bubble,
+.ck-tip:focus-within .ck-tip-bubble { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .ck-tip-bubble { transition: opacity 120ms ease; }
+}
+/* Arrow shared base */
+.ck-tip-bubble::after {
+  content: '';
+  position: absolute;
+  width: 0; height: 0;
+  border: 6px solid transparent;
+}
+/* top (default) */
+.ck-tip-top .ck-tip-bubble {
+  bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%) translateY(4px);
+}
+.ck-tip-top:hover .ck-tip-bubble,
+.ck-tip-top:focus-within .ck-tip-bubble { transform: translateX(-50%) translateY(0); }
+.ck-tip-top .ck-tip-bubble::after {
+  top: 100%; left: 50%; transform: translateX(-50%);
+  border-top-color: var(--color-text-primary);
+}
+/* bottom */
+.ck-tip-bottom .ck-tip-bubble {
+  top: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+}
+.ck-tip-bottom:hover .ck-tip-bubble,
+.ck-tip-bottom:focus-within .ck-tip-bubble { transform: translateX(-50%) translateY(0); }
+.ck-tip-bottom .ck-tip-bubble::after {
+  bottom: 100%; left: 50%; transform: translateX(-50%);
+  border-bottom-color: var(--color-text-primary);
+}
+/* left */
+.ck-tip-left .ck-tip-bubble {
+  right: calc(100% + 8px); top: 50%;
+  transform: translateY(-50%) translateX(4px);
+}
+.ck-tip-left:hover .ck-tip-bubble,
+.ck-tip-left:focus-within .ck-tip-bubble { transform: translateY(-50%) translateX(0); }
+.ck-tip-left .ck-tip-bubble::after {
+  left: 100%; top: 50%; transform: translateY(-50%);
+  border-left-color: var(--color-text-primary);
+}
+/* right */
+.ck-tip-right .ck-tip-bubble {
+  left: calc(100% + 8px); top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+}
+.ck-tip-right:hover .ck-tip-bubble,
+.ck-tip-right:focus-within .ck-tip-bubble { transform: translateY(-50%) translateX(0); }
+.ck-tip-right .ck-tip-bubble::after {
+  right: 100%; top: 50%; transform: translateY(-50%);
+  border-right-color: var(--color-text-primary);
+}
+
 /* ===== Upload dropzone ===== */
 .ck-dropzone {
   border: 1px dashed var(--color-border-default); border-radius: 4px;

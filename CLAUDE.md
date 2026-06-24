@@ -1,6 +1,6 @@
 # DS 4.0 — Build Memory
 
-Last updated: 2026-06-17
+Last updated: 2026-06-24
 
 ## System decisions (locked)
 - Border-radius: 4px across all components
@@ -131,6 +131,9 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 - DS 3.0 source: single Pagination 11452:8244 (range + 4 arrows, no variants, hardcoded hex, arrows built on Disabled icon-button variant, 14px icons). Unified + tokenized; added Numbered type + page-button states.
 - GOTCHA: DS 4.0 catalog "Double Chevron Left" (180:978/981) AND "Double Chevron Right" (180:986/989) BOTH render right-pointing (left one mislabeled) — no left double chevron exists. Fix: rotate the whole First Icon Button 180° (chevrons vertically symmetric → clean «). Nested glyph rotation is locked inside an instance; rotate the button instead.
 
+## Session log — 2026-06-24
+- Tooltip (Overlay page, greenfield). CSS-only fade+scale, 4 positions (top/bottom/left/right), 6px CSS arrow, max-width 200px, hover+focus-within, prefers-reduced-motion safe. bg = text/primary, text = text/inverse, 12px caption, r4 (radius-sm), shadow-sm. disabled prop renders children unwrapped. Zero hardcoded values. Code: styles.css `.ck-tip` block + `export function Tooltip` in Primitives.jsx + preview/40-tooltip.html. Figma: built in Claude Design 2026-06-24 (components/overlay/Tooltip.jsx + tooltip.card.html, 43 components 32 cards total after collision cleanup).
+
 ## Session log — 2026-06-17
 - Modal (536:144, 6 variants) + 2 new tokens (color/bg/overlay 535:2, shadow-lg effect style).
 - Tabs (542:83 item set 20 variants + 543:2 container). Doc 544:2 on Navigation page.
@@ -174,6 +177,7 @@ After each build, Code must: commit CLAUDE.md + push directly to main on certaca
 High priority: (all done) — Empty State · Pagination · Date Picker v1+v2 (DONE 2026-06-17/18: range + date-time/time-only). Polish 2026-06-18: File Upload Hover dropzone, Read-only Field pill borders, Menu Item Star swap (verified).
 Medium priority: (clear) — Avatar · KPI Stat Card · Gauge · Circular Progress all DONE 2026-06-17.
 Post-presentation: Full sidebar composition, Motion specs, Theming
+Overlay tier (2026-06-24): Tooltip DONE. Next: Accordion/Collapsible, Breadcrumb.
 
 ## Tokenization state (as of 2026-06-17)
 - Color: ~96%

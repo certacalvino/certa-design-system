@@ -1,0 +1,94 @@
+<!-- @dsCard group="Overlay" --><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Tooltip</title>
+<link rel="stylesheet" href="../ui_kits/certa-studio/styles.css" />
+<style>
+  body { background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px 64px; padding: 48px; }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 32px; background: var(--color-surface-default); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); }
+  .cell-label { font-size: var(--font-caption-size); color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; font-weight: var(--font-weight-semibold); }
+  /* give each cell a fixed height so the tooltip has room */
+  .cell-inner { display: flex; align-items: center; justify-content: center; height: 80px; width: 100%; }
+  button.demo {
+    height: var(--control-height-s); padding: 0 var(--space-xl);
+    border: 1px solid var(--color-border-default); border-radius: var(--radius-sm);
+    background: var(--color-surface-default); color: var(--color-text-primary);
+    font-family: var(--font-family-base); font-size: var(--font-body-size);
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="grid">
+
+  <!-- Top -->
+  <div class="cell">
+    <span class="cell-label">Top (default)</span>
+    <div class="cell-inner">
+      <span class="ck-tip ck-tip-top">
+        <button class="demo">Hover me</button>
+        <span class="ck-tip-bubble" role="tooltip">Appears above the trigger</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Bottom -->
+  <div class="cell">
+    <span class="cell-label">Bottom</span>
+    <div class="cell-inner">
+      <span class="ck-tip ck-tip-bottom">
+        <button class="demo">Hover me</button>
+        <span class="ck-tip-bubble" role="tooltip">Appears below the trigger</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Left -->
+  <div class="cell">
+    <span class="cell-label">Left</span>
+    <div class="cell-inner">
+      <span class="ck-tip ck-tip-left">
+        <button class="demo">Hover me</button>
+        <span class="ck-tip-bubble" role="tooltip">Appears to the left</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Right -->
+  <div class="cell">
+    <span class="cell-label">Right</span>
+    <div class="cell-inner">
+      <span class="ck-tip ck-tip-right">
+        <button class="demo">Hover me</button>
+        <span class="ck-tip-bubble" role="tooltip">Appears to the right</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Long copy wraps -->
+  <div class="cell">
+    <span class="cell-label">Long copy (wraps at 200px)</span>
+    <div class="cell-inner">
+      <span class="ck-tip ck-tip-top">
+        <button class="demo">Info</button>
+        <span class="ck-tip-bubble" role="tooltip">This tooltip has longer text that wraps naturally within the 200px max-width boundary.</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Focus (keyboard) -->
+  <div class="cell">
+    <span class="cell-label">Focus (tab to trigger)</span>
+    <div class="cell-inner">
+      <span class="ck-tip ck-tip-bottom">
+        <button class="demo">Tab here</button>
+        <span class="ck-tip-bubble" role="tooltip">Visible on keyboard focus too</span>
+      </span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
