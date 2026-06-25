@@ -84,7 +84,7 @@ function VendorsList({ onOpenVendor, onAddVendor }) {
       </div>
 
       <Card padded={false}>
-        <div style={{ padding: '0 20px' }}>
+        <div style={{ padding: '0 var(--space-2xl)' }}>
           <Tabs
             value={tab}
             onChange={setTab}
@@ -96,7 +96,7 @@ function VendorsList({ onOpenVendor, onAddVendor }) {
             ]}
           />
         </div>
-        <div style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ padding: 'var(--space-lg) var(--space-2xl)', display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
           <Input
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
@@ -109,7 +109,7 @@ function VendorsList({ onOpenVendor, onAddVendor }) {
           <Button variant="text" tone="brand" size="sm">Clear filters</Button>
           <div style={{ flex: 1 }} />
           {selected.size > 0 && (
-            <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>
+            <span style={{ fontSize: 'var(--font-caption-size)', color: 'var(--color-text-secondary)' }}>
               {selected.size} selected · <a href="#" onClick={(e) => { e.preventDefault(); setSelected(new Set()); }}>Clear</a>
             </span>
           )}
@@ -154,18 +154,18 @@ function VendorsList({ onOpenVendor, onAddVendor }) {
                 <td><Tag color={v.tier === 'Tier 1' ? 'brand' : v.tier === 'Tier 2' ? 'info' : 'neutral'}>{v.tier}</Tag></td>
                 <td>{statusTag(v.status)}</td>
                 <td>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 120 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', minWidth: 120 }}>
                     <div className="ck-meter"><div className={`ck-meter-fill ck-risk-${v.risk}`} style={{ width: `${v.riskScore}%` }} /></div>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text-primary)' }}>{v.riskScore}</span>
+                    <span style={{ fontSize: 'var(--font-caption-size)', fontWeight: 600, color: 'var(--color-text-primary)' }}>{v.riskScore}</span>
                   </div>
                 </td>
                 <td><Avatar initials={v.owner} size="sm" tone={['brand','teal','green','orange','neutral'][v.owner.charCodeAt(0) % 5]} /></td>
-                <td style={{ textAlign: 'right', color: 'var(--color-text-secondary)', fontSize: 12 }}>{v.updated}</td>
+                <td style={{ textAlign: 'right', color: 'var(--color-text-secondary)', fontSize: 'var(--font-caption-size)' }}>{v.updated}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div style={{ padding: '12px 20px', borderTop: '1px solid var(--color-bg-muted)', display: 'flex', alignItems: 'center', fontSize: 12, color: 'var(--color-text-secondary)' }}>
+        <div style={{ padding: 'var(--space-lg) var(--space-2xl)', borderTop: '1px solid var(--color-bg-muted)', display: 'flex', alignItems: 'center', fontSize: 'var(--font-caption-size)', color: 'var(--color-text-secondary)' }}>
           <span>Showing {filtered.length} of {vendors.length}</span>
           <div style={{ flex: 1 }} />
           <Button variant="text" tone="neutral" size="sm">Previous</Button>

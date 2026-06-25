@@ -29,7 +29,7 @@ function VendorDetail({ vendor, onBack, onApprove }) {
             <span className="sep">/</span>
             <span>{v.name}</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-lg)' }}>
             <h1 className="ck-page-title">{v.name}</h1>
             <RiskBadge level={v.risk} />
             {statusTag}
@@ -48,7 +48,7 @@ function VendorDetail({ vendor, onBack, onApprove }) {
         <span style={{ marginLeft: 8 }}><Button variant="text" tone="brand" size="sm">Review</Button></span>
       </Alert>
 
-      <div style={{ marginTop: 20 }}>
+      <div style={{ marginTop: 'var(--space-2xl)' }}>
         <Tabs
           value={tab}
           onChange={setTab}
@@ -61,8 +61,8 @@ function VendorDetail({ vendor, onBack, onApprove }) {
       </div>
 
       {tab === 'overview' && (
-        <div className="ck-detail-grid" style={{ marginTop: 20 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="ck-detail-grid" style={{ marginTop: 'var(--space-2xl)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
             <Card title="Company profile">
               <div className="ck-ro-grid">
                 <ReadOnlyField label="COMPANY NAME" value={v.name} />
@@ -70,8 +70,8 @@ function VendorDetail({ vendor, onBack, onApprove }) {
                 <ReadOnlyField label="COUNTRY" value="United States" />
                 <ReadOnlyField label="BUSINESS TYPE" value="Logistics & shipping" />
               </div>
-              <div style={{ marginTop: 20 }}>
-                <div className="ck-ro-label" style={{ marginBottom: 8 }}>Certifications</div>
+              <div style={{ marginTop: 'var(--space-2xl)' }}>
+                <div className="ck-ro-label" style={{ marginBottom: 'var(--space-md)' }}>Certifications</div>
                 <div className="ck-pills">
                   <span className="ck-pill">ISO 27001</span>
                   <span className="ck-pill">SOC 2 Type II</span>
@@ -96,16 +96,16 @@ function VendorDetail({ vendor, onBack, onApprove }) {
             </Card>
           </div>
 
-          <aside style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <aside style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
             <Card title="Risk score">
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                <span style={{ fontSize: 40, fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em' }}>{v.riskScore ?? 76}</span>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-md)' }}>
+                <span style={{ fontSize: 'var(--font-display-size)', fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em' }}>{v.riskScore ?? 76}</span>
                 <RiskBadge level={v.risk} />
               </div>
-              <div className="ck-meter" style={{ marginTop: 12 }}>
+              <div className="ck-meter" style={{ marginTop: 'var(--space-lg)' }}>
                 <div className={`ck-meter-fill ck-risk-${v.risk || 'medium'}`} style={{ width: `${v.riskScore ?? 76}%` }} />
               </div>
-              <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 8 }}>
+              <div style={{ fontSize: 'var(--font-caption-size)', color: 'var(--color-text-secondary)', marginTop: 'var(--space-md)' }}>
                 Last assessed Mar 18, 2026 by Michael Kim
               </div>
             </Card>
@@ -117,27 +117,27 @@ function VendorDetail({ vendor, onBack, onApprove }) {
               <div className="ck-meta-row"><div className="ck-meta-label">Spend YTD</div><div className="ck-meta-value">$2.4M</div></div>
               <div className="ck-meta-row"><div className="ck-meta-label">Renewal</div><div className="ck-meta-value">Jan 14, 2027</div></div>
               <div className="ck-meta-row"><div className="ck-meta-label">Owner</div>
-                <div className="ck-meta-value" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <div className="ck-meta-value" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
                   <Avatar initials="PR" size="sm" /> Priya Rao
                 </div>
               </div>
             </Card>
 
             <Card title="Reviewers">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
                   <Avatar initials="MK" size="sm" tone="teal" />
-                  <div style={{ flex: 1, fontSize: 13 }}>Michael Kim<div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Compliance lead</div></div>
+                  <div style={{ flex: 1, fontSize: 'var(--font-body-size)' }}>Michael Kim<div style={{ fontSize: 'var(--font-caption-size)', color: 'var(--color-text-secondary)' }}>Compliance lead</div></div>
                   <Tag color="success" dot>Approved</Tag>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
                   <Avatar initials="AS" size="sm" tone="orange" />
-                  <div style={{ flex: 1, fontSize: 13 }}>Alex Singh<div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Security</div></div>
+                  <div style={{ flex: 1, fontSize: 'var(--font-body-size)' }}>Alex Singh<div style={{ fontSize: 'var(--font-caption-size)', color: 'var(--color-text-secondary)' }}>Security</div></div>
                   <Tag color="warning" dot>Pending</Tag>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
                   <Avatar initials="EL" size="sm" tone="green" />
-                  <div style={{ flex: 1, fontSize: 13 }}>Elena Lopez<div style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Procurement</div></div>
+                  <div style={{ flex: 1, fontSize: 'var(--font-body-size)' }}>Elena Lopez<div style={{ fontSize: 'var(--font-caption-size)', color: 'var(--color-text-secondary)' }}>Procurement</div></div>
                   <Tag color="neutral" dot>Not started</Tag>
                 </div>
               </div>
@@ -147,8 +147,8 @@ function VendorDetail({ vendor, onBack, onApprove }) {
       )}
 
       {tab === 'documents' && (
-        <Card style={{ marginTop: 20 }} title="Documents" action={<Button variant="outline" tone="brand" size="sm" leadingIcon={<I.Upload />}>Upload</Button>}>
-          <div className="ck-dropzone" style={{ marginBottom: 16 }}>
+        <Card style={{ marginTop: 'var(--space-2xl)' }} title="Documents" action={<Button variant="outline" tone="brand" size="sm" leadingIcon={<I.Upload />}>Upload</Button>}>
+          <div className="ck-dropzone" style={{ marginBottom: 'var(--space-xl)' }}>
             <I.Upload style={{ color: 'var(--color-text-secondary)' }} />
             <div className="ck-dz-title">Drag files here or <a href="#" onClick={(e) => e.preventDefault()} style={{ color: 'var(--color-action-primary)' }}>browse</a></div>
             <div className="ck-dz-meta">PDF, DOCX up to 25 MB</div>
@@ -156,7 +156,7 @@ function VendorDetail({ vendor, onBack, onApprove }) {
           <div className="ck-doc-row">
             <span className="ck-doc-icon"><I.Doc /></span>
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 500, fontSize: 13 }}>SOC 2 Type II Report.pdf</div>
+              <div style={{ fontWeight: 500, fontSize: 'var(--font-body-size)' }}>SOC 2 Type II Report.pdf</div>
               <div className="ck-doc-meta">Verified · 4.2 MB · Uploaded by Priya Rao</div>
             </div>
             <Tag color="success" dot>Verified</Tag>
@@ -165,7 +165,7 @@ function VendorDetail({ vendor, onBack, onApprove }) {
           <div className="ck-doc-row">
             <span className="ck-doc-icon"><I.Doc /></span>
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 500, fontSize: 13 }}>ISO 27001 Certificate.pdf</div>
+              <div style={{ fontWeight: 500, fontSize: 'var(--font-body-size)' }}>ISO 27001 Certificate.pdf</div>
               <div className="ck-doc-meta">Pending review · 1.1 MB</div>
             </div>
             <Tag color="warning" dot>Pending</Tag>
@@ -174,7 +174,7 @@ function VendorDetail({ vendor, onBack, onApprove }) {
           <div className="ck-doc-row">
             <span className="ck-doc-icon" style={{ background: 'var(--color-status-danger-bg)', color: 'var(--color-status-danger-fg)' }}><I.Doc /></span>
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 500, fontSize: 13 }}>Cyber insurance certificate</div>
+              <div style={{ fontWeight: 500, fontSize: 'var(--font-body-size)' }}>Cyber insurance certificate</div>
               <div className="ck-doc-meta" style={{ color: 'var(--color-status-danger-fg)' }}>Expired Mar 12, 2026 — request renewal</div>
             </div>
             <Tag color="danger" dot>Expired</Tag>
@@ -184,7 +184,7 @@ function VendorDetail({ vendor, onBack, onApprove }) {
       )}
 
       {tab === 'assessment' && (
-        <Card style={{ marginTop: 20 }} title="Risk assessment" action={<Button variant="text" tone="brand" size="sm">View all</Button>}>
+        <Card style={{ marginTop: 'var(--space-2xl)' }} title="Risk assessment" action={<Button variant="text" tone="brand" size="sm">View all</Button>}>
           <div className="ck-activity">
             <div className="ck-activity-item">
               <Avatar initials="MK" size="sm" tone="teal" />

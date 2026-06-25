@@ -34,7 +34,7 @@ function HomeDashboard() {
         <div className="ck-stat"><div className="ck-stat-label">Compliance Score</div><div className="ck-stat-value">92%</div><div className="ck-stat-delta up">▲ 1 pt</div></div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 'var(--space-xl)' }}>
         <Card title="Recent vendor activity" action={<Button variant="text" tone="brand" size="sm">View all</Button>} padded={false}>
           <table className="ck-table">
             <thead>
@@ -56,26 +56,26 @@ function HomeDashboard() {
                   </td>
                   <td style={{ color: 'var(--color-text-secondary)' }}>{a.action}</td>
                   <td>{statusTag(a.status)}</td>
-                  <td style={{ textAlign: 'right', color: 'var(--color-text-secondary)', fontSize: 12 }}>{a.date}</td>
+                  <td style={{ textAlign: 'right', color: 'var(--color-text-secondary)', fontSize: 'var(--font-caption-size)' }}>{a.date}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </Card>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xl)' }}>
           <Card title="Risk distribution">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)' }}>
               {[
                 { label: 'Low', count: 198, pct: 80, tone: 'low' },
                 { label: 'Medium', count: 47, pct: 19, tone: 'medium' },
                 { label: 'High', count: 3, pct: 1, tone: 'high' },
               ].map(r => (
                 <div key={r.label}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, fontWeight: 500, color: 'var(--color-text-primary)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--font-caption-size)', fontWeight: 500, color: 'var(--color-text-primary)' }}>
                     <span>{r.label}</span><span>{r.count}</span>
                   </div>
-                  <div className="ck-meter" style={{ marginTop: 4 }}>
+                  <div className="ck-meter" style={{ marginTop: 'var(--space-sm)' }}>
                     <div className={`ck-meter-fill ck-risk-${r.tone}`} style={{ width: `${r.pct}%` }} />
                   </div>
                 </div>
@@ -84,16 +84,16 @@ function HomeDashboard() {
           </Card>
 
           <Card title="Upcoming renewals">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-lg)', fontSize: 'var(--font-body-size)' }}>
               {[
                 { v: 'Parker & Sons Mfg.', d: 'Apr 7, 2026' },
                 { v: 'Sunrise Diagnostics', d: 'Apr 14, 2026' },
                 { v: 'Acme Logistics', d: 'Apr 22, 2026' },
               ].map(r => (
-                <div key={r.v} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div key={r.v} style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
                   <I.Calendar style={{ color: 'var(--color-text-secondary)' }} />
                   <span style={{ flex: 1 }}>{r.v}</span>
-                  <span style={{ color: 'var(--color-text-secondary)', fontSize: 12 }}>{r.d}</span>
+                  <span style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--font-caption-size)' }}>{r.d}</span>
                 </div>
               ))}
             </div>
