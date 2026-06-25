@@ -29,8 +29,8 @@ function HomeDashboard() {
 
       <div className="ck-stats">
         <div className="ck-stat"><div className="ck-stat-label">Total Vendors</div><div className="ck-stat-value">248</div><div className="ck-stat-delta up">▲ 12 this month</div></div>
-        <div className="ck-stat"><div className="ck-stat-label">High Risk</div><div className="ck-stat-value" style={{ color: 'var(--color-status-danger-fg)' }}>3</div><div className="ck-stat-delta up">▲ 1 new</div></div>
-        <div className="ck-stat"><div className="ck-stat-label">Pending Reviews</div><div className="ck-stat-value">17</div><div className="ck-stat-delta down">▼ 4 vs last week</div></div>
+        <div className="ck-stat"><div className="ck-stat-label">High Risk</div><div className="ck-stat-value" style={{ color: 'var(--color-status-danger-fg)' }}>3</div><div className="ck-stat-delta bad">▲ 1 new</div></div>
+        <div className="ck-stat"><div className="ck-stat-label">Pending Reviews</div><div className="ck-stat-value">17</div><div className="ck-stat-delta good">▼ 4 vs last week</div></div>
         <div className="ck-stat"><div className="ck-stat-label">Compliance Score</div><div className="ck-stat-value">92%</div><div className="ck-stat-delta up">▲ 1 pt</div></div>
       </div>
 

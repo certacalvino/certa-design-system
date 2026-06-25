@@ -156,3 +156,8 @@ Last updated: 2026-06-24
 - Spacing: ~70%
 - Typography: 100%
 - Overall: ~88%
+
+## Catalyst app — risk-semantics fixes — 2026-06-25
+- Stat-card deltas were colored by arrow direction (.ck-stat-delta up=green/down=red), so risk metrics read backwards: "High Risk ▲1" green, "Pending Reviews ▼4" red. Added sentiment classes .ck-stat-delta.good/.bad (styles.css) and switched the risk cards in HomeDashboard + VendorsList (High Risk→bad/red, Pending→good/green). Arrows unchanged; only color now reflects good/bad. up/down kept for neutral-growth metrics (Total Vendors, Compliance, Avg score).
+- Risk-score scale was self-contradictory: list treats higher score = safer (94=low, 42=high) but VendorDetail hardcoded "76" + "High risk" + red bar. Wired VendorDetail to v.riskScore/v.risk (carried from the clicked row) and made the default coherent (medium/76, amber). Number, meter width+color, and RiskBadge now agree across list↔detail.
+- Still open (from review, not yet done): ~50 hardcoded px in app screens vs tokens; off-scale type (22px page title, 40px risk number); Gauge/CircularProgress unused in the app (uses .ck-meter); KPIStatCard(kit) vs .ck-stat(app) divergence + no invertDelta; "Pending"/"Not started" tags vs README pattern #7.

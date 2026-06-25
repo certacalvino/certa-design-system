@@ -377,8 +377,12 @@ button { font-family: inherit; }
 .ck-stat-label { font-size: 11px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
 .ck-stat-value { font-size: 28px; font-weight: 700; color: var(--color-text-primary); margin-top: 6px; line-height: 1; letter-spacing: -0.01em; }
 .ck-stat-delta { font-size: 12px; font-weight: 500; margin-top: 6px; display: inline-flex; gap: 4px; align-items: center; }
+/* up/down = neutral metrics (growth is good). For risk metrics where the
+   sentiment is independent of direction, use good/bad (a rising risk = bad/red). */
 .ck-stat-delta.up   { color: var(--color-status-success-fg); }
 .ck-stat-delta.down { color: var(--color-status-danger-fg); }
+.ck-stat-delta.good { color: var(--color-status-success-fg); }
+.ck-stat-delta.bad  { color: var(--color-status-danger-fg); }
 
 /* ===== Detail panel ===== */
 .ck-detail-grid { display: grid; grid-template-columns: 1fr 320px; gap: 24px; }

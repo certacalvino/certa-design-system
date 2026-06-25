@@ -7,7 +7,8 @@ function RiskBadge({ level }) {
 }
 
 function VendorDetail({ vendor, onBack, onApprove }) {
-  const v = vendor || { name: 'Acme Logistics, Inc.', region: 'North America', tier: 'Tier 1', status: 'review', risk: 'high' };
+  // riskScore is the SAME 0–100 health score the list uses (higher = safer): low≈90+, medium≈70s, high≈40s.
+  const v = vendor || { name: 'Acme Logistics, Inc.', region: 'North America', tier: 'Tier 1', status: 'review', risk: 'medium', riskScore: 76 };
   const [tab, setTab] = React.useState('overview');
 
   const statusTag = ({
@@ -98,11 +99,11 @@ function VendorDetail({ vendor, onBack, onApprove }) {
           <aside style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <Card title="Risk score">
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                <span style={{ fontSize: 40, fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em' }}>76</span>
+                <span style={{ fontSize: 40, fontWeight: 700, color: 'var(--color-text-primary)', letterSpacing: '-0.02em' }}>{v.riskScore ?? 76}</span>
                 <RiskBadge level={v.risk} />
               </div>
               <div className="ck-meter" style={{ marginTop: 12 }}>
-                <div className={`ck-meter-fill ck-risk-${v.risk || 'high'}`} style={{ width: '76%' }} />
+                <div className={`ck-meter-fill ck-risk-${v.risk || 'medium'}`} style={{ width: `${v.riskScore ?? 76}%` }} />
               </div>
               <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginTop: 8 }}>
                 Last assessed Mar 18, 2026 by Michael Kim

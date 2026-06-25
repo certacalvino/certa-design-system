@@ -69,12 +69,12 @@ function VendorsList({ onOpenVendor, onAddVendor }) {
         <div className="ck-stat">
           <div className="ck-stat-label">Pending review</div>
           <div className="ck-stat-value">17</div>
-          <div className="ck-stat-delta down">▼ 4 vs last week</div>
+          <div className="ck-stat-delta good">▼ 4 vs last week</div>
         </div>
         <div className="ck-stat">
           <div className="ck-stat-label">High-risk</div>
           <div className="ck-stat-value" style={{ color: 'var(--color-status-danger-fg)' }}>3</div>
-          <div className="ck-stat-delta up">▲ 1 new</div>
+          <div className="ck-stat-delta bad">▲ 1 new</div>
         </div>
         <div className="ck-stat">
           <div className="ck-stat-label">Avg. risk score</div>
