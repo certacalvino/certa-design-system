@@ -1182,6 +1182,69 @@ function DropdownMenu({ items = [], width = 240 }) {
   );
 }
 
+/* ---------------------------------------------------------------------------
+   DatePicker — single-date calendar panel. 296w, r8 (radius-lg) + shadow-lg.
+   Header (‹ Month YYYY ›) · weekday row (Caption, SUN-first) · 6×7 day grid
+   (40px cells r4: today = border/focused ring, selected = brand fill + inverse,
+   muted = tertiary, hover = surface-hover) · Today / Clear footer.
+   Matches Figma Date Picker v1 (cell 582:14 / panel 583:14 / field 585:71).
+   --------------------------------------------------------------------------- */
+const DP_WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+const DP_MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+function dpSameDay(a, b) { return !!(a && b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()); }
+function DatePicker({ value = null, onChange = () => {}, onClear = null }) {
+  const today = new Date();
+  const init = value || today;
+  const [view, setView] = React.useState({ y: init.getFullYear(), m: init.getMonth() });
+  const first = new Date(view.y, view.m, 1).getDay();
+  const start = new Date(view.y, view.m, 1 - first);
+  const cells = Array.from({ length: 42 }, (_, i) => new Date(start.getFullYear(), start.getMonth(), start.getDate() + i));
+  const go = (delta) => { const d = new Date(view.y, view.m + delta, 1); setView({ y: d.getFullYear(), m: d.getMonth() }); };
+  const navBtn = (label, onClick) => (
+    <button type="button" onClick={onClick} aria-label={label} style={{ width: 28, height: 28, border: "none", background: "transparent", cursor: "pointer", borderRadius: "var(--radius-sm)", color: "var(--color-text-secondary)", fontSize: 16, lineHeight: 1 }}>{label}</button>
+  );
+  return (
+    <div style={{ width: 296, boxSizing: "border-box", background: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", padding: "var(--space-md)", fontFamily: "var(--font-family-base)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 var(--space-sm)", marginBottom: "var(--space-sm)" }}>
+        {navBtn("‹", () => go(-1))}
+        <span style={{ fontSize: "var(--font-body-bold-size)", fontWeight: "var(--font-weight-bold)", color: "var(--color-text-primary)" }}>{DP_MONTHS[view.m]} {view.y}</span>
+        {navBtn("›", () => go(1))}
+      </div>
+      <div style={{ display: "flex" }}>
+        {DP_WEEKDAYS.map((w) => (
+          <span key={w} style={{ flex: 1, textAlign: "center", height: 32, lineHeight: "32px", fontSize: "var(--font-caption-size)", color: "var(--color-text-secondary)" }}>{w}</span>
+        ))}
+      </div>
+      {Array.from({ length: 6 }, (_, r) => (
+        <div key={r} style={{ display: "flex" }}>
+          {cells.slice(r * 7, r * 7 + 7).map((d, i) => {
+            const muted = d.getMonth() !== view.m;
+            const isToday = dpSameDay(d, today);
+            const isSel = dpSameDay(d, value);
+            return (
+              <button key={i} type="button" onClick={() => onChange(d)}
+                onMouseEnter={(e) => { if (!isSel) e.currentTarget.style.background = "var(--color-surface-hover)"; }}
+                onMouseLeave={(e) => { if (!isSel) e.currentTarget.style.background = "transparent"; }}
+                style={{
+                  flex: 1, height: 40, borderRadius: "var(--radius-sm)", cursor: "pointer", fontFamily: "var(--font-family-base)",
+                  border: isToday && !isSel ? "1px solid var(--color-border-focused)" : "1px solid transparent",
+                  fontSize: "var(--font-caption-size)",
+                  background: isSel ? "var(--color-bg-brand)" : "transparent",
+                  color: isSel ? "var(--color-text-inverse)" : muted ? "var(--color-text-tertiary)" : "var(--color-text-primary)",
+                  fontWeight: isSel ? "var(--font-weight-semibold)" : "var(--font-weight-regular)",
+                }}>{d.getDate()}</button>
+            );
+          })}
+        </div>
+      ))}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "var(--space-sm)", marginTop: "var(--space-sm)", borderTop: "1px solid var(--color-border-subtle)" }}>
+        <button type="button" onClick={() => { setView({ y: today.getFullYear(), m: today.getMonth() }); onChange(today); }} style={{ border: "none", background: "none", cursor: "pointer", color: "var(--color-text-link)", fontSize: "var(--font-body-size)", fontWeight: "var(--font-weight-medium)", padding: 0 }}>Today</button>
+        {onClear && <button type="button" onClick={onClear} style={{ border: "none", background: "none", cursor: "pointer", color: "var(--color-text-secondary)", fontSize: "var(--font-body-size)", padding: 0 }}>Clear</button>}
+      </div>
+    </div>
+  );
+}
+
 
 /* ===== components/CountryDropdown.jsx ===== */
 /* ============================================================================
@@ -1578,4 +1641,4 @@ function MaskedField({
 
 
 /* expose canonical kit as globals for the app shell */
-Object.assign(window, { Button, Pagination, Table, Radio, Toast, DropdownMenu, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton, Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone, FilterChip, ReadOnlyField, MaskedField, CountryDropdown, PhoneInput, SAMPLE_COUNTRIES, STATUS_COLOR });
+Object.assign(window, { Button, Pagination, Table, Radio, Toast, DropdownMenu, DatePicker, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton, Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone, FilterChip, ReadOnlyField, MaskedField, CountryDropdown, PhoneInput, SAMPLE_COUNTRIES, STATUS_COLOR });
