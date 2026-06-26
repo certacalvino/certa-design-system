@@ -54,7 +54,7 @@ for rel in SOURCES:
     parts.append(f"\n/* ===== {rel} ===== */")
     parts.append(strip(open(p).read()))
 # expose to window for the global-scope screens/app
-names = ["Button","Pagination","Table","Radio","Toast","DropdownMenu","DatePicker","Icon","Badge","Tag","ProcessStatus","Field","Input","IconButton",
+names = ["Button","Pagination","Table","Radio","Toast","DropdownMenu","DatePicker","RoundButton","FileRow","NavBar","Icon","Badge","Tag","ProcessStatus","Field","Input","IconButton",
          "Checkbox","CheckboxPill","MultiSelect","Card","SectionHeader","EmptyState",
          "ProgressSteps","Avatar","Toggle","Tabs","Alert","Switch","Dialog","RAGField",
          "KPIStatCard","Gauge","CircularProgress","SplitButton","TimeField","FileDropzone",

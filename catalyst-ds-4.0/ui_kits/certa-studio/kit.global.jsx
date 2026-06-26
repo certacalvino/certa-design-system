@@ -1245,6 +1245,78 @@ function DatePicker({ value = null, onChange = () => {}, onClear = null }) {
   );
 }
 
+/* ---------------------------------------------------------------------------
+   RoundButton — circular icon-only. variant filled/outline/ghost · M(40)/S(32).
+   Matches Figma Round Button (Buttons & Actions).
+   --------------------------------------------------------------------------- */
+function RoundButton({ icon = null, variant = "filled", size = "m", disabled = false, label, onClick = () => {} }) {
+  const px = size === "s" ? 32 : 40;
+  const variants = {
+    filled: { background: "var(--color-bg-brand)", color: "var(--color-text-inverse)" },
+    outline: { background: "var(--color-surface-default)", color: "var(--color-action-primary)", borderColor: "var(--color-border-default)" },
+    ghost: { background: "transparent", color: "var(--color-text-secondary)" },
+  };
+  return (
+    <button type="button" aria-label={label} disabled={disabled} onClick={onClick} style={{
+      width: px, height: px, borderRadius: "var(--radius-full)", display: "inline-flex", alignItems: "center",
+      justifyContent: "center", cursor: disabled ? "not-allowed" : "pointer", border: "1px solid transparent",
+      opacity: disabled ? 0.4 : 1, ...variants[variant],
+    }}>
+      {icon && <Icon glyph={icon} size={size === "s" ? 16 : 20} color="currentColor" />}
+    </button>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   FileRow — uploaded file: type badge + name + meta + download/remove. r4.
+   Matches Figma File row (489:1280). M only.
+   --------------------------------------------------------------------------- */
+function FileRow({ name, meta = null, type = "PDF", onDownload = null, onRemove = null }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", padding: "var(--space-md) var(--space-lg)", border: "1px solid var(--color-border-default)", borderRadius: "var(--radius-sm)", background: "var(--color-surface-default)", fontFamily: "var(--font-family-base)" }}>
+      <span style={{ width: 32, height: 32, flexShrink: 0, borderRadius: "var(--radius-sm)", background: "var(--color-bg-danger-subtle)", color: "var(--color-status-danger-fg)", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: "var(--font-weight-bold)" }}>{type}</span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontSize: "var(--font-body-size)", fontWeight: "var(--font-weight-medium)", color: "var(--color-text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{name}</div>
+        {meta && <div style={{ fontSize: "var(--font-caption-size)", color: "var(--color-text-secondary)" }}>{meta}</div>}
+      </div>
+      {onDownload && <button type="button" aria-label="Download" onClick={onDownload} style={{ border: "none", background: "none", cursor: "pointer", color: "var(--color-text-secondary)" }}><Icon glyph="↓" size={16} /></button>}
+      {onRemove && <button type="button" aria-label="Remove" onClick={onRemove} style={{ border: "none", background: "none", cursor: "pointer", color: "var(--color-text-secondary)" }}><Icon glyph="✕" size={16} /></button>}
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   NavBar — vertical sidebar nav. items: [{key, label, icon, badge}]. Active =
+   bg/brand-subtle + text/link + 2px brand left accent. Matches Figma Nav bar.
+   --------------------------------------------------------------------------- */
+function NavBar({ items = [], active = null, onSelect = () => {} }) {
+  return (
+    <nav style={{ display: "flex", flexDirection: "column", gap: "var(--space-xs)", width: 240, padding: "var(--space-md)", background: "var(--color-bg-sidebar)", fontFamily: "var(--font-family-base)" }}>
+      {items.map((it) => {
+        const on = it.key === active;
+        return (
+          <button key={it.key} type="button" onClick={() => onSelect(it.key)}
+            onMouseEnter={(e) => { if (!on) e.currentTarget.style.background = "var(--color-surface-hover)"; }}
+            onMouseLeave={(e) => { if (!on) e.currentTarget.style.background = "transparent"; }}
+            style={{
+              position: "relative", display: "flex", alignItems: "center", gap: "var(--space-md)", width: "100%", height: 40,
+              padding: "0 var(--space-lg)", border: "none", cursor: "pointer", borderRadius: "var(--radius-sm)", textAlign: "left",
+              background: on ? "var(--color-bg-brand-subtle)" : "transparent",
+              color: on ? "var(--color-text-link)" : "var(--color-text-secondary)",
+              fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-size)",
+              fontWeight: on ? "var(--font-weight-semibold)" : "var(--font-weight-medium)",
+            }}>
+            {on && <span aria-hidden style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 2, borderRadius: "var(--radius-full)", background: "var(--color-action-primary)" }} />}
+            {it.icon && <Icon glyph={it.icon} size={20} color="currentColor" />}
+            <span style={{ flex: 1 }}>{it.label}</span>
+            {it.badge != null && <Badge color="neutral" size="s">{it.badge}</Badge>}
+          </button>
+        );
+      })}
+    </nav>
+  );
+}
+
 
 /* ===== components/CountryDropdown.jsx ===== */
 /* ============================================================================
@@ -1641,4 +1713,4 @@ function MaskedField({
 
 
 /* expose canonical kit as globals for the app shell */
-Object.assign(window, { Button, Pagination, Table, Radio, Toast, DropdownMenu, DatePicker, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton, Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone, FilterChip, ReadOnlyField, MaskedField, CountryDropdown, PhoneInput, SAMPLE_COUNTRIES, STATUS_COLOR });
+Object.assign(window, { Button, Pagination, Table, Radio, Toast, DropdownMenu, DatePicker, RoundButton, FileRow, NavBar, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton, Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone, FilterChip, ReadOnlyField, MaskedField, CountryDropdown, PhoneInput, SAMPLE_COUNTRIES, STATUS_COLOR });
