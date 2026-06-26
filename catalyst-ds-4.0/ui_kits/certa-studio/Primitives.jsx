@@ -1096,8 +1096,90 @@ export function Table({ columns = [], rows = [], selectedKeys = [], onRowClick =
   );
 }
 
+/* ---------------------------------------------------------------------------
+   Radio — 16px circle, brand dot when checked. States default/checked/error/
+   disabled. Matches Figma Radio (179:435). Label = Body 14 text/primary.
+   --------------------------------------------------------------------------- */
+export function Radio({ checked = false, label = null, name, value, error = false, disabled = false, onChange = () => {} }) {
+  const borderColor = error ? "var(--color-border-error)" : checked ? "var(--color-border-focused)" : "var(--color-border-strong)";
+  return (
+    <label style={{ display: "inline-flex", alignItems: "center", gap: "var(--space-md)", cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.4 : 1, position: "relative" }}>
+      <span style={{
+        width: 16, height: 16, flexShrink: 0, borderRadius: "var(--radius-full)",
+        border: `1px solid ${borderColor}`, background: "var(--color-surface-default)",
+        display: "inline-flex", alignItems: "center", justifyContent: "center",
+      }}>
+        {checked && <span style={{ width: 8, height: 8, borderRadius: "var(--radius-full)", background: "var(--color-bg-brand)" }} />}
+      </span>
+      <input type="radio" name={name} value={value} checked={checked} disabled={disabled} onChange={onChange} style={{ position: "absolute", opacity: 0, width: 0, height: 0 }} />
+      {label && <span style={{ fontSize: "var(--font-body-size)", color: "var(--color-text-primary)" }}>{label}</span>}
+    </label>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   Toast — 430px, r8 (radius-lg) + shadow-lg. type success/error/warning/info.
+   Status badge + title + message + close. Matches Figma Toast (330:727).
+   --------------------------------------------------------------------------- */
+const TOAST_ICON = { success: "✓", error: "!", warning: "!", info: "i" };
+const TOAST_FG = { success: "var(--color-status-success-fg)", error: "var(--color-status-danger-fg)", warning: "var(--color-status-warning-fg)", info: "var(--color-status-info-fg)" };
+const TOAST_BG = { success: "var(--color-bg-success-subtle)", error: "var(--color-bg-danger-subtle)", warning: "var(--color-bg-warning-subtle)", info: "var(--color-status-info-bg)" };
+export function Toast({ type = "info", title, message = null, onClose = null }) {
+  return (
+    <div style={{
+      width: 430, maxWidth: "100%", display: "flex", gap: "var(--space-md)", alignItems: "flex-start",
+      padding: "var(--space-lg)", borderRadius: "var(--radius-lg)", background: "var(--color-surface-default)",
+      border: "1px solid var(--color-border-subtle)", boxShadow: "var(--shadow-lg)", fontFamily: "var(--font-family-base)",
+    }}>
+      <span style={{
+        flexShrink: 0, width: 20, height: 20, borderRadius: "var(--radius-full)", background: TOAST_BG[type],
+        color: TOAST_FG[type], display: "inline-flex", alignItems: "center", justifyContent: "center",
+        fontSize: "var(--font-caption-size)", fontWeight: "var(--font-weight-bold)",
+      }}>{TOAST_ICON[type]}</span>
+      <div style={{ flex: 1 }}>
+        {title && <div style={{ fontSize: "var(--font-body-bold-size)", fontWeight: "var(--font-weight-semibold)", color: "var(--color-text-primary)" }}>{title}</div>}
+        {message && <div style={{ fontSize: "var(--font-caption-size)", color: "var(--color-text-secondary)", marginTop: "var(--space-xs)" }}>{message}</div>}
+      </div>
+      {onClose && <button type="button" onClick={onClose} aria-label="Close" style={{ border: "none", background: "none", cursor: "pointer", color: "var(--color-text-secondary)", fontSize: 16, lineHeight: 1, padding: 0 }}>×</button>}
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   DropdownMenu — overlay menu. items: [{label, icon, onClick, destructive, divider}].
+   r8 + shadow-lg, 36px rows, 16px icons, hover = surface-hover, destructive = text/error.
+   Matches Figma Dropdown Menu (513:1669 / Menu Item 510:1825).
+   --------------------------------------------------------------------------- */
+export function DropdownMenu({ items = [], width = 240 }) {
+  return (
+    <div style={{
+      width, background: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)",
+      borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", padding: "var(--space-sm)", fontFamily: "var(--font-family-base)",
+    }}>
+      {items.map((it, i) =>
+        it.divider ? (
+          <div key={`d${i}`} style={{ height: 1, background: "var(--color-border-subtle)", margin: "var(--space-sm) 0" }} />
+        ) : (
+          <button key={i} type="button" onClick={it.onClick}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "var(--color-surface-hover)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; }}
+            style={{
+              display: "flex", alignItems: "center", gap: "var(--space-md)", width: "100%", height: 36,
+              padding: "0 var(--space-md)", border: "none", background: "transparent", cursor: "pointer",
+              borderRadius: "var(--radius-sm)", textAlign: "left", fontFamily: "var(--font-family-base)",
+              fontSize: "var(--font-body-size)", color: it.destructive ? "var(--color-text-error)" : "var(--color-text-primary)",
+            }}>
+            {it.icon && <Icon glyph={it.icon} size={16} color="currentColor" />}
+            <span style={{ flex: 1 }}>{it.label}</span>
+          </button>
+        )
+      )}
+    </div>
+  );
+}
+
 export default {
-  Button, Pagination, Table, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton,
+  Button, Pagination, Table, Radio, Toast, DropdownMenu, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton,
   Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps,
   Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress,
   SplitButton, TimeField, FileDropzone, Tooltip,
