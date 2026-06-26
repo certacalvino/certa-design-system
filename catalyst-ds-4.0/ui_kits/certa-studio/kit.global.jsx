@@ -1002,6 +1002,104 @@ function Tooltip({ content, position = "top", disabled = false, children }) {
   );
 }
 
+/* ---------------------------------------------------------------------------
+   Pagination — Type(Simple / Numbered). Range text = Caption (meta). r4 controls.
+   Matches Figma Pagination (Data Display). 32px controls, brand-subtle active.
+   --------------------------------------------------------------------------- */
+function Pagination({ type = "simple", page = 1, pageSize = 10, total = 0, onPage = () => {} }) {
+  const pages = Math.max(1, Math.ceil(total / pageSize));
+  const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
+  const to = Math.min(total, page * pageSize);
+  const ctrl = (label, disabled, onClick, active = false) => (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      style={{
+        minWidth: 32, height: 32, padding: "0 var(--space-md)",
+        borderRadius: "var(--radius-sm)",
+        border: `1px solid ${active ? "var(--color-border-focused)" : "var(--color-border-default)"}`,
+        background: active ? "var(--color-bg-brand-subtle)" : "var(--color-surface-default)",
+        color: disabled ? "var(--color-text-disabled)" : active ? "var(--color-text-link)" : "var(--color-text-primary)",
+        fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-size)",
+        fontWeight: active ? "var(--font-weight-semibold)" : "var(--font-weight-regular)",
+        cursor: disabled ? "not-allowed" : "pointer",
+      }}
+    >
+      {label}
+    </button>
+  );
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)" }}>
+      <span style={{ fontSize: "var(--font-caption-size)", color: "var(--color-text-secondary)" }}>
+        {from}–{to} of {total}
+      </span>
+      <div style={{ flex: 1 }} />
+      <div style={{ display: "flex", gap: "var(--space-sm)" }}>
+        {type === "numbered" ? (
+          <>
+            {ctrl("‹", page <= 1, () => onPage(page - 1))}
+            {Array.from({ length: pages }, (_, i) => i + 1).slice(0, 7).map((p) =>
+              ctrl(String(p), false, () => onPage(p), p === page))}
+            {ctrl("›", page >= pages, () => onPage(page + 1))}
+          </>
+        ) : (
+          <>
+            {ctrl("Previous", page <= 1, () => onPage(page - 1))}
+            {ctrl("Next", page >= pages, () => onPage(page + 1))}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   Table — declarative columns + rows. Column header = meta 10px uppercase on
+   surface/subtle; rows 52px; selected = surface/selected. Matches Figma Table
+   Cell (529:94) / Row (530:132) / Column Header (530:3400). Data Display.
+   columns: [{ key, label, width, align, render(row) }]. rows: [{...}].
+   --------------------------------------------------------------------------- */
+function Table({ columns = [], rows = [], selectedKeys = [], onRowClick = null, rowKey = "id" }) {
+  return (
+    <div style={{ border: "1px solid var(--color-border-default)", borderRadius: "var(--radius-sm)", overflow: "hidden", background: "var(--color-surface-default)" }}>
+      <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: 0, fontFamily: "var(--font-family-base)" }}>
+        <thead>
+          <tr>
+            {columns.map((c) => (
+              <th key={c.key} style={{
+                textAlign: c.align || "left", padding: "var(--space-md) var(--space-lg)",
+                background: "var(--color-bg-subtle)", borderBottom: "1px solid var(--color-border-default)",
+                fontSize: "var(--font-meta-size)", textTransform: "uppercase", letterSpacing: "0.04em",
+                fontWeight: "var(--font-weight-semibold)", color: "var(--color-text-secondary)",
+                whiteSpace: "nowrap", ...(c.width ? { width: c.width } : {}),
+              }}>{c.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => {
+            const k = r[rowKey] != null ? r[rowKey] : i;
+            const selected = selectedKeys.includes(k);
+            return (
+              <tr key={k} onClick={onRowClick ? () => onRowClick(r) : undefined}
+                style={{ cursor: onRowClick ? "pointer" : "default", background: selected ? "var(--color-surface-selected)" : "transparent" }}>
+                {columns.map((c) => (
+                  <td key={c.key} style={{
+                    textAlign: c.align || "left", padding: "0 var(--space-lg)", height: 52,
+                    borderBottom: i === rows.length - 1 ? "none" : "1px solid var(--color-border-subtle)",
+                    fontSize: "var(--font-body-size)", color: "var(--color-text-primary)", verticalAlign: "middle",
+                  }}>{c.render ? c.render(r) : r[c.key]}</td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 
 /* ===== components/CountryDropdown.jsx ===== */
 /* ============================================================================
@@ -1398,4 +1496,4 @@ function MaskedField({
 
 
 /* expose canonical kit as globals for the app shell */
-Object.assign(window, { Button, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton, Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone, FilterChip, ReadOnlyField, MaskedField, CountryDropdown, PhoneInput, SAMPLE_COUNTRIES, STATUS_COLOR });
+Object.assign(window, { Button, Pagination, Table, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton, Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone, FilterChip, ReadOnlyField, MaskedField, CountryDropdown, PhoneInput, SAMPLE_COUNTRIES, STATUS_COLOR });

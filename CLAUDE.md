@@ -174,3 +174,9 @@ Last updated: 2026-06-24
 - Brought REAL assets from the Catalyst 3.0 Claude-Design export: 6 status icons (assets/icons/) + Inter TTFs (fonts/) + @font-face. Logo + non-status icons still pending (Lucide stand-ins / placeholder).
 - Strategy locked: Figma = source of truth → derive token layer (this) → feed Claude Design via "Create using Claude Code" (BEST FIDELITY) pointed at this repo. Sync = re-run the Figma→tokens extraction when Figma changes.
 - Pending: type/radius/shadow not yet Figma Variables (sourced from locked decisions — tokenize in Figma to close); component CSS still references the (now Figma-correct) semantic names.
+
+## Closing the Figma↔code gap (for next /design-sync batch) — 2026-06-26
+- DS 4.1 pilot (7 components) is live in Claude Design ("Certa DS 4.1 — WIP", user's org). Full ~33-component sync running locally. /design-sync uploads from CODE (the bundle), not Figma directly — so Figma components must be coded in the kit to appear.
+- Gap (in Figma, not yet in the code kit), priority for TPRM: 🔴 Table, Date Picker, Pagination, Dropdown Menu · 🟡 Toast, Radio, Nav bar (standalone), Round Button · 🟢 File row.
+- Coded so far (this session) into Primitives.jsx + registered in build_kit.py names + kit.global.jsx: **Pagination** (Simple/Numbered, caption range, brand-subtle active) + **Table** (declarative columns/rows, meta-10px uppercase header on bg-subtle, 52px rows, surface/selected). Verified: balanced JSX, present in kit.global window assign.
+- Still to code from Figma: Date Picker, Dropdown Menu (next), then the 🟡/🟢. Local agent grades/render-checks them on next sync (safety net for blind-coding).
