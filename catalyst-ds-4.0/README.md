@@ -1,13 +1,18 @@
-# Certa Design System 4.0 — Catalyst Bundle (WIP)
+# Certa Design System 4.1 — Catalyst Bundle (WIP)
 
-A self-contained reference bundle for **Certa DS 4.0**. It ships the semantic
+A self-contained reference bundle for **Certa DS 4.1**. It ships the semantic
 token layer, the React UI-kit primitives + components, a **click-through app
 demo**, and 39 standalone component previews — everything an engineer or
 designer needs to consume the system without a Figma seat.
 
-> Last synced: **2026-06-17**. Token decisions are sourced from
-> [`CLAUDE.md`](../CLAUDE.md) ("System decisions (locked)") in
-> [certacalvino/certa-design-system](https://github.com/certacalvino/certa-design-system).
+> **4.1 (2026-06-26)** — token layer re-synced **1:1 from Figma** (source of truth,
+> file `X0G6UNPGB8MjsDXnIvlPhe`). Corrects 4.0's derivation drift: brand
+> `#1B4FD8 → #1f5eff`, generic Tailwind status ramps → Certa palette
+> (`#0f6b1a / #cc0e24 / #8b5800`), text `#1F2937 → #202730`; added real status
+> icons + self-hosted Inter. Token decisions also tracked in
+> [`CLAUDE.md`](../CLAUDE.md).
+>
+> _4.0 (2026-06-17) was the first build — kept for history; 4.1 is the faithful one._
 
 ---
 

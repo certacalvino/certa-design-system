@@ -3,8 +3,9 @@
 Last updated: 2026-06-24
 
 ## Naming
-- Design system: **Certa Platform DS 4.0** (not "Certa Studio" — Studio is a separate product)
-- Catalyst bundle: catalyst-ds-4.0/ in certacalvino/certa-design-system
+- Design system: **Certa Platform DS** (not "Certa Studio" — Studio is a separate product)
+- Versions: **4.0** = first build/testing (Figma + first bundle; had derived palette: brand #1B4FD8, Tailwind status). **4.1** = re-synced 1:1 from Figma (brand #1f5eff, Certa palette, real assets) — the faithful one. Name the Claude Design DS "Certa DS 4.1".
+- Catalyst bundle: catalyst-ds-4.0/ in certacalvino/certa-design-system (folder name kept as a path; the DS it ships is versioned 4.1)
 - App shell demo: "Certa Platform" (renamed from "Certa Studio" on 2026-06-19)
 
 ## Workflow rules (mandatory)

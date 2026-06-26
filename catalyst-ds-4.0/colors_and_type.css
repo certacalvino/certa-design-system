@@ -1,10 +1,10 @@
 /* ============================================================================
-   Certa Design System 4.0 — colors_and_type.css
+   Certa Design System 4.1 — colors_and_type.css
    Token foundation: primitives → semantic layer → typography → spacing → effects
    Brand #1f5eff · Certa navy-slate neutrals · Certa status palette
    Synced FROM FIGMA (source of truth: file X0G6UNPGB8MjsDXnIvlPhe) 2026-06-26.
-   Colors are 1:1 with Figma Variables. Earlier values (#1B4FD8 brand, Tailwind
-   status ramps) were a derivation error — corrected here against Figma.
+   4.1 = 4.0 re-synced 1:1 with Figma Variables. 4.0's values (#1B4FD8 brand,
+   Tailwind status ramps, slate #1F2937 text) were a derivation error, fixed here.
    ============================================================================ */
 
 /* Inter — self-hosted (TTFs in fonts/). Copy fonts/ + this file together. */
