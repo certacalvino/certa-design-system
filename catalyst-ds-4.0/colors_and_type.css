@@ -1,62 +1,72 @@
 /* ============================================================================
    Certa Design System 4.0 — colors_and_type.css
    Token foundation: primitives → semantic layer → typography → spacing → effects
-   Brand #1B4FD8 · Slate neutrals · WCAG-AA status palette · Light sidebar
-   Last synced: 2026-06-17 (see CLAUDE.md "System decisions (locked)")
+   Brand #1f5eff · Certa navy-slate neutrals · Certa status palette
+   Synced FROM FIGMA (source of truth: file X0G6UNPGB8MjsDXnIvlPhe) 2026-06-26.
+   Colors are 1:1 with Figma Variables. Earlier values (#1B4FD8 brand, Tailwind
+   status ramps) were a derivation error — corrected here against Figma.
    ============================================================================ */
+
+/* Inter — self-hosted (TTFs in fonts/). Copy fonts/ + this file together. */
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 100 900;
+  src: url("fonts/Inter-VariableFont_opsz_wght.ttf") format("truetype-variations"); }
+@font-face { font-family: "Inter"; font-style: italic; font-weight: 100 900;
+  src: url("fonts/Inter-Italic-VariableFont_opsz_wght.ttf") format("truetype-variations"); }
 
 /* ----------------------------------------------------------------------------
    1. PRIMITIVES  (raw values — never referenced directly by components)
+   Values from Figma "Primitives" collection.
    ---------------------------------------------------------------------------- */
 :root {
-  /* Slate / neutral ramp ---------------------------------------------------- */
-  --slate-50:  #F9FAFB;
-  --slate-100: #F3F4F6;
-  --slate-200: #E5E7EB;
-  --slate-300: #D1D5DB;
-  --slate-400: #9CA3AF;
-  --slate-500: #6B7280;
-  --slate-600: #4B5563;
-  --slate-700: #374151;
-  --slate-800: #1F2937;   /* canonical text */
-  --slate-900: #111827;
+  /* Neutral ramp (kept under legacy --slate-* names; values = Figma Neutral) - */
+  --slate-50:  #f8f9f9;   /* Neutral/200 */
+  --slate-100: #f4f5f5;   /* Neutral/300 */
+  --slate-200: #d0d4df;   /* Neutral/500 — border/default */
+  --slate-300: #5d6880;   /* Neutral/700 — border/strong */
+  --slate-400: #8892ac;   /* Neutral/600 — disabled/tertiary */
+  --slate-500: #8892ac;   /* Neutral/600 */
+  --slate-600: #5d6880;   /* Neutral/700 — text/secondary */
+  --slate-700: #5d6880;   /* Neutral/700 */
+  --slate-800: #202730;   /* Neutral/900 — text/primary (canonical text) */
+  --slate-900: #00164e;   /* Neutral/800 — deep navy */
 
-  /* Brand ramp (blue) ------------------------------------------------------- */
-  --brand-50:  #EFF4FE;
-  --brand-100: #DCE6FC;
-  --brand-200: #B9CDF9;
-  --brand-300: #8FAEF3;
-  --brand-400: #4F7BE6;
-  --brand-500: #1B4FD8;   /* canonical brand */
-  --brand-600: #1740B0;
-  --brand-700: #12338C;
+  /* Brand ramp (blue) — Figma Brand. brand-400 #1f5eff is PRIMARY ----------- */
+  --brand-50:  #f8faff;
+  --brand-100: #ecf2ff;
+  --brand-200: #a5bafe;
+  --brand-300: #5c8bfe;
+  --brand-400: #1f5eff;   /* canonical brand — Certa Blue */
+  --brand-500: #194fd7;   /* hover */
+  --brand-600: #1543b5;   /* pressed */
+  --brand-700: #113691;
 
-  /* Success ramp (green) ---------------------------------------------------- */
-  --green-50:  #ECFDF3;
-  --green-100: #D1FADF;
-  --green-500: #16A34A;   /* canonical success — AA on white */
-  --green-600: #15803D;
-  --green-700: #166534;
+  /* Success ramp (green) — Figma Green ------------------------------------- */
+  --green-50:  #f7fbf7;   /* L3 */
+  --green-100: #e3f1e6;   /* L2 */
+  --green-500: #49a55b;   /* base */
+  --green-600: #0f6b1a;   /* D1 — canonical success fg */
+  --green-700: #0c6b1a;   /* D2 */
 
-  /* Warning ramp (amber) ---------------------------------------------------- */
-  --amber-50:  #FFFBEB;
-  --amber-100: #FEF3C7;
-  --amber-500: #D97706;   /* canonical warning — AA on white */
-  --amber-600: #B45309;
-  --amber-700: #92400E;
+  /* Warning ramp (orange) — Figma Orange ----------------------------------- */
+  --amber-50:  #fff9f0;   /* L3 */
+  --amber-100: #feebcc;   /* L2 */
+  --amber-500: #fcac27;   /* base */
+  --amber-600: #8b5800;   /* D1 — canonical warning fg (AA) */
+  --amber-700: #7f5209;   /* D2 — dark label on amber */
 
-  /* Danger ramp (red) ------------------------------------------------------- */
-  --red-50:  #FEF2F2;
-  --red-100: #FEE2E2;
-  --red-500: #DC2626;     /* canonical danger — AA on white */
-  --red-600: #B91C1C;
-  --red-700: #991B1B;
+  /* Danger ramp (red) — Figma Red ------------------------------------------ */
+  --red-50:  #fff8f8;     /* L3 */
+  --red-100: #fee9e8;     /* L2 */
+  --red-500: #e01030;     /* base */
+  --red-600: #cc0e24;     /* D1 — canonical danger fg */
+  --red-700: #b71327;     /* D2 */
 
-  /* Teal ramp (avatar tone — not a status color) ---------------------------- */
-  --teal-50:  #F0FDFA;
-  --teal-100: #CCFBF1;
-  --teal-500: #0D9488;
-  --teal-600: #0F766E;
+  /* Teal ramp (info / avatar tone) — Figma Teal ---------------------------- */
+  --teal-50:  #f4fbff;    /* L3 */
+  --teal-100: #d9f1ff;    /* L2 */
+  --teal-500: #65c6ff;    /* base */
+  --teal-600: #32607f;    /* D2 */
+  --teal-700: #336485;    /* D1 — info fg */
 
   --white: #FFFFFF;
   --black: #000000;
@@ -66,84 +76,81 @@
      ---------------------------------------------------------------------------- */
 
   /* Text -------------------------------------------------------------------- */
-  --color-text-primary:   var(--slate-800);
-  --color-text-secondary: var(--slate-600);
-  --color-text-tertiary:  var(--slate-500);
-  --color-text-disabled:  var(--slate-400);
+  --color-text-primary:   var(--slate-800);   /* #202730 */
+  --color-text-secondary: var(--slate-600);   /* #5d6880 */
+  --color-text-tertiary:  var(--slate-500);   /* #8892ac */
+  --color-text-disabled:  var(--slate-400);   /* #8892ac */
   --color-text-inverse:   var(--white);
-  --color-text-link:      var(--brand-500);
-  --color-text-error:     var(--red-600);     /* asterisk / inline errors */
-  --color-text-success:   var(--green-600);
-  --color-text-warning:   var(--amber-700);
+  --color-text-link:      var(--brand-400);   /* #1f5eff */
+  --color-text-error:     var(--red-600);      /* #cc0e24 */
+  --color-text-success:   var(--green-600);    /* #0f6b1a */
+  --color-text-warning:   var(--amber-600);    /* #8b5800 */
 
   /* Background -------------------------------------------------------------- */
   --color-bg-page:          var(--white);
-  --color-bg-subtle:        var(--slate-50);
-  --color-bg-muted:         var(--slate-100);
-  --color-bg-sidebar:       #F7F8FA;          /* production-confirmed light */
-  /* Surface hierarchy (DS 4.0): page = surface/subtle (#F7F8FA), cards = surface/default (white) */
+  --color-bg-subtle:        var(--slate-50);   /* #f8f9f9 */
+  --color-bg-muted:         var(--slate-100);  /* #f4f5f5 */
+  --color-bg-sidebar:       #F7F8FA;           /* production-confirmed light */
   --color-surface-default:  var(--white);
   --color-surface-subtle:   #F7F8FA;
-  --color-bg-brand:         var(--brand-500);
-  --color-bg-brand-hover:   var(--brand-600);
-  --color-bg-brand-subtle:  var(--brand-50);
-  --color-bg-success-subtle: var(--green-50);
-  --color-bg-warning-subtle: var(--amber-50);
-  --color-bg-danger-subtle:  var(--red-50);
-  --color-bg-overlay:        rgba(17, 24, 39, 0.45);  /* modal scrim (535:2) */
+  --color-bg-brand:         var(--brand-400);  /* #1f5eff */
+  --color-bg-brand-hover:   var(--brand-500);  /* #194fd7 */
+  --color-bg-brand-subtle:  var(--brand-100);  /* #ecf2ff */
+  --color-bg-success-subtle: var(--green-50);  /* #f7fbf7 */
+  --color-bg-warning-subtle: var(--amber-50);  /* #fff9f0 */
+  --color-bg-danger-subtle:  var(--red-50);    /* #fff8f8 */
+  --color-bg-overlay:        rgba(17, 24, 39, 0.45);  /* Figma #11182773 */
 
   /* Border ------------------------------------------------------------------ */
-  --color-border-subtle:  var(--slate-100);
-  --color-border-default: var(--slate-200);
-  --color-border-strong:  var(--slate-300);
-  --color-border-focused: var(--brand-500);
-  --color-border-error:   var(--red-500);
+  --color-border-subtle:  #eeefef;             /* Figma border/subtle (Neutral/400) */
+  --color-border-default: var(--slate-200);    /* #d0d4df */
+  --color-border-strong:  var(--slate-300);    /* #5d6880 */
+  --color-border-focused: var(--brand-400);    /* #1f5eff */
+  --color-border-error:   var(--red-600);      /* #cc0e24 */
 
   /* Interactive / state ----------------------------------------------------- */
-  --color-action-primary:        var(--brand-500);
-  --color-action-primary-hover:  var(--brand-600);
-  --color-action-primary-press:  var(--brand-700);
-  --color-action-disabled-bg:    var(--slate-200);
-  --color-action-disabled-text:  var(--slate-400);
-  --color-surface-hover:         var(--slate-100);
-  --color-surface-selected:      var(--brand-50);
+  --color-action-primary:        var(--brand-400);  /* #1f5eff */
+  --color-action-primary-hover:  var(--brand-500);  /* #194fd7 */
+  --color-action-primary-press:  var(--brand-600);  /* #1543b5 */
+  --color-action-disabled-bg:    #eeefef;           /* Figma surface/disabled */
+  --color-action-disabled-text:  var(--slate-400);  /* #8892ac */
+  --color-surface-hover:         var(--slate-100);  /* #f4f5f5 — subtle-hover */
+  --color-surface-selected:      var(--brand-100);  /* #ecf2ff — brand-subtle */
 
   /* Status (Process Status chips, badges) ----------------------------------- */
-  --color-status-success-fg: var(--green-600);
-  --color-status-success-bg: var(--green-50);
-  --color-status-warning-fg: var(--amber-700);
-  --color-status-warning-bg: var(--amber-50);
-  --color-status-danger-fg:  var(--red-600);
-  --color-status-danger-bg:  var(--red-50);
-  --color-status-info-fg:    var(--brand-600);
-  --color-status-info-bg:    var(--brand-50);
-  --color-status-neutral-fg: var(--slate-600);
-  --color-status-neutral-bg: var(--slate-100);
+  --color-status-success-fg: var(--green-600);  /* #0f6b1a */
+  --color-status-success-bg: var(--green-50);   /* #f7fbf7 */
+  --color-status-warning-fg: var(--amber-600);  /* #8b5800 */
+  --color-status-warning-bg: var(--amber-50);   /* #fff9f0 */
+  --color-status-danger-fg:  var(--red-600);    /* #cc0e24 */
+  --color-status-danger-bg:  var(--red-50);     /* #fff8f8 */
+  --color-status-info-fg:    var(--teal-700);   /* #336485 — Figma text/info */
+  --color-status-info-bg:    var(--teal-50);    /* #f4fbff */
+  --color-status-neutral-fg: var(--slate-600);  /* #5d6880 */
+  --color-status-neutral-bg: var(--slate-100);  /* #f4f5f5 */
 
-  /* Avatar tones (decorative identity — light tint bg + saturated initials) -
-     Matches Figma set 572:50: Brand 100/700 · Teal/Green/Orange/Red L3/D2 ·
-     Neutral 200/700. Each tone is a {bg, fg} pair. */
-  --color-avatar-brand-bg:   var(--brand-100);   --color-avatar-brand-fg:   var(--brand-700);
-  --color-avatar-teal-bg:    var(--teal-100);    --color-avatar-teal-fg:    var(--teal-600);
-  --color-avatar-green-bg:   var(--green-100);   --color-avatar-green-fg:   var(--green-700);
-  --color-avatar-orange-bg:  var(--amber-100);   --color-avatar-orange-fg:  var(--amber-700);
-  --color-avatar-red-bg:     var(--red-100);     --color-avatar-red-fg:     var(--red-700);
-  --color-avatar-neutral-bg: var(--slate-200);   --color-avatar-neutral-fg: var(--slate-700);
+  /* Avatar tones (Figma 572:50: Brand 100/700 · Teal/Green/Orange/Red L3/D2 ·
+     Neutral 200/700) — {bg, fg} pairs. */
+  --color-avatar-brand-bg:   var(--brand-100);   --color-avatar-brand-fg:   var(--brand-700);  /* #ecf2ff / #113691 */
+  --color-avatar-teal-bg:    var(--teal-50);     --color-avatar-teal-fg:    var(--teal-600);   /* #f4fbff / #32607f */
+  --color-avatar-green-bg:   var(--green-50);    --color-avatar-green-fg:   var(--green-700);  /* #f7fbf7 / #0c6b1a */
+  --color-avatar-orange-bg:  var(--amber-50);    --color-avatar-orange-fg:  var(--amber-700);  /* #fff9f0 / #7f5209 */
+  --color-avatar-red-bg:     var(--red-50);      --color-avatar-red-fg:     var(--red-700);    /* #fff8f8 / #b71327 */
+  --color-avatar-neutral-bg: #f8f9f9;            --color-avatar-neutral-fg: var(--slate-600);  /* Neutral 200 / 700 */
 
   /* RAG risk (Red/Amber/Green) — reuses status palette ---------------------- */
   --color-rag-low-fg:    var(--green-600);   --color-rag-low-bg:    var(--green-50);
-  --color-rag-medium-fg: var(--amber-700);   --color-rag-medium-bg: var(--amber-50);
+  --color-rag-medium-fg: var(--amber-600);   --color-rag-medium-bg: var(--amber-50);
   --color-rag-high-fg:   var(--red-600);     --color-rag-high-bg:   var(--red-50);
 
-  /* RAG Field tab (saturated "base" fill + tab label) — matches Figma 577:23.
-     A11y: HIGH+LOW labels white (text/on-brand); MED dark (Orange/D2) since
-     white on amber/base fails AA. */
-  --color-rag-low-base:    var(--green-600);  --color-rag-low-label:    var(--white);
-  --color-rag-medium-base: var(--amber-500);  --color-rag-medium-label: var(--amber-700);
-  --color-rag-high-base:   var(--red-600);    --color-rag-high-label:   var(--white);
+  /* RAG Field tab (saturated "base" fill + tab label) — Figma 577:23.
+     HIGH+LOW labels white; MED dark (Orange/D2) — white on amber/base fails AA. */
+  --color-rag-low-base:    var(--green-600);  --color-rag-low-label:    var(--white);    /* #0f6b1a */
+  --color-rag-medium-base: var(--amber-500);  --color-rag-medium-label: var(--amber-700);/* #fcac27 / #7f5209 */
+  --color-rag-high-base:   var(--red-500);    --color-rag-high-label:   var(--white);    /* #e01030 */
 
   /* ----------------------------------------------------------------------------
-     3. TYPOGRAPHY
+     3. TYPOGRAPHY  (Figma Text Styles — Inter. Scale tops at Display 28.)
      ---------------------------------------------------------------------------- */
   --font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
                       Roboto, Helvetica, Arial, sans-serif;
@@ -154,17 +161,19 @@
   --font-weight-bold:     700;
 
   /* Type ramp (size / line-height) — 14px floor for interactive labels ------ */
-  --font-display-size:      28px;  --font-display-lh:      34px;  /* Display 28 — KPI/stat values */
-  --font-title-medium-size: 20px;  --font-title-medium-lh: 28px;
-  --font-title-small-size:  16px;  --font-title-small-lh:  24px;
-  --font-modal-title-size:  18px;  --font-modal-title-lh:  26px;  /* 18/600 exception */
-  --font-body-size:         14px;  --font-body-lh:         20px;
-  --font-body-bold-size:    14px;  --font-body-bold-lh:    20px;
-  --font-caption-size:      12px;  --font-caption-lh:      16px;  /* non-interactive only */
-  --font-meta-size:         10px;  --font-meta-lh:         14px;  /* table header — exception */
+  --font-display-size:      28px;  --font-display-lh:      34px;  /* Display 28 */
+  --font-title-medium-size: 20px;  --font-title-medium-lh: 30px;  /* Title Medium */
+  --font-section-size:      20px;  --font-section-lh:      28px;  /* Section Title */
+  --font-title-small-size:  16px;  --font-title-small-lh:  24px;  /* Title Small */
+  --font-input-label-size:  16px;  --font-input-label-lh:  24px;  /* Input Label */
+  --font-modal-title-size:  18px;  --font-modal-title-lh:  26px;  /* 18/600 modal exception */
+  --font-body-size:         14px;  --font-body-lh:         20px;  /* Body */
+  --font-body-bold-size:    14px;  --font-body-bold-lh:    20px;  /* Body Bold */
+  --font-caption-size:      12px;  --font-caption-lh:      16px;  /* Caption */
+  --font-meta-size:         10px;  --font-meta-lh:         12px;  /* Overline — table header exception */
 
   /* ----------------------------------------------------------------------------
-     4. SPACING  (8-unit grid)
+     4. SPACING  (8-unit grid — Figma Spacing collection)
      ---------------------------------------------------------------------------- */
   --space-xs:   2px;
   --space-sm:   4px;
@@ -176,7 +185,7 @@
   --space-4xl:  32px;
 
   /* ----------------------------------------------------------------------------
-     5. RADIUS  (4px default · 8px overlays · pill)
+     5. RADIUS  (4px default · 8px overlays · pill)  — FLAG: not in Figma Variables
      ---------------------------------------------------------------------------- */
   --radius-xs:   2px;   /* tag chips */
   --radius-sm:   4px;   /* DEFAULT — buttons, inputs, cards, chips */
@@ -184,22 +193,22 @@
   --radius-full: 9999px;
 
   /* ----------------------------------------------------------------------------
-     6. EFFECTS / ELEVATION
+     6. EFFECTS / ELEVATION  (navy-tinted) — FLAG: not in Figma Variables
      ---------------------------------------------------------------------------- */
-  --shadow-xs: 0 1px 2px rgba(0, 22, 78, 0.06);    /* card elevation (KPI Stat Card) */
-  --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.06);
+  --shadow-xs: 0 1px 2px rgba(0, 22, 78, 0.06);    /* card elevation */
+  --shadow-sm: 0 1px 2px rgba(0, 22, 78, 0.06);
   --shadow-md: 0 4px 12px rgba(0, 22, 78, 0.10);
-  --shadow-lg: 0 8px 24px rgba(0, 22, 78, 0.15);   /* modal/dialog (effect style) */
+  --shadow-lg: 0 8px 24px rgba(0, 22, 78, 0.15);   /* modal/dialog */
 
   /* Focus ring -------------------------------------------------------------- */
-  --focus-ring: 0 0 0 2px var(--white), 0 0 0 4px var(--brand-500);
-  --focus-ring-inset: inset 0 0 0 2px var(--brand-500);
+  --focus-ring: 0 0 0 2px var(--white), 0 0 0 4px var(--brand-400);
+  --focus-ring-inset: inset 0 0 0 2px var(--brand-400);
 
   /* Control sizing ---------------------------------------------------------- */
   --control-height-m: 40px;
   --control-height-s: 32px;
-  --icon-size:        20px;   /* production default — overrides 16px spec */
-  --icon-size-sm:     16px;   /* menu rows, table cells, read-only, headers */
+  --icon-size:        20px;
+  --icon-size-sm:     16px;
 }
 
 /* ----------------------------------------------------------------------------
