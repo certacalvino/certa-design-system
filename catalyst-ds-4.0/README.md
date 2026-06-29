@@ -147,6 +147,23 @@ Composition rules that aren't captured by any single component. These are the
 decisions that keep Certa screens consistent — follow them when assembling
 pages from the primitives.
 
+### 0. Use the kit components — do not improvise (READ FIRST)
+When generating any screen, compose from the real components on `window` — never
+hand-roll equivalents. The most common drift to avoid:
+- **Icons: NO emoji, ever.** Use the icon set on `window.I` (24 icons: `I.Home`,
+  `I.Vendors`, `I.Search`, `I.Plus`, `I.Filter`, `I.Settings`, `I.Reports`,
+  `I.Doc`, `I.Calendar`, `I.Bell`, `I.More`, `I.Caret`, `I.Close`, `I.Check`,
+  `I.Warn`, `I.Info`, `I.Logo`, …). 16px / 1.5px stroke / `currentColor`.
+- **Tables → `Table`** with real **column headers** + `Checkbox` for multi-select
+  rows + `Pagination` at the foot. Never render a headerless table or raw `<tr>`s.
+- **Tier / category / labels → `Tag`** (uniform pill), not colored plain text.
+- **Status → `ProcessStatus`** (dot + label, fixed vocabulary), not ad-hoc text.
+- **Navigation → `NavBar`** with `I.*` icons (active = brand-subtle + 2px accent).
+- **Risk KPIs → `KPIStatCard` with `invertDelta`** so a rising risk reads ▲ red
+  (don't omit the delta, don't paint rising-risk green).
+- **Pages follow `TEMPLATES.md`** (Vendor Detail / Vendors List / Home Dashboard)
+  for density and layout.
+
 ### 1. Section headers use `text/primary`, never `text/link`
 A section header (`SectionHeader`, `<h2 class="t-title-s">`) is a label, not a
 navigation target. Render it in `--color-text-primary` at Title Small (16/600).

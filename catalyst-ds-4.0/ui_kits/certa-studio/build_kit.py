@@ -11,6 +11,7 @@ import os, re
 CS = os.path.dirname(__file__)
 # dependency order: Primitives first, then components (CountryDropdown before PhoneInput)
 SOURCES = [
+    "Icons.jsx",
     "Primitives.jsx",
     "components/CountryDropdown.jsx",
     "components/PhoneInput.jsx",
@@ -59,7 +60,7 @@ names = ["Button","Pagination","Table","Radio","Toast","DropdownMenu","DatePicke
          "ProgressSteps","Avatar","Toggle","Tabs","Alert","Switch","Dialog","RAGField",
          "KPIStatCard","Gauge","CircularProgress","SplitButton","TimeField","FileDropzone",
          "FilterChip","ReadOnlyField","MaskedField","CountryDropdown","PhoneInput",
-         "SAMPLE_COUNTRIES","STATUS_COLOR"]
+         "SAMPLE_COUNTRIES","STATUS_COLOR","I"]
 parts.append("\n/* expose canonical kit as globals for the app shell */")
 parts.append("Object.assign(window, { " + ", ".join(names) + " });")
 
