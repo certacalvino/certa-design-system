@@ -580,12 +580,15 @@ function RAGField({ label = "Inherent risk", level = "Low", value }) {
    1px border/subtle + shadow-xs. Value = Display 28; delta ▲ success / ▼ error.
    Matches Figma set 595:4282.
    --------------------------------------------------------------------------- */
-function KPIStatCard({ icon = null, title, value, delta = null }) {
+function KPIStatCard({ icon = null, title, value, delta = null, invertDelta = false, sub = null }) {
   const up = delta && !String(delta).trim().startsWith("-");
+  // invertDelta: risk metrics where a rising value is BAD (▲ red). Default ▲ green.
+  const good = invertDelta ? !up : up;
   return (
     <div
       style={{
-        width: 200,
+        flex: "1 1 0",
+        minWidth: 200,
         display: "flex",
         flexDirection: "column",
         gap: "var(--space-md)",
@@ -600,10 +603,11 @@ function KPIStatCard({ icon = null, title, value, delta = null }) {
       <span className="t-meta" style={{ color: "var(--color-text-secondary)" }}>{title}</span>
       <span className="t-display" style={{ color: "var(--color-text-primary)" }}>{value}</span>
       {delta != null && (
-        <span style={{ fontSize: "var(--font-body-size)", fontWeight: "var(--font-weight-semibold)", color: up ? "var(--color-text-success)" : "var(--color-text-error)" }}>
+        <span style={{ fontSize: "var(--font-body-size)", fontWeight: "var(--font-weight-semibold)", color: good ? "var(--color-text-success)" : "var(--color-text-error)" }}>
           {up ? "▲" : "▼"} {String(delta).replace(/^-/, "")}
         </span>
       )}
+      {sub && <span className="t-caption">{sub}</span>}
     </div>
   );
 }
