@@ -252,3 +252,8 @@ Last updated: 2026-07-06
 
 ## Nav bar port — detached to local — 2026-07-06
 - Detached the ported 3.0 nav (763:374) recursively: 69 instances -> local nodes, 0 remaining. 4.0 no longer depends on the DS 3.0 library for the nav; visual unchanged (certa gradient logo, real icons, gray selected, expanded+collapsed). Navigation page clean + arranged.
+
+## Code Sidebar -> 3.0 + templates hardening — 2026-07-06
+- CODE Sidebar aligned to DS 3.0: added CertaLogo (gradient 3-blob mark) + Database to Icons.jsx; Sidebar logo=CertaLogo + "certa" lowercase wordmark; search = icon+label row (was boxed Input); selected gray. Verified via render (expanded+collapsed).
+- TEMPLATES.md hardened with a "HARD RULES (READ FIRST)" anti-pattern section fixing the exact broken-card issues: NO emoji (dates use <I.Calendar/>), risk distribution = horizontal bar meters NOT CircularProgress/Gauge, every KPIStatCard MUST pass a delta (+invertDelta for risk), use kit components not hand-rolled divs, fill the page. These steer the next /design-sync template composition.
+- NOTE: the broken template cards come from the LOCAL /design-sync composition (following TEMPLATES.md), not the repo app screens (which use .ck- classes with deltas, no emoji). Most robust follow-up = ship deterministic kit-composed template screens (the render/ pipeline can build them 1:1) instead of prose-driven composition.

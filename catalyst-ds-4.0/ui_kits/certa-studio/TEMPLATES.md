@@ -9,6 +9,24 @@ these, not just atoms.
 `--space-3xl` · card padding `--space-xl` (16) · field gap `--space-lg` (12).
 Only semantic tokens; no raw hex/px. Status vocab from the kit only.
 
+## 0. HARD RULES — anti-patterns that keep breaking (READ FIRST)
+
+These are the exact mistakes seen in generated template cards. Do NOT repeat them:
+
+1. **NO emoji, ever.** Every icon comes from `window.I` (real SVGs). Dates/renewals
+   use `<I.Calendar/>` — never 🗓/📅. Docs `<I.Doc/>`, bell `<I.Bell/>`, etc.
+2. **Risk distribution = horizontal bar meters, NOT `CircularProgress` and NOT `Gauge`.**
+   A distribution across Low/Med/High is 3 stacked rows, each `label · count · a thin
+   horizontal bar` (`--color-bg-muted` track + RAG-colored fill %). `CircularProgress`
+   is only for a single completion % (e.g. a due-diligence step); `Gauge` is only for a
+   single residual-risk score.
+3. **Every `KPIStatCard` MUST pass a `delta`** (and `invertDelta` for risk metrics so a
+   rising bad number is red). Never render an empty stat card with only a number.
+4. **KPIs use the `KPIStatCard` component**, tables use `Table`, status uses
+   `ProcessStatus`, tier uses `Tag`/`Badge`, nav uses `Sidebar` — do not hand-roll divs.
+5. **Fill the page.** No large empty bottom areas; the issues/activity table extends to
+   fill remaining height.
+
 ---
 
 ## 1. Vendor Detail (dashboard) — the hero template
@@ -41,7 +59,7 @@ Header → KPI row → 2-col (activity table | side cards).
 - **KPI row:** 4 × `KPIStatCard` (Total Vendors, High Risk ▲ bad/red, Pending ▼ good, Compliance ▲ good).
 - **Grid (2fr 1fr):**
   - *Recent activity* `Card` + `Table` (vendor `Avatar`+name, action, `ProcessStatus`, date).
-  - Side column: *Risk distribution* `Card` (3 meters Low/Med/High) + *Upcoming renewals* `Card` (list with calendar icon).
+  - Side column: *Risk distribution* `Card` — 3 **horizontal bar meters** (Low green / Med amber / High red), each row = label + count + thin bar (NOT `CircularProgress`, NOT `Gauge`). Then *Upcoming renewals* `Card` — list where each row is `<I.Calendar/>` + name + date (NO emoji).
 
 ---
 
