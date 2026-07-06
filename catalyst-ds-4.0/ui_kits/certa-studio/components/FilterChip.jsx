@@ -48,8 +48,8 @@ export function FilterChip({
             height: 16,
             padding: "0 4px",
             borderRadius: "var(--radius-sm)",
-            background: selected ? "var(--color-bg-page)" : "var(--color-bg-muted)",
-            color: selected ? "var(--color-text-link)" : "var(--color-text-secondary)",
+            background: selected ? "var(--color-action-primary)" : "var(--color-bg-muted)",
+            color: selected ? "var(--color-text-inverse)" : "var(--color-text-secondary)",
             fontSize: "var(--font-caption-size)",
             fontWeight: "var(--font-weight-semibold)",
           }}

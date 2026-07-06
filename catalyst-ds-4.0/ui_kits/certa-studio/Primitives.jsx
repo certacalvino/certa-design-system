@@ -805,7 +805,7 @@ export function SplitButton({ size = "m", state = "default", onClick = () => {},
           background: "transparent", cursor: "pointer", color: "var(--color-text-secondary)",
         }}
       >
-        <Icon glyph="▾" size={16} label="Open menu" />
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-label="Open menu"><path d="M4 6l4 4 4-4" /></svg>
       </button>
     </div>
   );
@@ -934,7 +934,7 @@ export function Tabs({ items = [], value, onChange = () => {} }) {
 export function Alert({ tone = "info", icon = null, children, action = null, onDismiss = null }) {
   const c = tone === "error" ? "danger" : tone;
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", padding: "var(--space-md) var(--space-lg)", borderRadius: "var(--radius-sm)", background: `var(--color-status-${c}-bg)`, color: `var(--color-status-${c}-fg)`, fontSize: "var(--font-body-size)", lineHeight: "var(--font-body-lh)" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", width: "100%", maxWidth: 480, padding: "var(--space-md) var(--space-lg)", borderRadius: "var(--radius-sm)", background: `var(--color-status-${c}-bg)`, color: `var(--color-status-${c}-fg)`, fontSize: "var(--font-body-size)", lineHeight: "var(--font-body-lh)" }}>
       {icon && <span style={{ flexShrink: 0, display: "inline-flex" }}>{icon}</span>}
       <div style={{ flex: 1, color: "var(--color-text-primary)" }}>{children}</div>
       {action && <span>{action}</span>}

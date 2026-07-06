@@ -32,6 +32,10 @@ const I = {
   X: (p) => (<svg viewBox="0 0 16 16" fill="currentColor" width="16" height="16" {...p}><circle cx="8" cy="8" r="8"/><path d="M5 5l6 6m0-6l-6 6" stroke="#fff" strokeWidth="1.6" fill="none" strokeLinecap="round"/></svg>),
   Info: (p) => (<svg viewBox="0 0 16 16" fill="currentColor" width="16" height="16" {...p}><circle cx="8" cy="8" r="8"/><path d="M7 7h2v5H7zm0-3h2v2H7z" fill="#fff"/></svg>),
   Logo: (p) => (<svg viewBox="0 0 24 24" width="24" height="24" {...p}><rect width="24" height="24" rx="6" style={{ fill: 'var(--color-action-primary)' }}/><path d="M16 8.6c-1-1.2-2.4-1.9-4-1.9-3 0-5.4 2.3-5.4 5.3 0 3 2.4 5.3 5.3 5.3 1.7 0 3.2-.7 4.2-2l-1.8-1.3c-.6.7-1.4 1.2-2.4 1.2-1.7 0-3.1-1.4-3.1-3.3s1.4-3.3 3.1-3.3c1 0 1.7.4 2.3 1.1l1.8-1.1z" fill="#fff"/></svg>),
+  Edit: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M10.5 2.5l3 3L6 13l-3.5.5.5-3.5 7.5-7.5z"/><path d="M9 4l3 3"/></svg>),
+  Trash: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2.5 4h11M6 4V2.5h4V4M4 4l.5 9h7l.5-9M6.5 6.5v4M9.5 6.5v4"/></svg>),
+  Duplicate: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><rect x="5.5" y="5.5" width="8" height="8" rx="1"/><path d="M10.5 5.5V3a.5.5 0 00-.5-.5H3a.5.5 0 00-.5.5v7a.5.5 0 00.5.5h2.5"/></svg>),
+  ArrowRight: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg>),
 };
 
 window.I = I;
@@ -843,7 +847,7 @@ function SplitButton({ size = "m", state = "default", onClick = () => {}, onTrig
           background: "transparent", cursor: "pointer", color: "var(--color-text-secondary)",
         }}
       >
-        <Icon glyph="▾" size={16} label="Open menu" />
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-label="Open menu"><path d="M4 6l4 4 4-4" /></svg>
       </button>
     </div>
   );
@@ -972,7 +976,7 @@ function Tabs({ items = [], value, onChange = () => {} }) {
 function Alert({ tone = "info", icon = null, children, action = null, onDismiss = null }) {
   const c = tone === "error" ? "danger" : tone;
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", padding: "var(--space-md) var(--space-lg)", borderRadius: "var(--radius-sm)", background: `var(--color-status-${c}-bg)`, color: `var(--color-status-${c}-fg)`, fontSize: "var(--font-body-size)", lineHeight: "var(--font-body-lh)" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", width: "100%", maxWidth: 480, padding: "var(--space-md) var(--space-lg)", borderRadius: "var(--radius-sm)", background: `var(--color-status-${c}-bg)`, color: `var(--color-status-${c}-fg)`, fontSize: "var(--font-body-size)", lineHeight: "var(--font-body-lh)" }}>
       {icon && <span style={{ flexShrink: 0, display: "inline-flex" }}>{icon}</span>}
       <div style={{ flex: 1, color: "var(--color-text-primary)" }}>{children}</div>
       {action && <span>{action}</span>}
@@ -1584,8 +1588,8 @@ function FilterChip({
             height: 16,
             padding: "0 4px",
             borderRadius: "var(--radius-sm)",
-            background: selected ? "var(--color-bg-page)" : "var(--color-bg-muted)",
-            color: selected ? "var(--color-text-link)" : "var(--color-text-secondary)",
+            background: selected ? "var(--color-action-primary)" : "var(--color-bg-muted)",
+            color: selected ? "var(--color-text-inverse)" : "var(--color-text-secondary)",
             fontSize: "var(--font-caption-size)",
             fontWeight: "var(--font-weight-semibold)",
           }}

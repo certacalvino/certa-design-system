@@ -27,6 +27,10 @@ const I = {
   X: (p) => (<svg viewBox="0 0 16 16" fill="currentColor" width="16" height="16" {...p}><circle cx="8" cy="8" r="8"/><path d="M5 5l6 6m0-6l-6 6" stroke="#fff" strokeWidth="1.6" fill="none" strokeLinecap="round"/></svg>),
   Info: (p) => (<svg viewBox="0 0 16 16" fill="currentColor" width="16" height="16" {...p}><circle cx="8" cy="8" r="8"/><path d="M7 7h2v5H7zm0-3h2v2H7z" fill="#fff"/></svg>),
   Logo: (p) => (<svg viewBox="0 0 24 24" width="24" height="24" {...p}><rect width="24" height="24" rx="6" style={{ fill: 'var(--color-action-primary)' }}/><path d="M16 8.6c-1-1.2-2.4-1.9-4-1.9-3 0-5.4 2.3-5.4 5.3 0 3 2.4 5.3 5.3 5.3 1.7 0 3.2-.7 4.2-2l-1.8-1.3c-.6.7-1.4 1.2-2.4 1.2-1.7 0-3.1-1.4-3.1-3.3s1.4-3.3 3.1-3.3c1 0 1.7.4 2.3 1.1l1.8-1.1z" fill="#fff"/></svg>),
+  Edit: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M10.5 2.5l3 3L6 13l-3.5.5.5-3.5 7.5-7.5z"/><path d="M9 4l3 3"/></svg>),
+  Trash: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2.5 4h11M6 4V2.5h4V4M4 4l.5 9h7l.5-9M6.5 6.5v4M9.5 6.5v4"/></svg>),
+  Duplicate: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><rect x="5.5" y="5.5" width="8" height="8" rx="1"/><path d="M10.5 5.5V3a.5.5 0 00-.5-.5H3a.5.5 0 00-.5.5v7a.5.5 0 00.5.5h2.5"/></svg>),
+  ArrowRight: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg>),
 };
 
 window.I = I;
