@@ -1316,8 +1316,86 @@ export function NavBar({ items = [], active = null, onSelect = () => {} }) {
   );
 }
 
+/* ---------------------------------------------------------------------------
+   Sidebar — full app navigation rail (parity with DS 3.0 Nav bar). Composes:
+   logo + wordmark · Search · nav items (icon + label + count) · footer utility
+   items (Studio / Language) · user profile. Expanded (240) / Collapsed (64).
+   Selected item follows the NavBar item style (solid brand fill + inverse).
+   items/footer: [{key,label,icon,badge}]. user: {name,email,initials,tone}.
+   --------------------------------------------------------------------------- */
+export function Sidebar({
+  items = [], active = null, onSelect = () => {},
+  footer = [], collapsed = false, brand = "Certa",
+  search = true, user = null,
+}) {
+  const width = collapsed ? 64 : 240;
+  const navItem = (it) => {
+    const on = it.key === active;
+    return (
+      <button key={it.key} type="button" onClick={() => onSelect(it.key)} title={collapsed ? it.label : undefined}
+        onMouseEnter={(e) => { if (!on) e.currentTarget.style.background = "var(--color-surface-hover)"; }}
+        onMouseLeave={(e) => { if (!on) e.currentTarget.style.background = "transparent"; }}
+        style={{
+          display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "flex-start",
+          gap: "var(--space-md)", width: "100%", height: 40, padding: collapsed ? 0 : "0 var(--space-lg)",
+          border: "none", cursor: "pointer", borderRadius: "var(--radius-sm)", textAlign: "left",
+          background: on ? "var(--color-bg-brand)" : "transparent",
+          color: on ? "var(--color-text-inverse)" : "var(--color-text-secondary)",
+          fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-size)", fontWeight: "var(--font-weight-medium)",
+        }}>
+        {it.icon && <span style={{ display: "inline-flex", flexShrink: 0 }}><Icon glyph={it.icon} size={20} color="currentColor" /></span>}
+        {!collapsed && <span style={{ flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{it.label}</span>}
+        {!collapsed && it.badge != null && <Badge color="neutral" size="s">{it.badge}</Badge>}
+      </button>
+    );
+  };
+  return (
+    <aside style={{
+      width, minHeight: "100%", boxSizing: "border-box", background: "var(--color-bg-sidebar)",
+      borderRight: "1px solid var(--color-border-subtle)", display: "flex", flexDirection: "column",
+      padding: "var(--space-lg) var(--space-md)", gap: "var(--space-lg)", fontFamily: "var(--font-family-base)",
+    }}>
+      {/* logo + wordmark */}
+      <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", height: 32, padding: "0 var(--space-sm)", justifyContent: collapsed ? "center" : "flex-start" }}>
+        <I.Logo />
+        {!collapsed && <span style={{ fontWeight: "var(--font-weight-bold)", fontSize: "var(--font-title-small-size)", color: "var(--color-text-primary)" }}>{brand}</span>}
+      </div>
+
+      {/* search */}
+      {search && (collapsed ? (
+        <button type="button" aria-label="Search" style={{ width: 40, height: 40, alignSelf: "center", border: "none", background: "transparent", cursor: "pointer", borderRadius: "var(--radius-sm)", color: "var(--color-text-secondary)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+          <Icon glyph={<I.Search />} size={20} color="currentColor" />
+        </button>
+      ) : (
+        <Input leadingIcon={<I.Search />} placeholder="Search" size="s" />
+      ))}
+
+      {/* primary nav */}
+      <nav style={{ display: "flex", flexDirection: "column", gap: "var(--space-xs)" }}>{items.map(navItem)}</nav>
+
+      <div style={{ flex: 1 }} />
+
+      {/* footer utilities (Studio / Language) */}
+      {footer.length > 0 && <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-xs)" }}>{footer.map(navItem)}</div>}
+
+      {/* user profile */}
+      {user && (
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", padding: "var(--space-sm)", borderTop: "1px solid var(--color-border-subtle)", paddingTop: "var(--space-md)", justifyContent: collapsed ? "center" : "flex-start" }}>
+          <Avatar name={user.name} initials={user.initials} tone={user.tone || "brand"} size="s" />
+          {!collapsed && (
+            <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+              <span style={{ fontSize: "var(--font-body-size)", fontWeight: "var(--font-weight-semibold)", color: "var(--color-text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{user.name}</span>
+              {user.email && <span style={{ fontSize: "var(--font-caption-size)", color: "var(--color-text-secondary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{user.email}</span>}
+            </div>
+          )}
+        </div>
+      )}
+    </aside>
+  );
+}
+
 export default {
-  Button, Pagination, Table, Radio, Toast, DropdownMenu, DatePicker, RoundButton, FileRow, NavBar, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton,
+  Button, Pagination, Table, Radio, Toast, DropdownMenu, DatePicker, RoundButton, FileRow, NavBar, Sidebar, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton,
   Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps,
   Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress,
   SplitButton, TimeField, FileDropzone, Tooltip,

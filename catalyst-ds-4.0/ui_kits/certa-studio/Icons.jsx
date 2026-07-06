@@ -31,6 +31,8 @@ const I = {
   Trash: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2.5 4h11M6 4V2.5h4V4M4 4l.5 9h7l.5-9M6.5 6.5v4M9.5 6.5v4"/></svg>),
   Duplicate: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><rect x="5.5" y="5.5" width="8" height="8" rx="1"/><path d="M10.5 5.5V3a.5.5 0 00-.5-.5H3a.5.5 0 00-.5.5v7a.5.5 0 00.5.5h2.5"/></svg>),
   ArrowRight: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg>),
+  Cube: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M8 1.7l5.5 3v6.6L8 14.3l-5.5-3V4.7L8 1.7z"/><path d="M2.7 4.9L8 7.9l5.3-3M8 7.9v6.2"/></svg>),
+  Globe: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" {...p}><circle cx="8" cy="8" r="6.3"/><path d="M1.8 8h12.4M8 1.7c1.9 1.9 1.9 10.7 0 12.6M8 1.7c-1.9 1.9-1.9 10.7 0 12.6"/></svg>),
 };
 
 window.I = I;
