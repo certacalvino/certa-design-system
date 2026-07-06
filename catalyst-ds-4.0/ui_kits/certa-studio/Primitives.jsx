@@ -57,7 +57,7 @@ export function Button({
   const accent = destructive ? "var(--color-status-danger-fg)" : "var(--color-action-primary)";
   const variants = {
     filled:  { background: accent, color: "var(--color-text-inverse)" },
-    outline: { background: "transparent", color: accent, borderColor: "var(--color-border-strong)" },
+    outline: { background: "transparent", color: accent, borderColor: destructive ? "var(--color-border-error)" : "var(--color-border-default)" },
     text:    { background: "transparent", color: accent },
     link:    { background: "transparent", color: "var(--color-text-link)", textDecoration: "underline", padding: 0, height: "auto" },
   };
