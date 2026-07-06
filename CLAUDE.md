@@ -214,3 +214,8 @@ Last updated: 2026-07-06
 ## DS-vs-Figma fidelity batch 2 — 2026-07-06
 - Added SVG icons Edit/Trash/Duplicate/ArrowRight to Icons.jsx (window.I) — kit lacked them so generated cards fell back to emoji (off-center pencil/trash). SplitButton chevron glyph then to inline SVG. Alert width:100%+maxWidth 480 (Figma=480). FilterChip selected count then action-primary bg + inverse text. Button outline border strong then default/error ("black borders", batch 1). All verified via render harness.
 - Radius Variable collection created in Figma (X0G6 coll 724:2, Value mode): xs2 sm4 lg8 full9999, CORNER_RADIUS. Figma audit: only Cascader+Slider pending 3.0 to 4.0 (low TPRM). Deferred (user-flagged independent): Table row contrast (locked surface-selected), NavBar rebuild, templates polish.
+
+## NavBar selected style — Figma synced to code — 2026-07-06
+- Decided (design lead): NavBar/Sidebar selected item = subtle gray (DS 3.0 style), NOT the blue fill 4.0 Figma originally had. Code: surface-hover bg + text-primary semibold.
+- Synced Figma to match: rebound the 4 Active nav-item variants (282:35/39/44/47) in X0G6 — frame fill bg/brand->bg/subtle-hover (107:8), icon+label text/on-brand->text/primary (3:59). Source of truth now consistent with code (blue will not reappear on next Figma sync).
+- Also built full Sidebar component (kit): logo+wordmark, Search, items w/ counts, footer (Studio/Language, new Cube+Globe icons), user profile, Expanded/Collapsed. Closes the "4.0 only had the bare nav item / burger" gap vs 3.0.
