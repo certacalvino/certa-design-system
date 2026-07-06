@@ -219,3 +219,8 @@ Last updated: 2026-07-06
 - Decided (design lead): NavBar/Sidebar selected item = subtle gray (DS 3.0 style), NOT the blue fill 4.0 Figma originally had. Code: surface-hover bg + text-primary semibold.
 - Synced Figma to match: rebound the 4 Active nav-item variants (282:35/39/44/47) in X0G6 — frame fill bg/brand->bg/subtle-hover (107:8), icon+label text/on-brand->text/primary (3:59). Source of truth now consistent with code (blue will not reappear on next Figma sync).
 - Also built full Sidebar component (kit): logo+wordmark, Search, items w/ counts, footer (Studio/Language, new Cube+Globe icons), user profile, Expanded/Collapsed. Closes the "4.0 only had the bare nav item / burger" gap vs 3.0.
+
+## Full Nav bar added to Figma — 2026-07-06
+- REVERTED the gray selected-state change (design lead prefers BLUE): NavBar/Sidebar code back to bg/brand + text-inverse; Figma 4 Active variants (282:35/39/44/47) rebound back to bg/brand + text/on-brand. Code+Figma consistent on BLUE.
+- Built the FULL Nav bar in Figma (was missing — 4.0 only had the bare nav item 282:83). New frame "Nav bar - Full (Expanded)" (739:149) on Navigation page 1:18: logo+Certa wordmark, Search field, 5 nav-item INSTANCES (Home/Records/Dashboards/Tasks active+badge/Notifications badge) with label overrides, flex spacer, footer (Studio/Language), user profile (JC/John Ceras). Chrome = native nodes (raw colors, reference frame); nav rows = real component instances.
+- KNOWN LIMITATION: all nav rows show the Menu (hamburger) icon — the 4.0 nav-item component has a fixed Menu icon, no INSTANCE_SWAP icon property. To vary icons per item, add an icon swap property to the component (follow-up). Collapsed full-nav variant not built yet (offer).
