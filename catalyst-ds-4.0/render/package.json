@@ -1,0 +1,19 @@
+{
+  "name": "certa-ds-render",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline renderer for the Certa DS 4.1 kit: bundles the CDN-React/Babel app into a single self-contained HTML (React from npm, JSX pre-transpiled, CSS + fonts inlined) that renders offline and as a claude.ai Artifact.",
+  "scripts": {
+    "render": "node render.mjs",
+    "render:shot": "node render.mjs --shot"
+  },
+  "dependencies": {
+    "esbuild": "^0.23.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "optionalDependencies": {
+    "playwright": "^1.61.1"
+  }
+}

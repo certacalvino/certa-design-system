@@ -1,6 +1,6 @@
 # DS 4.0 — Build Memory
 
-Last updated: 2026-06-24
+Last updated: 2026-07-06
 
 ## Naming
 - Design system: **Certa Platform DS** (not "Certa Studio" — Studio is a separate product)
@@ -195,3 +195,11 @@ Last updated: 2026-06-24
 - ROOT CAUSE of prototype using emoji icons: Icons.jsx (24 real SVG icons, window.I) was NOT in build_kit SOURCES → never shipped in kit.global.jsx → prototype had no icon set → fell back to emoji. FIX: added Icons.jsx to SOURCES + "I" to the window names list; kit.global now exposes window.I (24 icons). Also KPIStatCard got invertDelta+sub+flex (prior commit).
 - README UI Patterns: added rule "#0 Use the kit components — do not improvise (READ FIRST)": no emoji (use window.I), Tables=Table+headers+Checkbox+Pagination, Tier=Tag, Status=ProcessStatus, nav=NavBar, risk KPIs=KPIStatCard invertDelta, pages follow TEMPLATES.md.
 - These ship on next /design-sync refresh. Combined with an anchored generation prompt (name the components explicitly), prototype should stop improvising. NOTE: prototype still interprets — the kit + conventions + anchored prompt raise fidelity but don't guarantee 100%; the lever that helped most is the icon set actually being present.
+
+## 1:1 prototypes — offline renderer (`catalyst-ds-4.0/render/`) — 2026-07-06
+- KEY INSIGHT (answers "cómo logramos prototipos 1:1 fieles al DS"): a Claude Design *prototype* INTERPRETS the DS and is never 1:1. A screen CODED against the kit (Primitives.jsx via kit.global.jsx) is 1:1 BY CONSTRUCTION — it renders the real components. The reliable path is: code the screen with the kit → render it → share the HTML. Not "generate and hope".
+- Built `render/render.mjs` (Node + esbuild): bundles any CDN-React/Babel kit page (index.html, gallery.html, or any HTML loading the kit via `<script type="text/babel">`) into ONE self-contained .html with zero external requests — React 18 bundled from npm, every JSX pre-transpiled (jsxFactory React.createElement), styles.css + @import + Inter fonts inlined as data: URIs. Renders offline AND as a claude.ai Artifact (strict CSP blocks CDNs). `--shot` screenshots headless (pre-installed Chromium at $PLAYWRIGHT_BROWSERS_PATH) and FAILS if #root is empty — blind-render safety net.
+- Pipeline steps: (1) run build_kit.py so kit.global.jsx is fresh from Primitives (source of truth); (2) parse page for local CSS + ordered text/babel srcs, drop CDN scripts/font links; (3) DEDUPE any source build_kit already concatenates into kit.global.jsx (e.g. Icons.jsx) — else a 2nd top-level `const I` is a SyntaxError that silently kills the whole kit script (this exact bug cascaded to "Dialog is not defined"); (4) inline CSS, bundle React, transpile each JSX to its own top-level <script> (global scope preserved as index.html loads them); uncaught errors render their stack on-page.
+- Verified: the REAL click-through app (index.html + AppShell + HomeDashboard/VendorsList/VendorDetail + app.jsx) renders offline CDN-free, faithful (brand #1f5eff, Certa palette, real SVG icons, KPIs, risk meters, status). Also composed 3 reference screens (Home/Vendors/Vendor Detail) purely from the kit as Artifacts to show the DS "in use".
+- render/ ships package.json (esbuild+react+react-dom, playwright optional) + react-entry.js + README (the 1:1 rationale). dist/ + node_modules/ git-ignored. Docs: bundle README "Render offline / as a shareable Artifact (1:1)" section + Structure tree.
+- Self-contained output ~2.5MB (both Inter weights embedded = price of zero external requests). Branch: claude/dreamy-cray-2pdrwa.

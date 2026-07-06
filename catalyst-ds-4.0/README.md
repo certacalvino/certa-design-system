@@ -56,6 +56,22 @@ high → danger; approved → success, in review → warning, rejected → dange
 `gallery.html` is the component gallery (links every `preview/*.html`). The app and
 gallery cross-link in the corner.
 
+### Render offline / as a shareable Artifact (1:1)
+
+`render/` bundles any kit page into **one self-contained `.html`** — React from
+npm, JSX pre-transpiled, CSS + fonts inlined — so it renders with no CDN, offline,
+or as a claude.ai Artifact. This is the reliable path to a **1:1** prototype: a
+screen coded against the kit is faithful *by construction*, unlike a generated
+prototype which only interprets the DS.
+
+```bash
+cd render
+npm install
+node render.mjs --shot     # ../index.html -> dist/index.html (+ verified screenshot)
+```
+
+See `render/README.md`.
+
 ---
 
 ## What changed from DS 3.0 → 4.0
@@ -88,6 +104,10 @@ catalyst-ds-4.0/
 ├── colors_and_type.css         # primitives → semantic tokens → type/space/effects
 ├── README.md                   # this file
 ├── build_previews.py           # regenerates preview/*.html from token data
+├── render/                     # offline renderer → self-contained HTML (no CDN, Artifact-safe)
+│   ├── render.mjs              #   bundles a kit page: React from npm + JSX transpiled + CSS/fonts inlined
+│   ├── react-entry.js         #   exposes bundled React 18 as window.React / window.ReactDOM
+│   └── README.md              #   usage + the 1:1 rationale
 ├── ui_kits/certa-studio/
 │   │  # ── Certa Platform app shell (global-scope Babel; consumes the canonical kit) ──
 │   ├── styles.css              # app-chrome CSS (sidebar/topbar/table/stepper), DS 4.0 tokens
