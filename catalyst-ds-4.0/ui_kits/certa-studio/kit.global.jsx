@@ -1343,12 +1343,11 @@ function NavBar({ items = [], active = null, onSelect = () => {} }) {
             style={{
               position: "relative", display: "flex", alignItems: "center", gap: "var(--space-md)", width: "100%", height: 40,
               padding: "0 var(--space-lg)", border: "none", cursor: "pointer", borderRadius: "var(--radius-sm)", textAlign: "left",
-              background: on ? "var(--color-bg-brand-subtle)" : "transparent",
-              color: on ? "var(--color-text-link)" : "var(--color-text-secondary)",
+              background: on ? "var(--color-bg-brand)" : "transparent",
+              color: on ? "var(--color-text-inverse)" : "var(--color-text-secondary)",
               fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-size)",
-              fontWeight: on ? "var(--font-weight-semibold)" : "var(--font-weight-medium)",
+              fontWeight: "var(--font-weight-medium)",
             }}>
-            {on && <span aria-hidden style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 2, borderRadius: "var(--radius-full)", background: "var(--color-action-primary)" }} />}
             {it.icon && <Icon glyph={it.icon} size={20} color="currentColor" />}
             <span style={{ flex: 1 }}>{it.label}</span>
             {it.badge != null && <Badge color="neutral" size="s">{it.badge}</Badge>}
