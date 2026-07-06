@@ -1325,7 +1325,7 @@ export function NavBar({ items = [], active = null, onSelect = () => {} }) {
    --------------------------------------------------------------------------- */
 export function Sidebar({
   items = [], active = null, onSelect = () => {},
-  footer = [], collapsed = false, brand = "Certa",
+  footer = [], collapsed = false, brand = "certa",
   search = true, user = null,
 }) {
   const width = collapsed ? 64 : 240;
@@ -1355,20 +1355,19 @@ export function Sidebar({
       borderRight: "1px solid var(--color-border-subtle)", display: "flex", flexDirection: "column",
       padding: "var(--space-lg) var(--space-md)", gap: "var(--space-lg)", fontFamily: "var(--font-family-base)",
     }}>
-      {/* logo + wordmark */}
+      {/* logo (Certa gradient mark) + wordmark */}
       <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", height: 32, padding: "0 var(--space-sm)", justifyContent: collapsed ? "center" : "flex-start" }}>
-        <I.Logo />
-        {!collapsed && <span style={{ fontWeight: "var(--font-weight-bold)", fontSize: "var(--font-title-small-size)", color: "var(--color-text-primary)" }}>{brand}</span>}
+        <I.CertaLogo />
+        {!collapsed && <span style={{ fontWeight: "var(--font-weight-bold)", fontSize: "var(--font-title-medium-size)", letterSpacing: "-0.01em", color: "var(--color-text-primary)" }}>{brand}</span>}
       </div>
 
-      {/* search */}
-      {search && (collapsed ? (
-        <button type="button" aria-label="Search" style={{ width: 40, height: 40, alignSelf: "center", border: "none", background: "transparent", cursor: "pointer", borderRadius: "var(--radius-sm)", color: "var(--color-text-secondary)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-          <Icon glyph={<I.Search />} size={20} color="currentColor" />
-        </button>
-      ) : (
-        <Input leadingIcon={<I.Search />} placeholder="Search" size="s" />
-      ))}
+      {/* search — icon + label row (DS 3.0 style), not a boxed field */}
+      {search && (
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", height: 40, padding: collapsed ? 0 : "0 var(--space-lg)", justifyContent: collapsed ? "center" : "flex-start", color: "var(--color-text-secondary)", cursor: "text" }}>
+          <span style={{ display: "inline-flex", flexShrink: 0 }}><Icon glyph={<I.Search />} size={20} color="currentColor" /></span>
+          {!collapsed && <span style={{ fontSize: "var(--font-body-size)", color: "var(--color-text-secondary)" }}>Search</span>}
+        </div>
+      )}
 
       {/* primary nav */}
       <nav style={{ display: "flex", flexDirection: "column", gap: "var(--space-xs)" }}>{items.map(navItem)}</nav>

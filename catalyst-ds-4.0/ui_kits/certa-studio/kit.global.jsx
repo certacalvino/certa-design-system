@@ -37,6 +37,8 @@ const I = {
   Duplicate: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><rect x="5.5" y="5.5" width="8" height="8" rx="1"/><path d="M10.5 5.5V3a.5.5 0 00-.5-.5H3a.5.5 0 00-.5.5v7a.5.5 0 00.5.5h2.5"/></svg>),
   ArrowRight: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2.5 8h11M9.5 4l4 4-4 4"/></svg>),
   Cube: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M8 1.7l5.5 3v6.6L8 14.3l-5.5-3V4.7L8 1.7z"/><path d="M2.7 4.9L8 7.9l5.3-3M8 7.9v6.2"/></svg>),
+  Database: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M8 2.2c2.8 0 4.8.9 4.8 2v7.6c0 1.1-2 2-4.8 2s-4.8-.9-4.8-2V4.2c0-1.1 2-2 4.8-2z"/><path d="M12.8 4.2c0 1.1-2 2-4.8 2s-4.8-.9-4.8-2M12.8 8c0 1.1-2 2-4.8 2s-4.8-.9-4.8-2"/></svg>),
+  CertaLogo: (p) => (<svg viewBox="0 0 24 24" width="24" height="24" {...p}><defs><linearGradient id="certaGrad" x1="12" y1="2.5" x2="12" y2="21.5" gradientUnits="userSpaceOnUse"><stop stopColor="#54cffb"/><stop offset="1" stopColor="#1f5eff"/></linearGradient></defs><circle cx="12" cy="7.6" r="4.5" fill="url(#certaGrad)"/><circle cx="7.5" cy="15.6" r="4.5" fill="url(#certaGrad)"/><circle cx="16.5" cy="15.6" r="4.5" fill="url(#certaGrad)"/></svg>),
   Globe: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" {...p}><circle cx="8" cy="8" r="6.3"/><path d="M1.8 8h12.4M8 1.7c1.9 1.9 1.9 10.7 0 12.6M8 1.7c-1.9 1.9-1.9 10.7 0 12.6"/></svg>),
 };
 
@@ -1369,7 +1371,7 @@ function NavBar({ items = [], active = null, onSelect = () => {} }) {
    --------------------------------------------------------------------------- */
 function Sidebar({
   items = [], active = null, onSelect = () => {},
-  footer = [], collapsed = false, brand = "Certa",
+  footer = [], collapsed = false, brand = "certa",
   search = true, user = null,
 }) {
   const width = collapsed ? 64 : 240;
@@ -1399,20 +1401,19 @@ function Sidebar({
       borderRight: "1px solid var(--color-border-subtle)", display: "flex", flexDirection: "column",
       padding: "var(--space-lg) var(--space-md)", gap: "var(--space-lg)", fontFamily: "var(--font-family-base)",
     }}>
-      {/* logo + wordmark */}
+      {/* logo (Certa gradient mark) + wordmark */}
       <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", height: 32, padding: "0 var(--space-sm)", justifyContent: collapsed ? "center" : "flex-start" }}>
-        <I.Logo />
-        {!collapsed && <span style={{ fontWeight: "var(--font-weight-bold)", fontSize: "var(--font-title-small-size)", color: "var(--color-text-primary)" }}>{brand}</span>}
+        <I.CertaLogo />
+        {!collapsed && <span style={{ fontWeight: "var(--font-weight-bold)", fontSize: "var(--font-title-medium-size)", letterSpacing: "-0.01em", color: "var(--color-text-primary)" }}>{brand}</span>}
       </div>
 
-      {/* search */}
-      {search && (collapsed ? (
-        <button type="button" aria-label="Search" style={{ width: 40, height: 40, alignSelf: "center", border: "none", background: "transparent", cursor: "pointer", borderRadius: "var(--radius-sm)", color: "var(--color-text-secondary)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-          <Icon glyph={<I.Search />} size={20} color="currentColor" />
-        </button>
-      ) : (
-        <Input leadingIcon={<I.Search />} placeholder="Search" size="s" />
-      ))}
+      {/* search — icon + label row (DS 3.0 style), not a boxed field */}
+      {search && (
+        <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", height: 40, padding: collapsed ? 0 : "0 var(--space-lg)", justifyContent: collapsed ? "center" : "flex-start", color: "var(--color-text-secondary)", cursor: "text" }}>
+          <span style={{ display: "inline-flex", flexShrink: 0 }}><Icon glyph={<I.Search />} size={20} color="currentColor" /></span>
+          {!collapsed && <span style={{ fontSize: "var(--font-body-size)", color: "var(--color-text-secondary)" }}>Search</span>}
+        </div>
+      )}
 
       {/* primary nav */}
       <nav style={{ display: "flex", flexDirection: "column", gap: "var(--space-xs)" }}>{items.map(navItem)}</nav>
