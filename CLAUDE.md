@@ -238,3 +238,8 @@ Last updated: 2026-07-06
 ## Full Nav bar — real Certa logo — 2026-07-06
 - Replaced the flat "C" square logo mark in the full-nav header (740:2) with an instance of the real Certa brandmark (Brand & Special family, component 180:2389, 24x24 gradient mark); kept the "Certa" wordmark. Now matches 3.0 logo.
 - Nav bar full (739:149) now: real Certa logo + Search + real icons (House/Database/Chart/Tasks/Bell/Cube/Globe) + blue selected + profile. REMAINING vs 3.0: states + Expanded/Collapsed matrix (item states already in component 282:83; full-nav is single expanded+selected).
+
+## Full Nav bar — States x Density matrix — 2026-07-06
+- Built the full nav documentation matrix (matches 3.0): frame "Nav bar - Full - States x Density" (757:190) on Navigation page at x600/y850 (below the Nav bar Documentation 283:70). 6 cells = columns Rest / Hover-Selected / Focus x rows Expanded / Collapsed. Each cell is a composed full nav (real Certa brandmark logo + Search + real icons + footer + profile); the Tasks row varies by column: Default / Active(blue) / Focused(border). Collapsed cells = all rows Expanded=false, 64px container, wordmark/search-text/profile-text hidden.
+- Technique: clone the full nav, setProperties({State}) on the Tasks row (identified by position = 4th nav-item, since collapsed variants have no visible label), re-apply icon recolor (Active=on-brand white, else secondary). Item states themselves live in the nav-item component set 282:83.
+- Removed the now-redundant standalone "Nav bar - Full (Expanded)" frame. Nav bar work vs 3.0 now COMPLETE: full nav + real logo + real icons + states + expanded/collapsed.
