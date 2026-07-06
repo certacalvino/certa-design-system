@@ -1345,8 +1345,8 @@ function NavBar({ items = [], active = null, onSelect = () => {} }) {
             style={{
               position: "relative", display: "flex", alignItems: "center", gap: "var(--space-md)", width: "100%", height: 40,
               padding: "0 var(--space-lg)", border: "none", cursor: "pointer", borderRadius: "var(--radius-sm)", textAlign: "left",
-              background: on ? "var(--color-bg-brand)" : "transparent",
-              color: on ? "var(--color-text-inverse)" : "var(--color-text-secondary)",
+              background: on ? "var(--color-surface-hover)" : "transparent",
+              color: on ? "var(--color-text-primary)" : "var(--color-text-secondary)",
               fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-size)",
               fontWeight: on ? "var(--font-weight-semibold)" : "var(--font-weight-medium)",
             }}>
@@ -1383,8 +1383,8 @@ function Sidebar({
           display: "flex", alignItems: "center", justifyContent: collapsed ? "center" : "flex-start",
           gap: "var(--space-md)", width: "100%", height: 40, padding: collapsed ? 0 : "0 var(--space-lg)",
           border: "none", cursor: "pointer", borderRadius: "var(--radius-sm)", textAlign: "left",
-          background: on ? "var(--color-bg-brand)" : "transparent",
-          color: on ? "var(--color-text-inverse)" : "var(--color-text-secondary)",
+          background: on ? "var(--color-surface-hover)" : "transparent",
+          color: on ? "var(--color-text-primary)" : "var(--color-text-secondary)",
           fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-size)", fontWeight: on ? "var(--font-weight-semibold)" : "var(--font-weight-medium)",
         }}>
         {it.icon && <span style={{ display: "inline-flex", flexShrink: 0 }}><Icon glyph={it.icon} size={20} color="currentColor" /></span>}
