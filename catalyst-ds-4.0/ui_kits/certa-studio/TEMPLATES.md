@@ -1,5 +1,14 @@
 # Certa DS 4.1 — Page composition templates (reference)
 
+> **DETERMINISTIC templates now live as CODE** in `catalyst-ds-4.0/templates/`
+> (`HomeDashboard.jsx`, `VendorsList.jsx`, `VendorDetail.jsx` + `*.html`
+> previews). They are composed 1:1 from the kit and render-verified via
+> `render/` (all three: no emoji, bar-meter risk distribution, KPI deltas,
+> `I.Calendar` dates). **Prefer uploading/rendering these coded screens over
+> re-composing from the prose below** — coded = 1:1 by construction, prose =
+> interpreted. To verify: `cd render && node render.mjs ../templates/home.html --shot`
+> (also `vendors.html`, `detail.html`). The prose spec below documents the intent.
+
 These are the **layout patterns** the local /design-sync agent should compose
 from the kit components (window.CertaDS) and upload as template cards. They are
 the lever for generation quality — prototype copies *density + composition* from
