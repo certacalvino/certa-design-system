@@ -1393,8 +1393,85 @@ export function Sidebar({
   );
 }
 
+/* ---------------------------------------------------------------------------
+   Slider — track + brand fill + 16px handle. Migrated 3.0→4.0 (3.0 shipped it
+   as fragmented parts; rebuilt clean here). Controlled: value/min/max/onChange.
+   Track = bg/muted, fill = bg/brand, handle = surface/default + 2px brand ring.
+   No hover-only affordances (form-field a11y rule). r-full track.
+   --------------------------------------------------------------------------- */
+export function Slider({ value = 40, min = 0, max = 100, disabled = false, onChange = () => {} }) {
+  const trackRef = React.useRef(null);
+  const pct = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
+  const setFromX = (clientX) => {
+    const el = trackRef.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    const p = Math.max(0, Math.min(1, (clientX - r.left) / r.width));
+    onChange(Math.round(min + p * (max - min)));
+  };
+  return (
+    <div ref={trackRef} role="slider" aria-valuenow={value} aria-valuemin={min} aria-valuemax={max}
+      onClick={(e) => !disabled && setFromX(e.clientX)}
+      style={{ position: "relative", height: 16, width: "100%", display: "flex", alignItems: "center", cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.5 : 1 }}>
+      <span style={{ position: "absolute", left: 0, right: 0, height: 6, borderRadius: "var(--radius-full)", background: "var(--color-bg-muted)" }} />
+      <span style={{ position: "absolute", left: 0, width: pct + "%", height: 6, borderRadius: "var(--radius-full)", background: "var(--color-bg-brand)" }} />
+      <span aria-hidden style={{ position: "absolute", left: `calc(${pct}% - 8px)`, width: 16, height: 16, borderRadius: "var(--radius-full)", background: "var(--color-surface-default)", border: "2px solid var(--color-bg-brand)", boxShadow: "var(--shadow-xs)" }} />
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
+   Cascader — hierarchical select. Migrated 3.0→4.0. Trigger field (selected
+   path + chevron) + 2-column overlay panel (r8, shadow-lg). Parent column rows
+   show a chevron-right + highlight the active branch; leaf column selects.
+   options: [{ label, value, children: [{label, value}] }].
+   --------------------------------------------------------------------------- */
+export function Cascader({ options = [], value = [], onChange = () => {}, open = false, placeholder = "Select…" }) {
+  const [branch, setBranch] = React.useState(value[0] != null ? value[0] : (options[0] && options[0].value));
+  const active = options.find((o) => o.value === branch) || options[0];
+  const pathLabel = value.length
+    ? value.map((v, i) => { const lvl = i === 0 ? options : (options.find((o) => o.value === value[0]) || {}).children || []; const hit = lvl.find((x) => x.value === v); return hit ? hit.label : v; }).join(" / ")
+    : "";
+  const rowBase = { display: "flex", alignItems: "center", gap: "var(--space-md)", height: 36, padding: "0 var(--space-md)", borderRadius: "var(--radius-sm)", cursor: "pointer", fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-size)" };
+  return (
+    <div style={{ display: "inline-flex", flexDirection: "column", gap: "var(--space-sm)", width: 320, fontFamily: "var(--font-family-base)" }}>
+      <button type="button" style={{ display: "flex", alignItems: "center", gap: "var(--space-md)", height: "var(--control-height-m)", padding: "0 var(--space-lg)", borderRadius: "var(--radius-sm)", border: `1px solid ${open ? "var(--color-border-focused)" : "var(--color-border-default)"}`, background: "var(--color-bg-page)", cursor: "pointer", textAlign: "left" }}>
+        <span style={{ flex: 1, fontSize: "var(--font-body-size)", color: pathLabel ? "var(--color-text-primary)" : "var(--color-text-tertiary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{pathLabel || placeholder}</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6l4 4 4-4" /></svg>
+      </button>
+      {open && (
+        <div style={{ display: "flex", background: "var(--color-surface-default)", border: "1px solid var(--color-border-subtle)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", overflow: "hidden" }}>
+          <div style={{ flex: 1, padding: "var(--space-sm)", borderRight: "1px solid var(--color-border-subtle)", display: "flex", flexDirection: "column", gap: 2 }}>
+            {options.map((o) => {
+              const on = o.value === branch;
+              return (
+                <div key={o.value} onMouseEnter={() => setBranch(o.value)} onClick={() => setBranch(o.value)}
+                  style={{ ...rowBase, background: on ? "var(--color-surface-hover)" : "transparent", color: "var(--color-text-primary)", fontWeight: on ? "var(--font-weight-semibold)" : "var(--font-weight-regular)" }}>
+                  <span style={{ flex: 1 }}>{o.label}</span>
+                  {o.children && o.children.length > 0 && <span style={{ display: "inline-flex", color: "var(--color-text-tertiary)" }}><Icon glyph={<ChevronR />} size={16} color="currentColor" /></span>}
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ flex: 1, padding: "var(--space-sm)", display: "flex", flexDirection: "column", gap: 2 }}>
+            {((active && active.children) || []).map((c) => {
+              const on = value[0] === branch && value[1] === c.value;
+              return (
+                <div key={c.value} onClick={() => onChange([branch, c.value])}
+                  style={{ ...rowBase, background: on ? "var(--color-bg-brand-subtle)" : "transparent", color: on ? "var(--color-text-link)" : "var(--color-text-primary)", fontWeight: on ? "var(--font-weight-semibold)" : "var(--font-weight-regular)" }}>
+                  {c.label}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+function ChevronR(p) { return (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M6 4l4 4-4 4" /></svg>); }
+
 export default {
-  Button, Pagination, Table, Radio, Toast, DropdownMenu, DatePicker, RoundButton, FileRow, NavBar, Sidebar, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton,
+  Button, Pagination, Table, Radio, Toast, DropdownMenu, DatePicker, RoundButton, FileRow, NavBar, Sidebar, Slider, Cascader, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton,
   Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps,
   Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress,
   SplitButton, TimeField, FileDropzone, Tooltip,

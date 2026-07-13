@@ -269,3 +269,9 @@ Last updated: 2026-07-06
 - NO HOVER STATE / NO HOVER-ONLY ICONS (locked, a11y/WCAG): fields have no hover state, and icons must NEVER appear only on hover. Icons (leading/trailing, reveal toggles) are persistent. (Input has no :hover; icons are props. OK.)
 - ICON CLUTTER (guideline): keep field icons minimal (leading + trailing max); long labels + many icons = clutter. Watch in composition.
 - HELP-TEXT UNDERLINE (locked): help/caption text is NOT underlined (t-caption has no text-decoration). Field labels allow configurable HTML — do NOT add underline tags; put guardrails around what config can inject (open follow-up: define the allowed-HTML guardrail for labels).
+
+## Cascader + Slider migrated to 4.0 (code kit) — 2026-07-07
+- The only two components pending 3.0->4.0. Built them in the CODE kit (Primitives.jsx) with 4.0 tokens instead of importing from Figma: DS 3.0 Slider is FRAGMENTED in Figma (a "Slider Components" set of parts — Track Bar / Filled Trackbar / handle states — not an assembled component), so a clean import was not viable; rebuilt clean. Figma keeps disconnecting mid-write too. Code kit is what feeds Claude Design + prototypes, so this closes the gap where it matters.
+- Slider: track bg/muted + brand fill + 16px handle (surface/default + 2px brand ring), controlled value/min/max/onChange, disabled, r-full, click-to-set. No hover-only affordances (form-field a11y rule).
+- Cascader: trigger field (selected path + chevron) + 2-column overlay panel (r8/shadow-lg); parent column rows w/ chevron-right + active highlight, leaf column selects (brand-subtle). options=[{label,value,children:[...]}].
+- Added Slider+Cascader to Primitives default export + build_kit names + kit.global. Render-verified via render/ (no errors). FOLLOW-UP (optional): recreate both as clean Figma components in 4.0 (X0G6) for design-source completeness — deferred (low TPRM + Figma unstable).
