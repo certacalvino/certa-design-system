@@ -58,7 +58,7 @@ for rel in SOURCES:
 names = ["Button","Pagination","Table","Radio","Toast","DropdownMenu","DatePicker","RoundButton","FileRow","NavBar","Sidebar","Icon","Badge","Tag","ProcessStatus","Field","Input","IconButton",
          "Checkbox","CheckboxPill","MultiSelect","Card","SectionHeader","EmptyState",
          "ProgressSteps","Avatar","Toggle","Tabs","Alert","Switch","Dialog","RAGField",
-         "KPIStatCard","Gauge","CircularProgress","SplitButton","TimeField","FileDropzone","Slider","Cascader",
+         "KPIStatCard","Gauge","CircularProgress","SplitButton","TimeField","FileDropzone","Slider","Cascader","NumberStepper",
          "FilterChip","ReadOnlyField","MaskedField","CountryDropdown","PhoneInput",
          "SAMPLE_COUNTRIES","STATUS_COLOR","I"]
 parts.append("\n/* expose canonical kit as globals for the app shell */")

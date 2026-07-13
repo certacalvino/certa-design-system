@@ -35,6 +35,8 @@ const I = {
   Database: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M8 2.2c2.8 0 4.8.9 4.8 2v7.6c0 1.1-2 2-4.8 2s-4.8-.9-4.8-2V4.2c0-1.1 2-2 4.8-2z"/><path d="M12.8 4.2c0 1.1-2 2-4.8 2s-4.8-.9-4.8-2M12.8 8c0 1.1-2 2-4.8 2s-4.8-.9-4.8-2"/></svg>),
   CertaLogo: (p) => (<svg viewBox="0 0 24 24" width="24" height="24" {...p}><defs><linearGradient id="certaGrad" x1="12" y1="2.5" x2="12" y2="21.5" gradientUnits="userSpaceOnUse"><stop stopColor="#54cffb"/><stop offset="1" stopColor="#1f5eff"/></linearGradient></defs><circle cx="12" cy="7.6" r="4.5" fill="url(#certaGrad)"/><circle cx="7.5" cy="15.6" r="4.5" fill="url(#certaGrad)"/><circle cx="16.5" cy="15.6" r="4.5" fill="url(#certaGrad)"/></svg>),
   Globe: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" {...p}><circle cx="8" cy="8" r="6.3"/><path d="M1.8 8h12.4M8 1.7c1.9 1.9 1.9 10.7 0 12.6M8 1.7c-1.9 1.9-1.9 10.7 0 12.6"/></svg>),
+  Key: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="5.5" cy="10.5" r="3"/><path d="M7.7 8.3L13 3M11 5l1.5 1.5M9 7l1.2 1.2"/></svg>),
+  Minus: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" {...p}><path d="M3.5 8h9"/></svg>),
 };
 
 window.I = I;

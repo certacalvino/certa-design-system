@@ -40,6 +40,8 @@ const I = {
   Database: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}><path d="M8 2.2c2.8 0 4.8.9 4.8 2v7.6c0 1.1-2 2-4.8 2s-4.8-.9-4.8-2V4.2c0-1.1 2-2 4.8-2z"/><path d="M12.8 4.2c0 1.1-2 2-4.8 2s-4.8-.9-4.8-2M12.8 8c0 1.1-2 2-4.8 2s-4.8-.9-4.8-2"/></svg>),
   CertaLogo: (p) => (<svg viewBox="0 0 24 24" width="24" height="24" {...p}><defs><linearGradient id="certaGrad" x1="12" y1="2.5" x2="12" y2="21.5" gradientUnits="userSpaceOnUse"><stop stopColor="#54cffb"/><stop offset="1" stopColor="#1f5eff"/></linearGradient></defs><circle cx="12" cy="7.6" r="4.5" fill="url(#certaGrad)"/><circle cx="7.5" cy="15.6" r="4.5" fill="url(#certaGrad)"/><circle cx="16.5" cy="15.6" r="4.5" fill="url(#certaGrad)"/></svg>),
   Globe: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" {...p}><circle cx="8" cy="8" r="6.3"/><path d="M1.8 8h12.4M8 1.7c1.9 1.9 1.9 10.7 0 12.6M8 1.7c-1.9 1.9-1.9 10.7 0 12.6"/></svg>),
+  Key: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="5.5" cy="10.5" r="3"/><path d="M7.7 8.3L13 3M11 5l1.5 1.5M9 7l1.2 1.2"/></svg>),
+  Minus: (p) => (<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" {...p}><path d="M3.5 8h9"/></svg>),
 };
 
 window.I = I;
@@ -1440,6 +1442,55 @@ function Sidebar({
 }
 
 /* ---------------------------------------------------------------------------
+   NumberStepper — numeric input with increment controls. Migrated 3.0→4.0 gap
+   (3.0 Input page had two stepper chromes: minus/plus side buttons and a
+   stacked chevron up/down; DS 4.0 had no counter component at all). Controlled
+   value/min/max/step/onChange. variant="buttons" (default) | "chevron".
+   --------------------------------------------------------------------------- */
+function NumberStepper({ value = 1, min = -Infinity, max = Infinity, step = 1, size = "m", disabled = false, error = false, variant = "buttons", onChange = () => {} }) {
+  const h = size === "s" ? "var(--control-height-s)" : "var(--control-height-m)";
+  const border = `1px solid ${error ? "var(--color-border-error)" : "var(--color-border-default)"}`;
+  const clamp = (n) => Math.min(max, Math.max(min, n));
+  const dec = () => !disabled && value > min && onChange(clamp(value - step));
+  const inc = () => !disabled && value < max && onChange(clamp(value + step));
+  const stepBtn = (glyph, onClick, disabledBtn, side) => (
+    <button type="button" onClick={onClick} disabled={disabled || disabledBtn} aria-label={glyph === "minus" ? "Decrease" : "Increase"}
+      style={{
+        width: h, height: "100%", border: "none", background: "transparent", cursor: disabled || disabledBtn ? "not-allowed" : "pointer",
+        color: disabled || disabledBtn ? "var(--color-text-disabled)" : "var(--color-text-secondary)",
+        display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        borderRight: side === "left" ? "1px solid var(--color-border-subtle)" : "none",
+        borderLeft: side === "right" ? "1px solid var(--color-border-subtle)" : "none",
+      }}>
+      <Icon glyph={glyph === "minus" ? <I.Minus /> : <I.Plus />} size={16} color="currentColor" />
+    </button>
+  );
+  if (variant === "chevron") {
+    return (
+      <div style={{ display: "inline-flex", alignItems: "center", height: h, borderRadius: "var(--radius-sm)", border, background: disabled ? "var(--color-bg-muted)" : "var(--color-bg-page)", overflow: "hidden", opacity: disabled ? 0.6 : 1 }}>
+        <span style={{ flex: 1, minWidth: 48, padding: "0 var(--space-lg)", fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-size)", color: "var(--color-text-primary)" }}>{value}</span>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%", borderLeft: "1px solid var(--color-border-subtle)" }}>
+          <button type="button" onClick={inc} disabled={disabled || value >= max} aria-label="Increase" style={{ flex: 1, width: 24, border: "none", background: "transparent", cursor: disabled ? "not-allowed" : "pointer", color: "var(--color-text-secondary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 10l4-4 4 4" /></svg>
+          </button>
+          <span style={{ height: 1, background: "var(--color-border-subtle)" }} />
+          <button type="button" onClick={dec} disabled={disabled || value <= min} aria-label="Decrease" style={{ flex: 1, width: 24, border: "none", background: "transparent", cursor: disabled ? "not-allowed" : "pointer", color: "var(--color-text-secondary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6l4 4 4-4" /></svg>
+          </button>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div style={{ display: "inline-flex", alignItems: "center", height: h, borderRadius: "var(--radius-sm)", border, background: disabled ? "var(--color-bg-muted)" : "var(--color-bg-page)", overflow: "hidden", opacity: disabled ? 0.6 : 1 }}>
+      {stepBtn("minus", dec, value <= min, "left")}
+      <span style={{ flex: 1, textAlign: "center", minWidth: 32, fontFamily: "var(--font-family-base)", fontSize: "var(--font-body-size)", color: "var(--color-text-primary)" }}>{value}</span>
+      {stepBtn("plus", inc, value >= max, "right")}
+    </div>
+  );
+}
+
+/* ---------------------------------------------------------------------------
    Slider — track + brand fill + 16px handle. Migrated 3.0→4.0 (3.0 shipped it
    as fragmented parts; rebuilt clean here). Controlled: value/min/max/onChange.
    Track = bg/muted, fill = bg/brand, handle = surface/default + 2px brand ring.
@@ -1912,4 +1963,4 @@ function MaskedField({
 
 
 /* expose canonical kit as globals for the app shell */
-Object.assign(window, { Button, Pagination, Table, Radio, Toast, DropdownMenu, DatePicker, RoundButton, FileRow, NavBar, Sidebar, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton, Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone, Slider, Cascader, FilterChip, ReadOnlyField, MaskedField, CountryDropdown, PhoneInput, SAMPLE_COUNTRIES, STATUS_COLOR, I });
+Object.assign(window, { Button, Pagination, Table, Radio, Toast, DropdownMenu, DatePicker, RoundButton, FileRow, NavBar, Sidebar, Icon, Badge, Tag, ProcessStatus, Field, Input, IconButton, Checkbox, CheckboxPill, MultiSelect, Card, SectionHeader, EmptyState, ProgressSteps, Avatar, Toggle, Tabs, Alert, Switch, Dialog, RAGField, KPIStatCard, Gauge, CircularProgress, SplitButton, TimeField, FileDropzone, Slider, Cascader, NumberStepper, FilterChip, ReadOnlyField, MaskedField, CountryDropdown, PhoneInput, SAMPLE_COUNTRIES, STATUS_COLOR, I });

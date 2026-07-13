@@ -275,3 +275,8 @@ Last updated: 2026-07-06
 - Slider: track bg/muted + brand fill + 16px handle (surface/default + 2px brand ring), controlled value/min/max/onChange, disabled, r-full, click-to-set. No hover-only affordances (form-field a11y rule).
 - Cascader: trigger field (selected path + chevron) + 2-column overlay panel (r8/shadow-lg); parent column rows w/ chevron-right + active highlight, leaf column selects (brand-subtle). options=[{label,value,children:[...]}].
 - Added Slider+Cascader to Primitives default export + build_kit names + kit.global. Render-verified via render/ (no errors). FOLLOW-UP (optional): recreate both as clean Figma components in 4.0 (X0G6) for design-source completeness — deferred (low TPRM + Figma unstable).
+
+## Form field icons + NumberStepper — 2026-07-07
+- Compared DS 3.0 Input page icon set (Chevron down, Date, Key, Clear, Close, Minus, Plus) against 4.0 window.I: Chevron/Date/Close already covered (Caret/Calendar/Close); Key and Minus were genuinely missing. Added both to Icons.jsx.
+- Bigger finding: 3.0 Input page showed TWO number-stepper field chromes (minus/plus side buttons, and a stacked chevron up/down) with NO equivalent component in the 4.0 kit at all (checked Forms & Inputs build list — absent). Built NumberStepper in Primitives.jsx: variant="buttons" (default, −/value/+) and variant="chevron" (value + stacked ▲▼), controlled value/min/max/step, error/disabled states, sizes. Render-verified both variants + the Key icon in an encryption-select field.
+- Added to build_kit names + Primitives default export.
